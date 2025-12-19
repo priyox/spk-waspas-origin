@@ -1,0 +1,12 @@
+/* Bootstrap-based project styles
+	 This file now contains custom CSS only. Bootstrap is loaded via CDN
+	 in the main layout. Add your overrides below. */
+
+/* Example small helpers */
+body {
+	background: #f5f7fb;
+}
+
+.card {
+	border-radius: 0.5rem;
+}
