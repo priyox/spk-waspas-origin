@@ -4,6 +4,8 @@ use App\Http\Livewire\Kandidat;
 use App\Http\Livewire\Kriteria;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Penilaian;
+use App\Http\Livewire\WaspasProses;
+use App\Http\Livewire\WaspasHasil;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +19,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -29,25 +33,34 @@ Route::view('profile', 'profile')
 
     Route::middleware(['auth', 'menu.access'])->group(function () {
 
-    Route::get('/dashboard', Dashboard::class)
-        ->name('dashboard');
+    // Route::get('/dashboard', Dashboard::class)
+    //     ->name('dashboard');
+    Route::get('/dashboard', \App\Http\Livewire\Dashboard::class)->name('dashboard');
 
-    Route::get('/kandidat', [Kandidat::class, 'index'])
+    Route::get('/kandidat', Kandidat::class)
         ->name('kandidat.index');
 
-    Route::get('/kriteria', [Kriteria::class, 'index'])
+    Route::get('/kriteria', Kriteria::class)
         ->name('kriteria.index');
 
-    Route::get('/penilaian', [Penilaian::class, 'index'])
+    Route::get('/penilaian', Penilaian::class)
         ->name('penilaian.input');
 
-    Route::get('/waspas/proses', [Waspas::class, 'proses'])
+    Route::get('/waspas/proses', WaspasProses::class)
         ->name('waspas.proses');
 
-    Route::get('/waspas/hasil', [Waspas::class, 'hasil'])
+    Route::get('/waspas/hasil', WaspasHasil::class)
         ->name('waspas.hasil');
 
 });
 
+
+// Logout route
+use App\Livewire\Actions\Logout;
+
+Route::post('logout', function (Logout $logout) {
+    $logout();
+    return redirect('/login');
+})->middleware('auth')->name('logout');
 
 require __DIR__.'/auth.php';

@@ -33,6 +33,18 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('kandidat.index')" :active="request()->routeIs('kandidat.*')" wire:navigate>
+                        {{ __('Candidates') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('kriteria.index')" :active="request()->routeIs('kriteria.*')" wire:navigate>
+                        {{ __('Criteria') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('penilaian.input')" :active="request()->routeIs('penilaian.*')" wire:navigate>
+                        {{ __('Assessment') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('waspas.hasil')" :active="request()->routeIs('waspas.hasil')" wire:navigate>
+                        {{ __('Results') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -83,6 +95,18 @@ new class extends Component
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('kandidat.index')" :active="request()->routeIs('kandidat.*')" wire:navigate>
+                {{ __('Candidates') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('kriteria.index')" :active="request()->routeIs('kriteria.*')" wire:navigate>
+                {{ __('Criteria') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('penilaian.input')" :active="request()->routeIs('penilaian.*')" wire:navigate>
+                {{ __('Assessment') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('waspas.hasil')" :active="request()->routeIs('waspas.hasil')" wire:navigate>
+                {{ __('Results') }}
             </x-responsive-nav-link>
         </div>
 

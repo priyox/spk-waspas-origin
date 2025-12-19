@@ -1,129 +1,71 @@
- <!doctype html>
- <html lang="en">
+@extends('layouts.guest')
 
- <head>
-     <base href="./">
-     <meta charset="utf-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-     <meta name="description" content="Pemilihan Kandidat Terbaik Menggunakan Metode SPK-WASPAS">
-     <meta name="author" content="Priyox">
-     <meta name="keyword" content="Sistem Pendukung Keputusan, WASPAS, SPK">
-    <link rel="icon" href="{{ asset('snacked/ltr/assets/images/favicon/favicon-32x32.png') }}" type="image/png" />
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
-     <title>Login SPK-WASPAS</title>
-     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
-     <style>
-         html,body{height:100%;margin:0;padding:0}
-         .js-fullheight{height:100vh}
-         .login-wrap{background:rgba(0,0,0,0.25);padding:30px;border-radius:8px}
-         .form-control{padding:10px;border-radius:4px;border:1px solid #ddd}
-         .submit{cursor:pointer}
-         .heading-section{margin:0}
-     </style>
- </head>
+@section('content')
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <img src="{{ asset('favicon.ico') }}" style="width: 36px; height: 36px;" class="me-2" alt="logo">
+                        SPK-WASPAS
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-center mb-4">Sistem Pendukung Keputusan</h4>
+                    <p class="text-center text-muted mb-4">Pemilihan Kandidat Jabatan Manajerial</p>
+                    
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">{{ __('Email') }}</label>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
 
- <body class="img js-fullheight" style="background-image:url({{ asset('bg1.jpg') }});object-fit:cover">
-     <section class="ftco-section">
-         <div class="container">
-             <div class="row justify-content-center">
-                <div class="mt-4 mb-0 text-center col-md-6 mx-auto">
-                     <img src="{{ asset('favicon.ico') }}" style="width: 80px;">
-                     <h2 class="heading-section">
-                         <span
-                             style="margin-left: 10px; font-weight: bold; font-family: 'Teko', sans-serif; color: #ffffff; font-size: 40pt">Sistem Pendukung Keputusan</span>
-                     </h2>
-                     <span
-                         style="margin-left: 10px; font-weight: normal; font-family: 'Teko', sans-serif; color: #ffffff; font-size: 25pt">
-                         Pemilihan Kandidat Jabatan Manajerial</span>
-                 </div>
-             </div>
-             <div class="mt-4 row justify-content-center">
-                 <div class="col-md-6 col-lg-4">
-                     <div class="p-0 login-wrap">
-                         <h6 class="mb-4 text-center" style="color: #ffffff;">Masukkan Email dan Password Anda</h6>
-                         <form action="{{ route('login') }}" class="signin-form" id="flogin"
-                             onsubmit="return lsogin();" method="post" accept-charset="utf-8">
-                             @csrf
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{ __('Password') }}</label>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
 
-                             <x-validation-errors class="mb-4" />
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="remember">
+                                {{ __('Remember Me') }}
+                            </label>
+                        </div>
 
-                             @if (session('status'))
-                                 <div class="mb-4 text-sm font-medium text-green-600">
-                                     {{ session('status') }}
-                                 </div>
-                             @endif
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Login') }}
+                            </button>
+                        </div>
 
-                             <div class="form-group">
-                                 <input type="email" class="form-control" name="email" placeholder="Email"
-                                     id="flogin_username" autofocus required>
-                             </div>
-                             <div class="form-group">
-                                 <input name="password" placeholder="Password" id="flogin_password" type="password"
-                                     class="form-control" required>
-                                 <span toggle="#flogin_password"
-                                     class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                             </div>
-                             <div class="form-group">
-                                 <button type="submit" class="px-3 form-control btn submit" id="flogin_tb_ok"
-                                     style="background-color: rgb(51, 88, 244) !important;
-								background-image: linear-gradient(to left bottom, rgb(29, 140, 248), rgb(51, 88, 244), rgb(29, 140, 248)) !important;
-								background-size: 210% 210%;
-								background-position: 100% 0;
-								transition: all .15s ease;
-								box-shadow: none;
-								color: #fff;"><b>Login</b></button>
-                             </div>
-                         </form>
-                     </div>
-                 </div>
-             </div>
-         </div>
-         <div class="pt-3 container-fluid client bg-transparent">
-             <div class="container text-center">
-                 <span class="small float-center" style="font-size: 10px; color:#fff;"><b>&copy;2023
-                         <?php if (date('Y') == 2023) {
-                             echo '';
-                         } else {
-                             echo '- ' . date('Y');
-                         }
-                         ?>
-                         Priyox</b></span>
-             </div>
-         </div>
-     </section>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-     <script>
-         $(function() {
-             $(".alert").delay(3000).slideUp(300);
-         });
-     </script>
-     <script type="text/javascript">
-         (function($) {
-             "use strict";
-             var fullHeight = function() {
-                 $('.js-fullheight').css('height', $(window).height());
-                 // $(window).resize(function () {
-                 // 	$('.js-fullheight').css('height', $(window).height());
-                 // });
-             };
-             fullHeight();
-             $(".toggle-password").click(function() {
-                 $(this).toggleClass("fa-eye fa-eye-slash");
-                 var input = $($(this).attr("toggle"));
-                 if (input.attr("type") == "password") {
-                     input.attr("type", "text");
-                 } else {
-                     input.attr("type", "password");
-                 }
-             });
-         })(jQuery);
-     </script>
- </body>
-
- </html>
+                        @if (Route::has('password.request'))
+                            <div class="text-center mt-3">
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    {{ __('Forgot Your Password?') }}
+                                </a>
+                            </div>
+                        @endif
+                    </form>
+                </div>
+                
+                <div class="card-footer bg-light text-center">
+                    <small class="text-muted">&copy; {{ date('Y') }} Priyox</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -54,7 +54,7 @@ class UserManager extends Component
 
         return view('livewire.user-manager', [
             'users' => $users,
-        ]);
+        ])->layout('layouts.admin');
     }
 
     public function sortBy($field)
