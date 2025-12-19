@@ -43,6 +43,15 @@ Route::view('profile', 'profile')
     Route::get('/kriteria', Kriteria::class)
         ->name('kriteria.index');
 
+    Route::get('/bidang-ilmu', \App\Http\Livewire\BidangIlmu::class)
+        ->name('bidang-ilmu.index');
+
+    Route::get('/syarat-jabatan', \App\Http\Livewire\SyaratJabatan::class)
+        ->name('syarat-jabatan.index');
+
+    Route::get('/jabatan-target', \App\Http\Livewire\JabatanTarget::class)
+        ->name('jabatan-target.index');
+
     Route::get('/penilaian', Penilaian::class)
         ->name('penilaian.input');
 

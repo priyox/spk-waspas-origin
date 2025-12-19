@@ -61,6 +61,8 @@ class WaspasHasil extends Component
             $results[] = [
                 'nip' => $kandidat->nip,
                 'nama' => $kandidat->nama,
+                'q1' => $q1,
+                'q2' => $q2,
                 'qi' => (0.5 * $q1) + (0.5 * $q2)
             ];
         }
