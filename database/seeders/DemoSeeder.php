@@ -46,11 +46,11 @@ class DemoSeeder extends Seeder
                     'nama' => $faker->name,
                     'tempat_lahir' => $faker->city,
                     'tanggal_lahir' => $faker->date(),
-                    'golongan_id' => $golonganId,
-                    'jenis_jabatan_id' => $jenisJabatanId,
+                    'golongan_id' => '31',
+                    'jenis_jabatan_id' => '1',
                     'jabatan' => $faker->jobTitle,
-                    'tingkat_pendidikan_id' => $tingkatPendidikanId,
-                    'bidang_ilmu_id' => $bidangIlmuId,
+                    'tingkat_pendidikan_id' => '1',
+                    'bidang_ilmu_id' => '1',
                 ]
             );
 

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('eselons', function (Blueprint $table) {
             $table->id();
             $table->string('eselon', 5); // Eselon I, Eselon II, dst.
-            $table->string('jenis_jabatan', 20);
+            $table->string('jenis_jabatan', 30);
         });
     }
 

@@ -11,7 +11,12 @@ class Golongan extends Model
 
     protected $table = 'golongans';
 
+    public $timestamps = false;
+
     protected $guarded = [];
+    
+    public $incrementing = false; // ID manual
+    protected $keyType = 'int';
 
     public function kandidats()
     {

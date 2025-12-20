@@ -11,5 +11,7 @@ class JenisJabatan extends Model
 
     protected $table = 'jenis_jabatans';
 
+    public $timestamps = false;
+
     protected $guarded = [];
 }

@@ -17,11 +17,9 @@ return new class extends Migration
                   ->constrained('jabatan_targets') // Merujuk ke tabel jabatan_targets
                   ->onDelete('cascade'); 
                   
-            // Kolom Foreign Key ke tabel 'kandidats' (NIP)
-            $table->string('nip', 20);
-            $table->foreign('nip')
-                  ->references('nip')
-                  ->on('kandidats')
+            // Kolom Foreign Key ke tabel 'kandidats' (id)
+            $table->foreignId('kandidats_id')
+                  ->constrained('kandidats') // Merujuk ke tabel kandidats
                   ->onDelete('cascade'); 
                   
             $table->double('pangkat', 4, 2)->nullable(); 
@@ -40,7 +38,7 @@ return new class extends Migration
             $table->double('wpm', 4, 2); // Weighted Product Model Score
 
             // Constraint unik: Satu kandidat hanya boleh memiliki satu hasil per jabatan target
-            $table->unique(['jabatan_target_id', 'nip']);
+            $table->unique(['jabatan_target_id', 'kandidats_id']);
             $table->timestamps();
         });
     }

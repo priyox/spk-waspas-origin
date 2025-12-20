@@ -11,5 +11,10 @@ class Eselon extends Model
 
     protected $table = 'eselons';
 
+    public $timestamps = false;
+
+    public $incrementing = false; // karena ID manual
+    protected $keyType = 'int';
+
     protected $guarded = [];
 }

@@ -17,13 +17,13 @@ return new class extends Migration
                   ->constrained('kriterias')
                   ->onDelete('cascade'); 
 
-            $table->string('nip', 18);
-            $table->foreign('nip')->references('nip')->on('kandidats')
-                  ->onDelete('cascade'); // Jika Kandidat dihapus, semua nilainya juga dihapus
-                  
+            $table->foreignId('kandidats_id')
+                  ->constrained('kandidats') // Merujuk ke tabel kandidats
+                  ->onDelete('cascade'); 
+
             $table->double('nilai', 3, 2); 
 
-            $table->unique(['kriteria_id', 'nip']);
+            $table->unique(['kriteria_id', 'kandidats_id']);
             $table->timestamps();
         });
     }

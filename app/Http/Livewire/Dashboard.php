@@ -13,7 +13,7 @@ class Dashboard extends Component
         $userCount = \App\Models\User::count();
         $jabatanCount = \App\Models\JenisJabatan::count();
         // Calculate progress: candidates with scores vs total
-        $scoredCandidates = \App\Models\Nilai::distinct('nip')->count('nip');
+        $scoredCandidates = \App\Models\Nilai::distinct('kandidats_id')->count('kandidats_id');
         $resultsCount = $scoredCandidates . ' / ' . $kandidatCount . ' Dinilai';
 
         return view('livewire.dashboard', compact('kandidatCount', 'kriteriaCount', 'resultsCount', 'userCount', 'jabatanCount'))

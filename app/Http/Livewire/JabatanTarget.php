@@ -33,6 +33,7 @@ class JabatanTarget extends Component
         $this->id_eselon = \App\Models\Eselon::first()?->id ?? 0;
         $this->id_bidang = \App\Models\BidangIlmu::first()?->id ?? 0;
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'jabatan-modal');
     }
 
     public function store()
@@ -62,6 +63,7 @@ class JabatanTarget extends Component
         $this->id_eselon = $jabatan->id_eselon;
         $this->id_bidang = $jabatan->id_bidang;
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'jabatan-modal');
     }
 
     public function delete($id)
@@ -74,6 +76,7 @@ class JabatanTarget extends Component
     {
         $this->isModalOpen = false;
         $this->resetInputFields();
+        $this->dispatch('close-modal', 'jabatan-modal');
     }
 
     private function resetInputFields()

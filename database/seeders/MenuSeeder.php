@@ -59,32 +59,30 @@ class MenuSeeder extends Seeder
 
         // ===== SUB MENU MASTER DATA =====
         Menu::create([
-            'menu_name' => 'Data ASN',
-            'route' => 'asn.index',
+            'menu_name' => 'Kandidat',
+            'route' => 'kandidat.index',
             'icon' => 'bi bi-people',
             'parent_id' => $masterData->id,
             'order' => 1,
-            'permission_name' => 'asn-manage',
+            'permission_name' => 'kandidat-manage',
             'is_active' => true,
         ]);
-
+        Menu::create([
+            'menu_name' => 'Jabatan Target',
+            'route' => 'jabatan-target.index',
+            'icon' => 'bi bi-briefcase',
+            'parent_id' => $masterData->id,
+            'order' => 2,
+            'permission_name' => 'jabatan-target-manage',
+            'is_active' => true,
+        ]);
         Menu::create([
             'menu_name' => 'Kriteria',
             'route' => 'kriteria.index',
             'icon' => 'bi bi-list-check',
             'parent_id' => $masterData->id,
-            'order' => 2,
-            'permission_name' => 'kriteria-manage',
-            'is_active' => true,
-        ]);
-
-        Menu::create([
-            'menu_name' => 'Sub Kriteria',
-            'route' => 'subkriteria.index',
-            'icon' => 'bi bi-diagram-3',
-            'parent_id' => $masterData->id,
             'order' => 3,
-            'permission_name' => 'subkriteria-manage',
+            'permission_name' => 'kriteria-manage',
             'is_active' => true,
         ]);
 

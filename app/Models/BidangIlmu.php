@@ -11,6 +11,8 @@ class BidangIlmu extends Model
 
     protected $table = 'bidang_ilmus';
 
+    public $timestamps = false;
+
     protected $guarded = [];
 
     public function kandidats()

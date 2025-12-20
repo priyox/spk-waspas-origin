@@ -11,6 +11,8 @@ class TingkatPendidikan extends Model
 
     protected $table = 'tingkat_pendidikans';
 
+    public $timestamps = false;
+
     protected $guarded = [];
 
     public function kandidats()

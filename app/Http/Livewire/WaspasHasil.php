@@ -55,7 +55,8 @@ class WaspasHasil extends Component
 
                 $weight = $kriteria->bobot / 100;
                 $q1 += ($norm * $weight);
-                $q2 *= pow($norm, $weight);
+                // Add a small epsilon (0.0001) to norm to prevent entire product becoming zero if norm is 0
+                $q2 *= pow($norm + 0.0001, $weight);
             }
 
             $results[] = [

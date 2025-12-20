@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 class Menu extends Model
 {
     protected $fillable = [
-        'nama',
+        'menu_name',
         'route',
         'icon',
         'parent_id',

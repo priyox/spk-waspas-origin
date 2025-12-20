@@ -15,10 +15,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('eselon_id')
                   ->constrained('eselons') // Nama tabel yang direferensikan (eselons)
-                  ->onDelete('restrict');
+                  ->onDelete('cascade');
             // Kolom syarat dan nilai
-            $table->string('syarat', 100); // Contoh: Pendidikan Minimal, Pengalaman Kerja, Usia Maksimal
-            $table->string('nilai', 100);
+            $table->unsignedBigInteger('minimal_golongan_id');
+
+            $table->unsignedBigInteger('minimal_tingkat_pendidikan_id');
+
+            // Syarat asal jabatan (OPSIONAL)
+            $table->unsignedBigInteger('minimal_eselon_id')->nullable(); // jika struktural
+            $table->unsignedBigInteger('minimal_jenjang_fungsional_id')->nullable(); // jika fungsional
+
+            $table->text('keterangan')->nullable();
+            $table->boolean('is_active')->default(true);
+
             $table->timestamps();
         });
     }

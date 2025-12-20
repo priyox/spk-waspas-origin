@@ -31,6 +31,7 @@ class SyaratJabatan extends Component
         $this->resetInputFields();
         $this->eselon_id = \App\Models\Eselon::first()?->id;
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'syarat-modal');
     }
 
     public function store()
@@ -60,6 +61,7 @@ class SyaratJabatan extends Component
         $this->syarat = $syaratJabatan->syarat;
         $this->nilai = $syaratJabatan->nilai;
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'syarat-modal');
     }
 
     public function delete($id)
@@ -72,6 +74,7 @@ class SyaratJabatan extends Component
     {
         $this->isModalOpen = false;
         $this->resetInputFields();
+        $this->dispatch('close-modal', 'syarat-modal');
     }
 
     private function resetInputFields()

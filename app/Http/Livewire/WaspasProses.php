@@ -72,7 +72,8 @@ class WaspasProses extends Component
                 $q1 += ($norm * $weight);
 
                 // WPM: Product (Norm ^ Weight)
-                $q2 *= pow($norm, $weight);
+                // Add a small epsilon (0.0001) to norm to prevent entire product becoming zero if norm is 0
+                $q2 *= pow($norm + 0.0001, $weight);
             }
 
             $qi = (0.5 * $q1) + (0.5 * $q2);

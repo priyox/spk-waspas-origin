@@ -63,62 +63,52 @@
                     </table>
                 </div>
 
-                <!-- Modal -->
-                @if($isModalOpen)
-                <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                                <x-modal name="kriteria-modal" :show="$isModalOpen" maxWidth="lg">
+                    <div class="p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100 mb-4">
+                            {{ $kriteria_id_to_edit ? 'Edit Kriteria' : 'Tambah Kriteria' }}
+                        </h3>
 
-                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        <form wire:submit.prevent="store">
+                            <div class="space-y-4">
+                                <!-- Nama Kriteria -->
+                                <div>
+                                    <x-input-label for="kriteria" :value="__('Nama Kriteria')" />
+                                    <x-text-input id="kriteria" type="text" class="mt-1 block w-full" wire:model="kriteria" placeholder="Contoh: Pengalaman Kerja" />
+                                    <x-input-error :messages="$errors->get('kriteria')" class="mt-2" />
+                                </div>
 
-                        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                            <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                <div class="sm:flex sm:items-start">
-                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" id="modal-title">
-                                            {{ $kriteria_id_to_edit ? 'Edit Kriteria' : 'Tambah Kriteria' }}
-                                        </h3>
-                                        <div class="mt-4 space-y-4">
-                                            <!-- Nama Kriteria -->
-                                            <div>
-                                                <label for="kriteria" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Kriteria</label>
-                                                <input type="text" wire:model="kriteria" id="kriteria" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm" placeholder="Contoh: Pengalaman Kerja">
-                                                @error('kriteria') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                            </div>
+                                <!-- Bobot -->
+                                <div>
+                                    <x-input-label for="bobot" :value="__('Bobot (%)')" />
+                                    <x-text-input id="bobot" type="number" step="0.01" class="mt-1 block w-full" wire:model="bobot" placeholder="Contoh: 20" />
+                                    <x-input-error :messages="$errors->get('bobot')" class="mt-2" />
+                                </div>
 
-                                            <!-- Bobot -->
-                                            <div>
-                                                <label for="bobot" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bobot (%)</label>
-                                                <input type="number" step="0.01" wire:model="bobot" id="bobot" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm" placeholder="Contoh: 20">
-                                                @error('bobot') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                            </div>
-
-                                            <!-- Jenis -->
-                                            <div>
-                                                <label for="jenis" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jenis</label>
-                                                <select wire:model="jenis" id="jenis" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-100 sm:text-sm">
-                                                    <option value="">Pilih Jenis</option>
-                                                    <option value="Benefit">Benefit (Keuntungan)</option>
-                                                    <option value="Cost">Cost (Biaya/Kekurangan)</option>
-                                                </select>
-                                                @error('jenis') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                            </div>
-                                        </div>
-                                    </div>
+                                <!-- Jenis -->
+                                <div>
+                                    <x-input-label for="jenis" :value="__('Jenis')" />
+                                    <select id="jenis" wire:model="jenis" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                        <option value="">Pilih Jenis</option>
+                                        <option value="Benefit">Benefit (Keuntungan)</option>
+                                        <option value="Cost">Cost (Biaya/Kekurangan)</option>
+                                    </select>
+                                    <x-input-error :messages="$errors->get('jenis')" class="mt-2" />
                                 </div>
                             </div>
-                            <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                <button wire:click.prevent="store()" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                    Simpan
-                                </button>
-                                <button wire:click="closeModal()" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                    Batal
-                                </button>
+
+                            <div class="mt-6 flex justify-end gap-x-3">
+                                <x-secondary-button wire:click="closeModal">
+                                    {{ __('Batal') }}
+                                </x-secondary-button>
+
+                                <x-primary-button type="submit">
+                                    {{ __('Simpan') }}
+                                </x-primary-button>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </div>
-                @endif
+                </x-modal>
             </div>
         </div>
     </div>

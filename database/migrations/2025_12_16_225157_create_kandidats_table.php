@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kandidats', function (Blueprint $table) {
-            $table->string('nip', 20)->primary(); 
+            $table->id();
+            $table->string('nip', 18)->unique(); 
             $table->string('nama', 255);
             $table->string('tempat_lahir', 100);
             $table->date('tanggal_lahir');

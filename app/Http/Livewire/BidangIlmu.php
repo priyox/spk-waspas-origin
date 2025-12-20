@@ -27,6 +27,7 @@ class BidangIlmu extends Component
     {
         $this->resetInputFields();
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'bidang-modal');
     }
 
     public function store()
@@ -50,6 +51,7 @@ class BidangIlmu extends Component
         $this->bidang_id_to_edit = $id;
         $this->bidang = $bidangIlmu->bidang;
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'bidang-modal');
     }
 
     public function delete($id)
@@ -62,6 +64,7 @@ class BidangIlmu extends Component
     {
         $this->isModalOpen = false;
         $this->resetInputFields();
+        $this->dispatch('close-modal', 'bidang-modal');
     }
 
     private function resetInputFields()

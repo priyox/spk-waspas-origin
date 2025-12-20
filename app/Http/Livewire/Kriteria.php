@@ -27,6 +27,7 @@ class Kriteria extends Component
     {
         $this->resetInputFields();
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'kriteria-modal');
     }
 
     public function store()
@@ -54,6 +55,7 @@ class Kriteria extends Component
         $this->jenis = $kriteria->jenis;
     
         $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'kriteria-modal');
     }
 
     public function delete($id)
@@ -66,6 +68,7 @@ class Kriteria extends Component
     {
         $this->isModalOpen = false;
         $this->resetInputFields();
+        $this->dispatch('close-modal', 'kriteria-modal');
     }
 
     private function resetInputFields()

@@ -25,7 +25,7 @@ class Kandidat extends Component
 
     public function render()
     {
-        $this->kandidats = \App\Models\Kandidat::all();
+        $this->kandidats = \App\Models\Kandidat::with(['golongan', 'eselon', 'tingkat_pendidikan', 'bidang_ilmu'])->get();
         
         return view('livewire.kandidat', [
             'golongans' => \App\Models\Golongan::all(),
@@ -45,6 +45,8 @@ class Kandidat extends Component
         $this->jenis_jabatan_id = \App\Models\JenisJabatan::first()?->id;
         $this->tingkat_pendidikan_id = \App\Models\TingkatPendidikan::first()?->id;
         $this->bidang_ilmu_id = \App\Models\BidangIlmu::first()?->id;
+
+        $this->dispatch('open-modal', 'kandidat-modal');
     }
 
     public function store()
@@ -90,6 +92,8 @@ class Kandidat extends Component
         
         $this->kandidat_id_to_edit = $nip; // Actually NIP is primary key
         $this->isModalOpen = true;
+
+        $this->dispatch('open-modal', 'kandidat-modal');
     }
 
     public function delete($nip)
@@ -102,6 +106,7 @@ class Kandidat extends Component
     {
         $this->isModalOpen = false;
         $this->resetInputFields();
+        $this->dispatch('close-modal', 'kandidat-modal');
     }
 
     private function resetInputFields()

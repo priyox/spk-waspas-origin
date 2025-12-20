@@ -10,6 +10,11 @@ class CheckMenuAccess
 {
     public function handle(Request $request, Closure $next)
     {
+        // Bypass untuk Super Admin
+        if (auth()->check() && auth()->user()->hasRole('Super Admin')) {
+            return $next($request);
+        }
+
         // Ambil nama route yang diakses
         $routeName = $request->route()->getName();
 

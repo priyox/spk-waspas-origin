@@ -21,7 +21,7 @@ class Kandidat extends Model
         return $this->belongsTo(Golongan::class);
     }
 
-    public function jenisJabatan()
+    public function jenis_jabatan()
     {
         return $this->belongsTo(JenisJabatan::class);
     }
@@ -31,23 +31,23 @@ class Kandidat extends Model
         return $this->belongsTo(Eselon::class);
     }
 
-    public function tingkatPendidikan()
+    public function tingkat_pendidikan()
     {
         return $this->belongsTo(TingkatPendidikan::class, 'tingkat_pendidikan_id');
     }
 
-    public function bidangIlmu()
+    public function bidang_ilmu()
     {
         return $this->belongsTo(BidangIlmu::class, 'bidang_ilmu_id');
     }
 
     public function nilais()
     {
-        return $this->hasMany(Nilai::class, 'nip', 'nip');
+        return $this->hasMany(Nilai::class, 'id');
     }
 
     public function waspasNilais()
     {
-        return $this->hasMany(WaspasNilai::class, 'nip', 'nip');
+        return $this->hasMany(WaspasNilai::class, 'id');
     }
 }
