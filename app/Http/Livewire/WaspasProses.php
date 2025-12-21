@@ -15,7 +15,7 @@ class WaspasProses extends Component
         // 1. Build Matrix X
         $matrix = [];
         foreach ($nilais as $nilai) {
-            $matrix[$nilai->nip][$nilai->kriteria_id] = $nilai->nilai;
+            $matrix[$nilai->kandidats_id][$nilai->kriteria_id] = $nilai->nilai;
         }
 
         // 2. Normalize Matrix R
@@ -26,8 +26,8 @@ class WaspasProses extends Component
         foreach ($kriterias as $kriteria) {
             $values = [];
             foreach ($kandidats as $kandidat) {
-                if (isset($matrix[$kandidat->nip][$kriteria->id])) {
-                    $values[] = $matrix[$kandidat->nip][$kriteria->id];
+                if (isset($matrix[$kandidat->id][$kriteria->id])) {
+                    $values[] = $matrix[$kandidat->id][$kriteria->id];
                 }
             }
             if (count($values) > 0) {
@@ -42,7 +42,7 @@ class WaspasProses extends Component
         // Calculate Normalized values
         foreach ($kandidats as $kandidat) {
             foreach ($kriterias as $kriteria) {
-                $val = $matrix[$kandidat->nip][$kriteria->id] ?? 0;
+                $val = $matrix[$kandidat->id][$kriteria->id] ?? 0;
                 $norm = 0;
                 
                 // Assuming 'jenis' column exists (Cost/Benefit). Default to Benefit if null.
@@ -54,7 +54,7 @@ class WaspasProses extends Component
                      $norm = ($minMax[$kriteria->id]['max'] != 0) ? ($val / $minMax[$kriteria->id]['max']) : 0;
                 }
 
-                $normalized[$kandidat->nip][$kriteria->id] = $norm;
+                $normalized[$kandidat->id][$kriteria->id] = $norm;
             }
         }
 
@@ -65,7 +65,7 @@ class WaspasProses extends Component
             $q2 = 1; // WPM (Product)
 
             foreach ($kriterias as $kriteria) {
-                $norm = $normalized[$kandidat->nip][$kriteria->id] ?? 0;
+                $norm = $normalized[$kandidat->id][$kriteria->id] ?? 0;
                 $weight = $kriteria->bobot / 100; // Assuming bobot is percent (e.g. 30 for 30%) or 0.3. Let's assume passed as integer percent based on view.
                 
                 // WSM: Sum (Norm * Weight)

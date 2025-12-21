@@ -20,6 +20,6 @@ class Nilai extends Model
 
     public function kandidat()
     {
-        return $this->belongsTo(Kandidat::class, 'nip', 'nip');
+        return $this->belongsTo(Kandidat::class, 'kandidats_id');
     }
 }

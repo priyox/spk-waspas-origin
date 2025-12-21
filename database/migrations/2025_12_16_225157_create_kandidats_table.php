@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('tempat_lahir', 100);
             $table->date('tanggal_lahir');
             $table->foreignId('golongan_id')->constrained('golongans');
+            $table->date('tmt_golongan');
             $table->foreignId('jenis_jabatan_id')->constrained('jenis_jabatans');
             $table->foreignId('eselon_id')->nullable();
             $table->string('jabatan', 255);
+            $table->date('tmt_jabatan');
             $table->string('unit_kerja', 255)->nullable();
             $table->foreignId('tingkat_pendidikan_id')->constrained('tingkat_pendidikans');
             $table->string('jurusan', 255)->nullable();

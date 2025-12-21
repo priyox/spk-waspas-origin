@@ -13,9 +13,6 @@ class Kandidat extends Model
 
     protected $guarded = [];
 
-    public $incrementing = false;
-    protected $keyType = 'string';
-
     public function golongan()
     {
         return $this->belongsTo(Golongan::class);

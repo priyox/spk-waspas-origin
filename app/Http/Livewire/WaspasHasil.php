@@ -15,7 +15,7 @@ class WaspasHasil extends Component
         // 1. Build Matrix X
         $matrix = [];
         foreach ($nilais as $nilai) {
-            $matrix[$nilai->nip][$nilai->kriteria_id] = $nilai->nilai;
+            $matrix[$nilai->kandidats_id][$nilai->kriteria_id] = $nilai->nilai;
         }
 
         // 2. Normalize Matrix R (Simplified for result, just needed for Q calc)
@@ -23,8 +23,8 @@ class WaspasHasil extends Component
         foreach ($kriterias as $kriteria) {
             $values = [];
             foreach ($kandidats as $kandidat) {
-                if (isset($matrix[$kandidat->nip][$kriteria->id])) {
-                    $values[] = $matrix[$kandidat->nip][$kriteria->id];
+                if (isset($matrix[$kandidat->id][$kriteria->id])) {
+                    $values[] = $matrix[$kandidat->id][$kriteria->id];
                 }
             }
             if (count($values) > 0) {
@@ -43,7 +43,7 @@ class WaspasHasil extends Component
             $q2 = 1;
 
             foreach ($kriterias as $kriteria) {
-                $val = $matrix[$kandidat->nip][$kriteria->id] ?? 0;
+                $val = $matrix[$kandidat->id][$kriteria->id] ?? 0;
                 $norm = 0;
                 $type = strtolower($kriteria->jenis ?? 'benefit');
 
