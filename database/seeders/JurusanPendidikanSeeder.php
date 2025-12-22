@@ -30,8 +30,8 @@ class JurusanPendidikanSeeder extends Seeder
             ['id' => 12, 'jurusan' => 'S-2 Ekonomi', 'tingkat_pendidikan_id' => 8, 'bidang_ilmu_id' => 5],
             ['id' => 13, 'jurusan' => 'S-2 Administrasi Negara', 'tingkat_pendidikan_id' => 8, 'bidang_ilmu_id' => 6],
             ['id' => 14, 'jurusan' => 'S-2 Psikologi', 'tingkat_pendidikan_id' => 8, 'bidang_ilmu_id' => 7],
-            ['id' => 13, 'jurusan' => 'S-3 Administrasi Publik', 'tingkat_pendidikan_id' => 9, 'bidang_ilmu_id' => 6],
-            ['id' => 14, 'jurusan' => 'S-3 Teknik Informatika', 'tingkat_pendidikan_id' => 9, 'bidang_ilmu_id' => 1],
+            ['id' => 15, 'jurusan' => 'S-3 Administrasi Publik', 'tingkat_pendidikan_id' => 9, 'bidang_ilmu_id' => 6],
+            ['id' => 16, 'jurusan' => 'S-3 Teknik Informatika', 'tingkat_pendidikan_id' => 9, 'bidang_ilmu_id' => 1],
 
         ];
 

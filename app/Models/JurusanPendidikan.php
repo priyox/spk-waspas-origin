@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class JurusanPendidikan extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $guarded = [];
     public function tingkat_pendidikan()
     {
         return $this->belongsTo(TingkatPendidikan::class, 'tingkat_pendidikan_id');

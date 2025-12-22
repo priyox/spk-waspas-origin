@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class JabatanFungsionals extends Model
+class JabatanFungsional extends Model
 {
     protected $table = 'jabatan_fungsionals';
 
