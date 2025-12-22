@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\SyaratJabatan;
 
 class SyaratJabatanSeeder extends Seeder
 {
@@ -12,7 +13,8 @@ class SyaratJabatanSeeder extends Seeder
      */
   public function run(): void
     {
-        DB::table('syarat_jabatans')->insert([
+        SyaratJabatan::query()->delete();
+        $data = [
             [
                 'id' => 1,
                 'id_eselon' => 32,
@@ -37,6 +39,6 @@ class SyaratJabatanSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
+        ];
     }
 }

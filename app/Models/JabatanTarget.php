@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class JabatanTarget extends Model
 {
-    use HasFactory;
 
     protected $table = 'jabatan_targets';
 
     protected $guarded = [];
+
+    public function eselon()
+    {
+        return $this->belongsTo(Eselon::class);
+    }
+
+    public function bidang_ilmu()
+    {
+        return $this->belongsTo(BidangIlmu::class, 'bidang_ilmu_id');
+    }
 }

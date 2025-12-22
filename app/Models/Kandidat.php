@@ -23,6 +23,16 @@ class Kandidat extends Model
         return $this->belongsTo(JenisJabatan::class);
     }
 
+    public function jabatan_fungsional()
+    {
+        return $this->belongsTo(JabatanFungsional::class);
+    }
+
+    public function jabatan_pelaksana()
+    {
+        return $this->belongsTo(JabatanPelaksana::class);
+    }
+
     public function eselon()
     {
         return $this->belongsTo(Eselon::class);
@@ -36,6 +46,11 @@ class Kandidat extends Model
     public function bidang_ilmu()
     {
         return $this->belongsTo(BidangIlmu::class, 'bidang_ilmu_id');
+    }
+
+public function unit_kerja()
+    {
+        return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
 
     public function nilais()

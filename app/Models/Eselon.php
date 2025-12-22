@@ -17,4 +17,5 @@ class Eselon extends Model
     protected $keyType = 'int';
 
     protected $guarded = [];
+    
 }

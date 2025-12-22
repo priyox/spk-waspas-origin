@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kriterias', function (Blueprint $table) {
+        Schema::create('unit_kerjas', function (Blueprint $table) {
             $table->id();
-            $table->string('kriteria', 50)->unique();
-            $table->double('bobot');
-            $table->enum('jenis', ['Benefit', 'Cost'])->default('Benefit');
-            $table->text('keterangan')->nullable();
-            $table->timestamps();
+            $table->string('unit_kerja', 255);
         });
     }
 
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kriterias');
+        Schema::dropIfExists('unit_kerja');
     }
 };

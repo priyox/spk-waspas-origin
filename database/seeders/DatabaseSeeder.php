@@ -26,8 +26,12 @@ class DatabaseSeeder extends Seeder
             KriteriaSeeder::class,
             KandidatSeeder::class,
             NilaiSeeder::class,
-            JenjangJabfungSeeder::class,
             SyaratJabatanSeeder::class,
+            JabatanFungsionalSeeder::class,
+            JabatanPelaksanaSeeder::class,
+            UnitKerjaSeeder::class,
+            JurusanPendidikanSeeder::class,
+            JabatanTargetSeeder::class,
         ]);
     }
 }

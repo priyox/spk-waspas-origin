@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('eselons', function (Blueprint $table) {
             $table->id();
-            $table->string('eselon', 5); // Eselon I, Eselon II, dst.
-            $table->string('jenis_jabatan', 30);
+            $table->string('eselon', 20); // Eselon I, Eselon II, dst.
+            $table->string('jenis_jabatan', 50)->nullable();
         });
     }
 
