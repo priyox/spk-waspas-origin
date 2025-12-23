@@ -48,7 +48,12 @@ class Kandidat extends Model
         return $this->belongsTo(BidangIlmu::class, 'bidang_ilmu_id');
     }
 
-public function unit_kerja()
+    public function jurusan_pendidikan()
+    {
+        return $this->belongsTo(JurusanPendidikan::class, 'jurusan_pendidikan_id');
+    }
+
+    public function unit_kerja()
     {
         return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
