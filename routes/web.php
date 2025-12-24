@@ -7,6 +7,7 @@ use App\Http\Livewire\Penilaian;
 use App\Http\Livewire\WaspasProses;
 use App\Http\Livewire\WaspasHasil;
 use App\Http\Livewire\KriteriaNilai;
+use App\Http\Livewire\Report;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +66,12 @@ Route::view('profile', 'profile')
     Route::get('/waspas/hasil', WaspasHasil::class)
         ->name('waspas.hasil');
 
+});
+
+// Report page - accessible only via direct URL (not in sidebar menu)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/report', Report::class)
+        ->name('report');
 });
 
 
