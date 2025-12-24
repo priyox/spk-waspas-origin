@@ -4,8 +4,8 @@
     </h2>
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="py-8">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 @if (session()->has('message'))
@@ -13,49 +13,74 @@
                         <span class="block sm:inline">{{ session('message') }}</span>
                     </div>
                 @endif
-                
+
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Kelola Data Kriteria</h3>
-                    <button wire:click="create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium transition-colors duration-150">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Kelola Kriteria</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Kriteria penilaian untuk perhitungan WASPAS</p>
+                    </div>
+                    <button wire:click="create" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors duration-150 shadow-lg hover:shadow-xl">
                         + Tambah Kriteria
                     </button>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kode</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama Kriteria</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Bobot</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Jenis</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Kode</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Nama Kriteria</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Bobot</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Jenis</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             @forelse($kriterias as $kriteria)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">C{{ $kriteria->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $kriteria->kriteria }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                                        K{{ $kriteria->id }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ $kriteria->kriteria }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                         {{ $kriteria->bobot }}%
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $kriteria->jenis == 'Benefit' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $kriteria->jenis == 'Benefit' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
                                         {{ $kriteria->jenis ?? 'Benefit' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button wire:click="edit({{ $kriteria->id }})" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-2">Edit</button>
-                                    <button wire:click="delete({{ $kriteria->id }})" onclick="return confirm('Are you sure you want to delete this criterion?')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Hapus</button>
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button wire:click="edit({{ $kriteria->id }})" class="inline-flex items-center px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/50 dark:hover:bg-amber-900 dark:text-amber-300 rounded-lg transition-colors">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                            Edit
+                                        </button>
+                                        <button wire:click="confirmDelete({{ $kriteria->id }})" class="inline-flex items-center px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/50 dark:hover:bg-red-900 dark:text-red-300 rounded-lg transition-colors">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                            Hapus
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-400">
-                                    Belum ada data kriteria.
+                                <td colspan="5" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                                        </svg>
+                                        <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada data kriteria</p>
+                                        <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">Klik tombol "Tambah Kriteria" untuk menambah data baru</p>
+                                    </div>
                                 </td>
                             </tr>
                             @endforelse
@@ -63,52 +88,123 @@
                     </table>
                 </div>
 
-                                <x-modal name="kriteria-modal" :show="$isModalOpen" maxWidth="lg">
-                    <div class="p-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100 mb-4">
-                            {{ $kriteria_id_to_edit ? 'Edit Kriteria' : 'Tambah Kriteria' }}
-                        </h3>
+                <!-- Info Total Bobot -->
+                @if($kriterias->count() > 0)
+                <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Bobot:</span>
+                        @php $totalBobot = $kriterias->sum('bobot'); @endphp
+                        <span class="text-lg font-bold {{ $totalBobot == 100 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                            {{ $totalBobot }}%
+                            @if($totalBobot == 100)
+                                <svg class="inline w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            @else
+                                <span class="text-sm font-normal ml-2">(harus 100%)</span>
+                            @endif
+                        </span>
+                    </div>
+                </div>
+                @endif
+
+                <x-modal name="kriteria-modal" :show="$isModalOpen" maxWidth="xl">
+                    <div class="p-8 text-gray-900 dark:text-gray-100">
+                        <div class="flex items-center justify-between mb-6 border-b pb-4 dark:border-gray-700">
+                            <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                                <i class="bi bi-list-check mr-2"></i>
+                                {{ $kriteria_id_to_edit ? 'Edit Kriteria' : 'Tambah Kriteria' }}
+                            </h3>
+                            <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
 
                         <form wire:submit.prevent="store">
-                            <div class="space-y-4">
+                            <div class="space-y-5">
                                 <!-- Nama Kriteria -->
                                 <div>
-                                    <x-input-label for="kriteria" :value="__('Nama Kriteria')" />
-                                    <x-text-input id="kriteria" type="text" class="mt-1 block w-full" wire:model="kriteria" placeholder="Contoh: Pengalaman Kerja" />
-                                    <x-input-error :messages="$errors->get('kriteria')" class="mt-2" />
+                                    <label for="kriteria" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Nama Kriteria <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" id="kriteria" wire:model="kriteria" placeholder="Contoh: Pengalaman Kerja, Pendidikan, dll"
+                                        class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                    @error('kriteria') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
 
                                 <!-- Bobot -->
                                 <div>
-                                    <x-input-label for="bobot" :value="__('Bobot (%)')" />
-                                    <x-text-input id="bobot" type="number" step="0.01" class="mt-1 block w-full" wire:model="bobot" placeholder="Contoh: 20" />
-                                    <x-input-error :messages="$errors->get('bobot')" class="mt-2" />
+                                    <label for="bobot" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Bobot (%) <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="number" id="bobot" wire:model="bobot" step="0.01" min="0" max="100" placeholder="Contoh: 20"
+                                        class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total bobot semua kriteria harus 100%</p>
+                                    @error('bobot') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
 
                                 <!-- Jenis -->
                                 <div>
-                                    <x-input-label for="jenis" :value="__('Jenis')" />
-                                    <select id="jenis" wire:model="jenis" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                        <option value="">Pilih Jenis</option>
-                                        <option value="Benefit">Benefit (Keuntungan)</option>
-                                        <option value="Cost">Cost (Biaya/Kekurangan)</option>
+                                    <label for="jenis" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Jenis Kriteria <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="jenis" wire:model="jenis"
+                                        class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                        style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Benefit">Benefit (Semakin tinggi semakin baik)</option>
+                                        <option value="Cost">Cost (Semakin rendah semakin baik)</option>
                                     </select>
-                                    <x-input-error :messages="$errors->get('jenis')" class="mt-2" />
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        <strong>Benefit:</strong> nilai lebih tinggi = lebih baik (contoh: pendidikan, pengalaman) |
+                                        <strong>Cost:</strong> nilai lebih rendah = lebih baik (contoh: jarak, biaya)
+                                    </p>
+                                    @error('jenis') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
-                            <div class="mt-6 flex justify-end gap-x-3">
-                                <x-secondary-button wire:click="closeModal">
-                                    {{ __('Batal') }}
-                                </x-secondary-button>
+                            <div class="mt-8 flex justify-center gap-x-4">
+                                <button type="button" wire:click="closeModal"
+                                    class="px-8 py-3 text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                    Batal
+                                </button>
 
-                                <x-primary-button type="submit">
-                                    {{ __('Simpan') }}
-                                </x-primary-button>
+                                <button type="submit"
+                                    class="px-8 py-3 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors flex items-center">
+                                    <i class="bi bi-save mr-2"></i>
+                                    Simpan
+                                </button>
                             </div>
                         </form>
                     </div>
                 </x-modal>
+
+                <!-- Delete Confirmation Modal -->
+                <div x-show="$wire.confirmingDeletion" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" style="display: none;">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+                        <div class="p-6 text-center">
+                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                                <i class="bi bi-exclamation-triangle text-red-600 dark:text-red-400 text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Hapus Kriteria</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                                Apakah Anda yakin ingin menghapus kriteria ini? Tindakan ini tidak dapat dibatalkan.
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 flex gap-3 justify-center sm:flex-row flex-col-reverse">
+                            <button wire:click="cancelDelete" type="button"
+                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Batal
+                            </button>
+                            <button wire:click="deleteKriteria" type="button"
+                                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+</div>

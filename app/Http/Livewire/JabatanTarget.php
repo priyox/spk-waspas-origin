@@ -10,6 +10,8 @@ class JabatanTarget extends Component
     public $jabatanTargets, $nama_jabatan, $id_eselon, $id_bidang;
     public $isModalOpen = false;
     public $jabatan_id_to_edit = null;
+    public $confirmingDeletion = false;
+    public $deleteJabatanId = null;
 
     protected $rules = [
         'nama_jabatan' => 'required|string|max:255',
@@ -66,10 +68,26 @@ class JabatanTarget extends Component
         $this->dispatch('open-modal', 'jabatan-modal');
     }
 
-    public function delete($id)
+    public function confirmDelete($id)
     {
-        JabatanTargetModel::find($id)->delete();
-        session()->flash('message', 'Jabatan Target berhasil dihapus.');
+        $this->confirmingDeletion = true;
+        $this->deleteJabatanId = $id;
+    }
+
+    public function deleteJabatan()
+    {
+        if ($this->deleteJabatanId) {
+            JabatanTargetModel::find($this->deleteJabatanId)->delete();
+            session()->flash('message', 'Jabatan Target berhasil dihapus.');
+        }
+        $this->confirmingDeletion = false;
+        $this->deleteJabatanId = null;
+    }
+
+    public function cancelDelete()
+    {
+        $this->confirmingDeletion = false;
+        $this->deleteJabatanId = null;
     }
 
     public function closeModal()

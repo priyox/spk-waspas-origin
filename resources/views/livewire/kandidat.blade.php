@@ -4,8 +4,8 @@
     </h2>
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="py-8">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 @if (session()->has('message'))
@@ -13,7 +13,7 @@
                         <span class="block sm:inline">{{ session('message') }}</span>
                     </div>
                 @endif
-        
+
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Kelola Data Kandidat</h3>
                     <button wire:click="create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium transition-colors duration-150">
@@ -58,7 +58,7 @@
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900 dark:text-gray-100 font-medium">{{ $kandidat->jabatan }}</div>
                                     <div class="text-xs text-indigo-600 dark:text-indigo-400">
-                                        {{ $kandidat->eselon?->eselon ?? '' }} 
+                                        {{ $kandidat->eselon?->eselon ?? '' }}
                                         {{ $kandidat->jabatan_fungsional?->nama_jabatan ?? '' }}
                                         {{ $kandidat->jabatan_pelaksana?->nama_jabatan ?? '' }}
                                     </div>
@@ -73,7 +73,7 @@
                                     <button wire:click="edit('{{ $kandidat->nip }}')" class="p-1 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors">
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
-                                    <button wire:click="delete('{{ $kandidat->nip }}')" onclick="return confirm('Apakah Anda yakin ingin menghapus kandidat ini?')" class="p-1 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors">
+                                    <button wire:click="confirmDelete('{{ $kandidat->nip }}')" class="p-1 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -92,7 +92,7 @@
                     </table>
                 </div>
 
-                <x-modal name="kandidat-modal" :show="$isModalOpen" maxWidth="5xl">
+                <x-modal name="kandidat-modal" :show="$isModalOpen" maxWidth="6xl">
                     <div class="p-8 text-gray-900 dark:text-gray-100">
                         <div class="flex items-center justify-between mb-6 border-b pb-4 dark:border-gray-700">
                             <h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400">
@@ -105,57 +105,65 @@
                         </div>
 
                         <form wire:submit.prevent="store">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 gap-6">
                                 <!-- Section: Identitas Diri -->
-                                <div class="col-span-full bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center">
-                                        <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 mr-2">1</span>
+                                <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg">
+                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center">
+                                        <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-2 text-sm font-bold">1</span>
                                         Identitas Diri
                                     </h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                        <div class="md:col-span-1">
-                                            <x-input-label for="nip" :value="__('NIP')" />
-                                            <x-text-input id="nip" type="text" class="mt-1 block w-full" wire:model="nip" placeholder="19XXXXXXXXXXXXXX" :disabled="$kandidat_id_to_edit" />
-                                            <x-input-error :messages="$errors->get('nip')" class="mt-2" />
-                                        </div>
-                                        <div class="md:col-span-1">
-                                            <x-input-label for="nama" :value="__('Nama Lengkap')" />
-                                            <x-text-input id="nama" type="text" class="mt-1 block w-full" wire:model="nama" placeholder="Nama lengkap & Gelar" />
-                                            <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                                        <div>
+                                            <label for="nip" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">NIP <span class="text-red-500">*</span></label>
+                                            <input type="text" id="nip" wire:model="nip" placeholder="19XXXXXXXXXXXXXX" {{ $kandidat_id_to_edit ? 'disabled' : '' }}
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors" />
+                                            @error('nip') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
-                                            <x-input-label for="tempat_lahir" :value="__('Tempat Lahir')" />
-                                            <x-text-input id="tempat_lahir" type="text" class="mt-1 block w-full" wire:model="tempat_lahir" />
-                                            <x-input-error :messages="$errors->get('tempat_lahir')" class="mt-2" />
+                                            <label for="nama" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                                            <input type="text" id="nama" wire:model="nama" placeholder="Nama lengkap & Gelar"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                            @error('nama') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
-                                            <x-input-label for="tanggal_lahir" :value="__('Tanggal Lahir')" />
-                                            <x-text-input id="tanggal_lahir" type="date" class="mt-1 block w-full" wire:model="tanggal_lahir" />
-                                            <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-2" />
+                                            <label for="tempat_lahir" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tempat Lahir</label>
+                                            <input type="text" id="tempat_lahir" wire:model="tempat_lahir" placeholder="Kota kelahiran"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                            @error('tempat_lahir') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div>
+                                            <label for="tanggal_lahir" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tanggal Lahir</label>
+                                            <input type="date" id="tanggal_lahir" wire:model="tanggal_lahir"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                            @error('tanggal_lahir') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Section: Jabatan & Kepegawaian -->
-                                <div class="col-span-full bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center">
-                                        <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 mr-2">2</span>
+                                <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg">
+                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center">
+                                        <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-2 text-sm font-bold">2</span>
                                         Jabatan & Kepegawaian
                                     </h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                                         <div class="md:col-span-2">
-                                            <x-input-label for="jabatan" :value="__('Nama Jabatan')" />
-                                            <x-text-input id="jabatan" type="text" class="mt-1 block w-full" wire:model="jabatan" placeholder="Nama Jabatan Lengkap" />
-                                            <x-input-error :messages="$errors->get('jabatan')" class="mt-2" />
+                                            <label for="jabatan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nama Jabatan <span class="text-red-500">*</span></label>
+                                            <input type="text" id="jabatan" wire:model="jabatan" placeholder="Nama Jabatan Lengkap"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                            @error('jabatan') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
-                                            <x-input-label for="tmt_jabatan" :value="__('TMT Jabatan')" />
-                                            <x-text-input id="tmt_jabatan" type="date" class="mt-1 block w-full" wire:model="tmt_jabatan" />
+                                            <label for="tmt_jabatan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">TMT Jabatan</label>
+                                            <input type="date" id="tmt_jabatan" wire:model="tmt_jabatan"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
                                         </div>
                                         <div>
-                                            <x-input-label for="jenis_jabatan_id" :value="__('Jenis Jabatan')" />
-                                            <select id="jenis_jabatan_id" wire:model.live="jenis_jabatan_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Jenis</option>
+                                            <label for="jenis_jabatan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jenis Jabatan <span class="text-red-500">*</span></label>
+                                            <select id="jenis_jabatan_id" wire:model.live="jenis_jabatan_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Jenis Jabatan --</option>
                                                 @foreach($jenis_jabatans as $j)
                                                     <option value="{{ $j->id }}">{{ $j->jenis_jabatan }}</option>
                                                 @endforeach
@@ -165,9 +173,11 @@
                                         <!-- Conditional Fields based on Jenis Jabatan -->
                                         @if(in_array($jenis_jabatan_id, [20, 30, 40]))
                                         <div>
-                                            <x-input-label for="eselon_id" :value="__('Eselon')" />
-                                            <select id="eselon_id" wire:model="eselon_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Eselon</option>
+                                            <label for="eselon_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Eselon <span class="text-red-500">*</span></label>
+                                            <select id="eselon_id" wire:model="eselon_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Eselon --</option>
                                                 @foreach($eselons as $e)
                                                     <option value="{{ $e->id }}">{{ $e->eselon }}</option>
                                                 @endforeach
@@ -175,9 +185,11 @@
                                         </div>
                                         @elseif($jenis_jabatan_id == 2)
                                         <div class="md:col-span-2">
-                                            <x-input-label for="jabatan_fungsional_id" :value="__('Jabatan Fungsional')" />
-                                            <select id="jabatan_fungsional_id" wire:model="jabatan_fungsional_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Jabfung</option>
+                                            <label for="jabatan_fungsional_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jabatan Fungsional <span class="text-red-500">*</span></label>
+                                            <select id="jabatan_fungsional_id" wire:model="jabatan_fungsional_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Jabatan Fungsional --</option>
                                                 @foreach($jabatan_fungsionals as $jf)
                                                     <option value="{{ $jf->id }}">{{ $jf->nama_jabatan }} ({{ $jf->jenjang }})</option>
                                                 @endforeach
@@ -185,9 +197,11 @@
                                         </div>
                                         @elseif($jenis_jabatan_id == 3)
                                         <div class="md:col-span-2">
-                                            <x-input-label for="jabatan_pelaksana_id" :value="__('Jabatan Pelaksana')" />
-                                            <select id="jabatan_pelaksana_id" wire:model="jabatan_pelaksana_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Jabatan Pelaksana</option>
+                                            <label for="jabatan_pelaksana_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jabatan Pelaksana <span class="text-red-500">*</span></label>
+                                            <select id="jabatan_pelaksana_id" wire:model="jabatan_pelaksana_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Jabatan Pelaksana --</option>
                                                 @foreach($jabatan_pelaksanas as $jp)
                                                     <option value="{{ $jp->id }}">{{ $jp->nama_jabatan }}</option>
                                                 @endforeach
@@ -196,22 +210,27 @@
                                         @endif
 
                                         <div>
-                                            <x-input-label for="golongan_id" :value="__('Golongan')" />
-                                            <select id="golongan_id" wire:model="golongan_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Golongan</option>
+                                            <label for="golongan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Golongan <span class="text-red-500">*</span></label>
+                                            <select id="golongan_id" wire:model="golongan_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Golongan --</option>
                                                 @foreach($golongans as $g)
                                                     <option value="{{ $g->id }}">{{ $g->golongan }} - {{ $g->pangkat }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div>
-                                            <x-input-label for="tmt_golongan" :value="__('TMT Golongan')" />
-                                            <x-text-input id="tmt_golongan" type="date" class="mt-1 block w-full" wire:model="tmt_golongan" />
+                                            <label for="tmt_golongan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">TMT Golongan</label>
+                                            <input type="date" id="tmt_golongan" wire:model="tmt_golongan"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
                                         </div>
                                         <div class="md:col-span-2">
-                                            <x-input-label for="unit_kerja_id" :value="__('Unit Kerja')" />
-                                            <select id="unit_kerja_id" wire:model="unit_kerja_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Unit Kerja</option>
+                                            <label for="unit_kerja_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Unit Kerja <span class="text-red-500">*</span></label>
+                                            <select id="unit_kerja_id" wire:model="unit_kerja_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Unit Kerja --</option>
                                                 @foreach($unit_kerjas as $uk)
                                                     <option value="{{ $uk->id }}">{{ $uk->unit_kerja }}</option>
                                                 @endforeach
@@ -221,61 +240,95 @@
                                 </div>
 
                                 <!-- Section: Pendidikan -->
-                                <div class="col-span-full bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg">
-                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center">
-                                        <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 mr-2">3</span>
+                                <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg">
+                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center">
+                                        <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-2 text-sm font-bold">3</span>
                                         Latar Belakang Pendidikan
                                     </h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                                         <div>
-                                            <x-input-label for="tingkat_pendidikan_id" :value="__('Tingkat')" />
-                                            <select id="tingkat_pendidikan_id" wire:model="tingkat_pendidikan_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Tingkat</option>
+                                            <label for="tingkat_pendidikan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tingkat Pendidikan <span class="text-red-500">*</span></label>
+                                            <select id="tingkat_pendidikan_id" wire:model="tingkat_pendidikan_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Tingkat --</option>
                                                 @foreach($tingkat_pendidikans as $tp)
                                                     <option value="{{ $tp->id }}">{{ $tp->tingkat }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="md:col-span-2">
-                                            <x-input-label for="jurusan_pendidikan_id" :value="__('Jurusan Spesifik')" />
-                                            <select id="jurusan_pendidikan_id" wire:model="jurusan_pendidikan_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Jurusan</option>
+                                            <label for="jurusan_pendidikan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jurusan Spesifik</label>
+                                            <select id="jurusan_pendidikan_id" wire:model="jurusan_pendidikan_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Jurusan --</option>
                                                 @foreach($jurusan_pendidikans as $jp)
                                                     <option value="{{ $jp->id }}">{{ $jp->jurusan }}</option>
                                                 @endforeach
                                             </select>
-                                            <div class="text-[10px] text-gray-400 mt-1">* Jika tidak ada, isi di kolom manual samping</div>
+                                            <p class="text-xs text-gray-400 mt-1">Jika tidak ada, isi di kolom "Keterangan Jurusan" di bawah</p>
                                         </div>
                                         <div>
-                                            <x-input-label for="bidang_ilmu_id" :value="__('Kelompok Bidang')" />
-                                            <select id="bidang_ilmu_id" wire:model="bidang_ilmu_id" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                                <option value="">Pilih Bidang</option>
+                                            <label for="bidang_ilmu_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Kelompok Bidang <span class="text-red-500">*</span></label>
+                                            <select id="bidang_ilmu_id" wire:model="bidang_ilmu_id"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Pilih Bidang --</option>
                                                 @foreach($bidang_ilmus as $bi)
                                                     <option value="{{ $bi->id }}">{{ $bi->bidang }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="md:col-span-full">
-                                            <x-input-label for="jurusan" :value="__('Keterangan Jurusan (Lainnya)')" />
-                                            <x-text-input id="jurusan" type="text" class="mt-1 block w-full" wire:model="jurusan" placeholder="Gunakan jika jurusan spesifik tidak tersedia di daftar" />
+                                        <div class="md:col-span-4">
+                                            <label for="jurusan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Keterangan Jurusan (Lainnya)</label>
+                                            <input type="text" id="jurusan" wire:model="jurusan" placeholder="Gunakan jika jurusan spesifik tidak tersedia di daftar"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mt-8 flex justify-end gap-x-4">
-                                <x-secondary-button wire:click="closeModal" class="px-6 py-2">
-                                    {{ __('Batal') }}
-                                </x-secondary-button>
+                            <div class="mt-8 flex justify-center gap-x-4">
+                                <button type="button" wire:click="closeModal"
+                                    class="px-8 py-3 text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                    Batal
+                                </button>
 
-                                <x-primary-button type="submit" class="px-8 py-2 bg-indigo-600 hover:bg-indigo-700">
+                                <button type="submit"
+                                    class="px-8 py-3 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors flex items-center">
                                     <i class="bi bi-save mr-2"></i>
-                                    {{ __('Simpan Data') }}
-                                </x-primary-button>
+                                    Simpan Data
+                                </button>
                             </div>
                         </form>
                     </div>
                 </x-modal>
+
+                <!-- Delete Confirmation Modal -->
+                <div x-show="$wire.confirmingDeletion" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" style="display: none;">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+                        <div class="p-6 text-center">
+                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                                <i class="bi bi-exclamation-triangle text-red-600 dark:text-red-400 text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Hapus Kandidat</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                                Apakah Anda yakin ingin menghapus kandidat ini? Tindakan ini tidak dapat dibatalkan.
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 flex gap-3 justify-center sm:flex-row flex-col-reverse">
+                            <button wire:click="cancelDelete" type="button"
+                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                Batal
+                            </button>
+                            <button wire:click="deleteKandidat" type="button"
+                                class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

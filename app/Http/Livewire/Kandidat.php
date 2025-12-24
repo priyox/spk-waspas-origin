@@ -10,6 +10,8 @@ class Kandidat extends Component
     public $golongan_id, $jenis_jabatan_id, $eselon_id, $tingkat_pendidikan_id, $jurusan_pendidikan_id, $jabatan_fungsional_id, $jabatan_pelaksana_id, $bidang_ilmu_id, $unit_kerja_id;
     public $isModalOpen = false;
     public $kandidat_id_to_edit = null;
+    public $confirmingDeletion = false;
+    public $deleteNip = null;
 
     protected $rules = [
         'nip' => 'required|string|max:20',
@@ -120,10 +122,26 @@ class Kandidat extends Component
         $this->dispatch('open-modal', 'kandidat-modal');
     }
 
-    public function delete($nip)
+    public function confirmDelete($nip)
     {
-        \App\Models\Kandidat::where('nip', $nip)->delete();
-        session()->flash('message', 'Kandidat deleted successfully.');
+        $this->confirmingDeletion = true;
+        $this->deleteNip = $nip;
+    }
+
+    public function deleteKandidat()
+    {
+        if ($this->deleteNip) {
+            \App\Models\Kandidat::where('nip', $this->deleteNip)->delete();
+            session()->flash('message', 'Kandidat deleted successfully.');
+        }
+        $this->confirmingDeletion = false;
+        $this->deleteNip = null;
+    }
+
+    public function cancelDelete()
+    {
+        $this->confirmingDeletion = false;
+        $this->deleteNip = null;
     }
 
     public function closeModal()

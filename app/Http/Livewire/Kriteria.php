@@ -9,6 +9,8 @@ class Kriteria extends Component
     public $kriterias, $kriteria, $bobot, $jenis;
     public $isModalOpen = false;
     public $kriteria_id_to_edit = null;
+    public $confirmingDeletion = false;
+    public $deleteKriteriaId = null;
 
     protected $rules = [
         'kriteria' => 'required|string|max:255',
@@ -58,10 +60,26 @@ class Kriteria extends Component
         $this->dispatch('open-modal', 'kriteria-modal');
     }
 
-    public function delete($id)
+    public function confirmDelete($id)
     {
-        \App\Models\Kriteria::find($id)->delete();
-        session()->flash('message', 'Kriteria deleted successfully.');
+        $this->confirmingDeletion = true;
+        $this->deleteKriteriaId = $id;
+    }
+
+    public function deleteKriteria()
+    {
+        if ($this->deleteKriteriaId) {
+            \App\Models\Kriteria::find($this->deleteKriteriaId)->delete();
+            session()->flash('message', 'Kriteria deleted successfully.');
+        }
+        $this->confirmingDeletion = false;
+        $this->deleteKriteriaId = null;
+    }
+
+    public function cancelDelete()
+    {
+        $this->confirmingDeletion = false;
+        $this->deleteKriteriaId = null;
     }
 
     public function closeModal()
