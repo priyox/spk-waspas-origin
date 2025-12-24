@@ -76,13 +76,7 @@ class Kandidat extends Component
         }
     }
 
-    public function getJurusanPendidikansOptionsProperty()
-    {
-        if (!$this->tingkat_pendidikan_id) {
-            return collect();
-        }
-        return \App\Models\JurusanPendidikan::where('tingkat_pendidikan_id', $this->tingkat_pendidikan_id)->get();
-    }
+
 
     public function updatedJabatanFungsionalId($value)
     {
@@ -174,6 +168,7 @@ class Kandidat extends Component
         $this->kandidat_id_to_edit = $nip;
         $this->isModalOpen = true;
 
+        
         $this->dispatch('open-modal', 'kandidat-modal');
     }
 
