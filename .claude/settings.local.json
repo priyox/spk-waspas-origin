@@ -8,7 +8,8 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Implement WASPAS calculation with jabatan target and auto-fill penilaian\n\n- Add auto-fill for criteria K1 (Pangkat), K2 (Masa Jabatan), K3 (Pendidikan), K8 (Bidang Ilmu)\n- Add MasaJabatanRange and PersentaseConversion models for value conversion\n- Add PenilaianAutoFillService for calculating auto-fill values\n- Update WaspasProses to calculate based on selected jabatan target\n- Save WASPAS results to database with jabatan_target_id\n- Update WaspasHasil to filter results by jabatan target\n- Add validation for required fields in Penilaian\n- Improve UI: wider content area, larger dropdowns, centered buttons\n- Display category labels for auto-filled criteria\n- Fix model relationships (JabatanTarget, SyaratJabatan, WaspasNilai)\n\n🤖 Generated with [Claude Code](https://claude.ai/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git push:*)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
