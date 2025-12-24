@@ -8,6 +8,7 @@ use App\Http\Livewire\WaspasProses;
 use App\Http\Livewire\WaspasHasil;
 use App\Http\Livewire\KriteriaNilai;
 use App\Http\Livewire\Report;
+use App\Http\Livewire\Profile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,7 +30,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::view('profile', 'profile')
+Route::get('profile', Profile::class)
     ->middleware(['auth'])
     ->name('profile');
 

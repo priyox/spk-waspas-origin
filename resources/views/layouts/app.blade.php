@@ -65,11 +65,14 @@
                                 </x-dropdown-link>
 
                                 <!-- Authentication -->
-                                <button wire:click="logout" class="w-full text-left">
-                                    <x-dropdown-link>
-                                        {{ __('Log Out') }}
-                                    </x-dropdown-link>
-                                </button>
+                                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left">
+                                        <x-dropdown-link>
+                                            {{ __('Log Out') }}
+                                        </x-dropdown-link>
+                                    </button>
+                                </form>
                             </x-slot>
                         </x-dropdown>
                     </div>
