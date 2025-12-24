@@ -6,6 +6,7 @@ use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Penilaian;
 use App\Http\Livewire\WaspasProses;
 use App\Http\Livewire\WaspasHasil;
+use App\Http\Livewire\KriteriaNilai;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,6 +52,9 @@ Route::view('profile', 'profile')
 
     Route::get('/jabatan-target', \App\Http\Livewire\JabatanTarget::class)
         ->name('jabatan-target.index');
+
+    Route::get('/kriteria-nilai', KriteriaNilai::class)
+        ->name('kriteria-nilai.index');
 
     Route::get('/penilaian', Penilaian::class)
         ->name('penilaian.input');

@@ -94,6 +94,15 @@ class MenuSeeder extends Seeder
             'permission_name' => 'syarat-jabatan-manage',
             'is_active' => true,
         ]);
+        Menu::create([
+            'menu_name' => 'Nilai Kriteria',
+            'route' => 'kriteria-nilai.index',
+            'icon' => 'bi bi-graph-up',
+            'parent_id' => $masterData->id,
+            'order' => 5,
+            'permission_name' => 'kriteria-nilai-manage',
+            'is_active' => true,
+        ]);
 
         // ===== SUB MENU PENILAIAN =====
         Menu::create([
