@@ -1,4 +1,3 @@
-actio
 <?php
 
 namespace Database\Seeders;
