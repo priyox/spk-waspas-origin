@@ -142,8 +142,18 @@ class Penilaian extends Component
             foreach ($manualKriterias as $kriteriaId) {
                 $value = $this->nilais[$kandidat->id][$kriteriaId] ?? null;
 
-                if ($value === '' || $value === null) {
-                    $this->validationErrors[$kandidat->id][$kriteriaId] = true;
+                // Validasi berdasarkan tipe kriteria:
+                if (in_array($kriteriaId, $this->dropdownKriterias)) {
+                    // Dropdown (K4-K7): nilai harus 1-5, tidak boleh kosong, null, atau 0
+                    if ($value === '' || $value === null || $value === 0 || $value === '0' || $value < 1 || $value > 5) {
+                        $this->validationErrors[$kandidat->id][$kriteriaId] = true;
+                    }
+                } elseif (in_array($kriteriaId, $this->persentaseKriterias)) {
+                    // Persentase (K9-K10): nilai 0-100 valid, tapi tidak boleh kosong atau null
+                    // Nilai 0 diperbolehkan untuk persentase (contoh: 0% = tidak ada penghargaan)
+                    if ($value === '' || $value === null || $value < 0 || $value > 100) {
+                        $this->validationErrors[$kandidat->id][$kriteriaId] = true;
+                    }
                 }
             }
         }
@@ -182,7 +192,17 @@ class Penilaian extends Component
                     continue;
                 }
 
-                if ($value !== '' && $value !== null) {
+                // Validasi nilai sebelum simpan
+                $isValid = false;
+                if (in_array($kriteriaId, $this->dropdownKriterias)) {
+                    // Dropdown: nilai harus 1-5
+                    $isValid = ($value !== '' && $value !== null && $value >= 1 && $value <= 5);
+                } elseif (in_array($kriteriaId, $this->persentaseKriterias)) {
+                    // Persentase: nilai 0-100 (0 valid)
+                    $isValid = ($value !== '' && $value !== null && $value >= 0 && $value <= 100);
+                }
+
+                if ($isValid) {
                     $nilaiToSave = $value;
 
                     // Konversi persentase ke nilai 1-5 untuk K9 dan K10
