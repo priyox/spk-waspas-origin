@@ -7,7 +7,7 @@ use Livewire\Component;
 class Kandidat extends Component
 {
     public $kandidats, $nip, $nama, $tempat_lahir, $tanggal_lahir, $jabatan, $tmt_golongan, $tmt_jabatan, $jurusan;
-    public $golongan_id, $jenis_jabatan_id, $eselon_id, $tingkat_pendidikan_id, $jurusan_pendidikan_id, $jabatan_fungsional_id, $jabatan_pelaksana_id, $bidang_ilmu_id, $unit_kerja_id;
+    public $golongan_id, $jenis_jabatan_id, $eselon_id, $tingkat_pendidikan_id, $jurusan_pendidikan_id, $jabatan_fungsional_id, $jabatan_pelaksana_id, $jabatan_target_id, $bidang_ilmu_id, $unit_kerja_id;
     public $isModalOpen = false;
     public $kandidat_id_to_edit = null;
     public $confirmingDeletion = false;
@@ -28,6 +28,7 @@ class Kandidat extends Component
         'jurusan_pendidikan_id' => 'nullable|exists:jurusan_pendidikans,id',
         'jabatan_fungsional_id' => 'nullable|exists:jabatan_fungsionals,id',
         'jabatan_pelaksana_id' => 'nullable|exists:jabatan_pelaksanas,id',
+        'jabatan_target_id' => 'nullable|exists:jabatan_targets,id',
         'bidang_ilmu_id' => 'nullable|exists:bidang_ilmus,id',
         'unit_kerja_id' => 'nullable|exists:unit_kerjas,id',
         'jurusan' => 'nullable|string|max:255',
@@ -56,7 +57,58 @@ class Kandidat extends Component
             'jurusan_pendidikans' => \App\Models\JurusanPendidikan::all(),
             'jabatan_fungsionals' => \App\Models\JabatanFungsional::all(),
             'jabatan_pelaksanas' => \App\Models\JabatanPelaksana::all(),
+            'jabatan_targets' => \App\Models\JabatanTarget::all(),
         ])->layout('layouts.app');
+    }
+
+    public function updatedTingkatPendidikanId()
+    {
+        $this->jurusan_pendidikan_id = null;
+    }
+
+    public function updatedJurusanPendidikanId($value)
+    {
+        if ($value) {
+            $jurusan = \App\Models\JurusanPendidikan::find($value);
+            if ($jurusan) {
+                $this->bidang_ilmu_id = $jurusan->bidang_ilmu_id;
+            }
+        }
+    }
+
+    public function getJurusanPendidikansOptionsProperty()
+    {
+        if (!$this->tingkat_pendidikan_id) {
+            return collect();
+        }
+        return \App\Models\JurusanPendidikan::where('tingkat_pendidikan_id', $this->tingkat_pendidikan_id)->get();
+    }
+
+    public function updatedJabatanFungsionalId($value)
+    {
+        if ($value) {
+            $jw = \App\Models\JabatanFungsional::find($value);
+            if ($jw) $this->jabatan = $jw->nama_jabatan;
+        }
+    }
+
+    public function updatedJabatanPelaksanaId($value)
+    {
+        if ($value) {
+            $jp = \App\Models\JabatanPelaksana::find($value);
+            if ($jp) $this->jabatan = $jp->nama_jabatan;
+        }
+    }
+
+    public function updatedJabatanTargetId($value)
+    {
+        if ($value) {
+            $jt = \App\Models\JabatanTarget::find($value);
+            if ($jt) {
+                $this->jabatan = $jt->nama_jabatan;
+                $this->eselon_id = $jt->id_eselon;
+            }
+        }
     }
 
     public function create()
@@ -85,6 +137,8 @@ class Kandidat extends Component
             'jurusan_pendidikan_id' => $this->jurusan_pendidikan_id ?: null,
             'jabatan_fungsional_id' => $this->jabatan_fungsional_id ?: null,
             'jabatan_pelaksana_id' => $this->jabatan_pelaksana_id ?: null,
+            'jabatan_target_id' => $this->jabatan_target_id ?: null,
+            'jabatan_target_id' => $this->jabatan_target_id ?: null,
             'bidang_ilmu_id' => $this->bidang_ilmu_id ?: null,
             'unit_kerja_id' => $this->unit_kerja_id ?: null,
             'jurusan' => $this->jurusan,
@@ -112,6 +166,7 @@ class Kandidat extends Component
         $this->jurusan_pendidikan_id = $kandidat->jurusan_pendidikan_id;
         $this->jabatan_fungsional_id = $kandidat->jabatan_fungsional_id;
         $this->jabatan_pelaksana_id = $kandidat->jabatan_pelaksana_id;
+        $this->jabatan_target_id = $kandidat->jabatan_target_id;
         $this->bidang_ilmu_id = $kandidat->bidang_ilmu_id;
         $this->unit_kerja_id = $kandidat->unit_kerja_id;
         $this->jurusan = $kandidat->jurusan;
@@ -167,6 +222,7 @@ class Kandidat extends Component
         $this->jurusan_pendidikan_id = '';
         $this->jabatan_fungsional_id = '';
         $this->jabatan_pelaksana_id = '';
+        $this->jabatan_target_id = '';
         $this->bidang_ilmu_id = '';
         $this->unit_kerja_id = '';
         $this->jurusan = '';

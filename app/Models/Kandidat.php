@@ -43,6 +43,11 @@ class Kandidat extends Model
         return $this->belongsTo(TingkatPendidikan::class, 'tingkat_pendidikan_id');
     }
 
+    public function jabatan_target()
+    {
+        return $this->belongsTo(JabatanTarget::class);
+    }
+
     public function bidang_ilmu()
     {
         return $this->belongsTo(BidangIlmu::class, 'bidang_ilmu_id');

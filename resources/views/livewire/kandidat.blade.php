@@ -155,17 +155,6 @@
                                         Jabatan & Kepegawaian
                                     </h4>
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-                                        <div class="md:col-span-2">
-                                            <label for="jabatan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nama Jabatan <span class="text-red-500">*</span></label>
-                                            <input type="text" id="jabatan" wire:model="jabatan" placeholder="Nama Jabatan Lengkap"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
-                                            @error('jabatan') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                                        </div>
-                                        <div>
-                                            <label for="tmt_jabatan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">TMT Jabatan</label>
-                                            <input type="date" id="tmt_jabatan" wire:model="tmt_jabatan"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
-                                        </div>
                                         <div>
                                             <label for="jenis_jabatan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jenis Jabatan <span class="text-red-500">*</span></label>
                                             <select id="jenis_jabatan_id" wire:model.live="jenis_jabatan_id"
@@ -178,40 +167,65 @@
                                             </select>
                                         </div>
 
-                                        <!-- Conditional Fields based on Jenis Jabatan -->
+                                        <div class="md:col-span-2">
+                                            <label for="jabatan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nama Jabatan <span class="text-red-500">*</span></label>
+                                            
+                                            @if($jenis_jabatan_id == 2)
+                                                <select id="jabatan_fungsional_id" wire:model.live="jabatan_fungsional_id"
+                                                    class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10 mb-2"
+                                                    style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                    <option value="">-- Pilih Jabatan Fungsional --</option>
+                                                    @foreach($jabatan_fungsionals as $jf)
+                                                        <option value="{{ $jf->id }}">{{ $jf->nama_jabatan }} ({{ $jf->jenjang }})</option>
+                                                    @endforeach
+                                                </select>
+                                                <input type="text" id="jabatan" wire:model="jabatan" placeholder="Nama Jabatan terisi otomatis" readonly
+                                                    class="w-full px-4 py-3 text-base bg-gray-100 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 cursor-not-allowed" />
+                                            @elseif($jenis_jabatan_id == 3)
+                                                <select id="jabatan_pelaksana_id" wire:model.live="jabatan_pelaksana_id"
+                                                    class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10 mb-2"
+                                                    style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                    <option value="">-- Pilih Jabatan Pelaksana --</option>
+                                                    @foreach($jabatan_pelaksanas as $jp)
+                                                        <option value="{{ $jp->id }}">{{ $jp->nama_jabatan }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <input type="text" id="jabatan" wire:model="jabatan" placeholder="Nama Jabatan terisi otomatis" readonly
+                                                    class="w-full px-4 py-3 text-base bg-gray-100 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 cursor-not-allowed" />
+                                            @elseif(in_array($jenis_jabatan_id, [20, 30, 40]))
+                                                <select id="jabatan_target_id" wire:model.live="jabatan_target_id"
+                                                    class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10 mb-2"
+                                                    style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                    <option value="">-- Pilih Jabatan Target --</option>
+                                                    @foreach($jabatan_targets as $jt)
+                                                        <option value="{{ $jt->id }}">{{ $jt->nama_jabatan }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <input type="text" id="jabatan" wire:model="jabatan" placeholder="Nama Jabatan terisi otomatis" readonly
+                                                    class="w-full px-4 py-3 text-base bg-gray-100 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 cursor-not-allowed" />
+                                            @else
+                                                <input type="text" id="jabatan" wire:model="jabatan" placeholder="Nama Jabatan Lengkap"
+                                                    class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                            @endif
+                                            @error('jabatan') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div>
+                                            <label for="tmt_jabatan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">TMT Jabatan</label>
+                                            <input type="date" id="tmt_jabatan" wire:model="tmt_jabatan"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
+                                        </div>
+
+                                        <!-- Eselon only for structural -->
                                         @if(in_array($jenis_jabatan_id, [20, 30, 40]))
                                         <div>
-                                            <label for="eselon_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Eselon <span class="text-red-500">*</span></label>
-                                            <select id="eselon_id" wire:model="eselon_id"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
-                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
-                                                <option value="">-- Pilih Eselon --</option>
+                                            <label for="eselon_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Eselon</label>
+                                            <select id="eselon_id" wire:model="eselon_id" disabled
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 cursor-not-allowed appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%239ca3af%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Auto-filled --</option>
                                                 @foreach($eselons as $e)
                                                     <option value="{{ $e->id }}">{{ $e->eselon }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @elseif($jenis_jabatan_id == 2)
-                                        <div class="md:col-span-2">
-                                            <label for="jabatan_fungsional_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jabatan Fungsional <span class="text-red-500">*</span></label>
-                                            <select id="jabatan_fungsional_id" wire:model="jabatan_fungsional_id"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
-                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
-                                                <option value="">-- Pilih Jabatan Fungsional --</option>
-                                                @foreach($jabatan_fungsionals as $jf)
-                                                    <option value="{{ $jf->id }}">{{ $jf->nama_jabatan }} ({{ $jf->jenjang }})</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @elseif($jenis_jabatan_id == 3)
-                                        <div class="md:col-span-2">
-                                            <label for="jabatan_pelaksana_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jabatan Pelaksana <span class="text-red-500">*</span></label>
-                                            <select id="jabatan_pelaksana_id" wire:model="jabatan_pelaksana_id"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
-                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
-                                                <option value="">-- Pilih Jabatan Pelaksana --</option>
-                                                @foreach($jabatan_pelaksanas as $jp)
-                                                    <option value="{{ $jp->id }}">{{ $jp->nama_jabatan }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -256,7 +270,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                                         <div>
                                             <label for="tingkat_pendidikan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tingkat Pendidikan <span class="text-red-500">*</span></label>
-                                            <select id="tingkat_pendidikan_id" wire:model="tingkat_pendidikan_id"
+                                            <select id="tingkat_pendidikan_id" wire:model.live="tingkat_pendidikan_id"
                                                 class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
                                                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
                                                 <option value="">-- Pilih Tingkat --</option>
@@ -267,22 +281,22 @@
                                         </div>
                                         <div class="md:col-span-2">
                                             <label for="jurusan_pendidikan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Jurusan Spesifik</label>
-                                            <select id="jurusan_pendidikan_id" wire:model="jurusan_pendidikan_id"
+                                            <select id="jurusan_pendidikan_id" wire:model.live="jurusan_pendidikan_id"
                                                 class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
                                                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
-                                                <option value="">-- Pilih Jurusan --</option>
-                                                @foreach($jurusan_pendidikans as $jp)
+                                                <option value="">-- Pilih Jurusan Spesifik --</option>
+                                                @foreach($this->jurusanPendidikansOptions as $jp)
                                                     <option value="{{ $jp->id }}">{{ $jp->jurusan }}</option>
                                                 @endforeach
                                             </select>
                                             <p class="text-xs text-gray-400 mt-1">Jika tidak ada, isi di kolom "Keterangan Jurusan" di bawah</p>
                                         </div>
                                         <div>
-                                            <label for="bidang_ilmu_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Kelompok Bidang <span class="text-red-500">*</span></label>
-                                            <select id="bidang_ilmu_id" wire:model="bidang_ilmu_id"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
-                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
-                                                <option value="">-- Pilih Bidang --</option>
+                                            <label for="bidang_ilmu_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Kelompok Bidang</label>
+                                            <select id="bidang_ilmu_id" wire:model="bidang_ilmu_id" disabled
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 cursor-not-allowed appearance-none bg-no-repeat bg-right pr-10"
+                                                style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%239ca3af%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                <option value="">-- Auto-filled --</option>
                                                 @foreach($bidang_ilmus as $bi)
                                                     <option value="{{ $bi->id }}">{{ $bi->bidang }}</option>
                                                 @endforeach
