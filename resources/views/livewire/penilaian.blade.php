@@ -33,7 +33,8 @@
                         Jabatan Target <span class="text-xs font-normal text-gray-500">(menentukan syarat jabatan untuk perhitungan)</span>
                     </label>
                     <select wire:model.live="selectedJabatanId" id="selectedJabatanId"
-                        class="w-full md:w-1/2 lg:w-1/3 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-all">
+                        class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                        style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
                         <option value="">-- Pilih Jabatan Target --</option>
                         @foreach($jabatanTargets as $target)
                             <option value="{{ $target->id }}">{{ $target->nama_jabatan }}</option>
@@ -49,7 +50,7 @@
                             <p class="font-semibold mb-1">Syarat Jabatan ({{ $selectedTarget->eselon->eselon ?? '-' }}):</p>
                             <ul class="list-disc list-inside space-y-0.5">
                                 <li>Min. Golongan: {{ $syarat->minimalGolongan->golongan ?? '-' }}</li>
-                                <li>Min. Pendidikan: {{ $syarat->minimalTingkatPendidikan->tingkat_pendidikan ?? '-' }}</li>
+                                <li>Min. Pendidikan: {{ $syarat->minimalTingkatPendidikan->tingkat ?? '-' }}</li>
                             </ul>
                         </div>
                         @endif

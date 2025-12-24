@@ -85,6 +85,15 @@ class MenuSeeder extends Seeder
             'permission_name' => 'kriteria-manage',
             'is_active' => true,
         ]);
+        Menu::create([
+            'menu_name' => 'Syarat Jabatan',
+            'route' => 'syarat-jabatan.index',
+            'icon' => 'bi bi-card-checklist',
+            'parent_id' => $masterData->id,
+            'order' => 4,
+            'permission_name' => 'syarat-jabatan-manage',
+            'is_active' => true,
+        ]);
 
         // ===== SUB MENU PENILAIAN =====
         Menu::create([

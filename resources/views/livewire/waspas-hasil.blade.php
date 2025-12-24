@@ -25,7 +25,8 @@
                             Jabatan Target
                         </label>
                         <select wire:model.live="selectedJabatanId" id="selectedJabatanId"
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                            style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
                             <option value="">-- Pilih Jabatan Target --</option>
                             @foreach($jabatanTargets as $target)
                                 @php
@@ -40,9 +41,8 @@
                     </div>
 
                     @if($selectedJabatanId && count($results) > 0)
-                    <button type="button" wire:click="deleteResult({{ $selectedJabatanId }})"
-                        wire:confirm="Apakah Anda yakin ingin menghapus hasil perhitungan untuk jabatan ini?"
-                        class="px-4 py-2.5 bg-red-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 transition ease-in-out duration-150">
+                    <button type="button" wire:click="confirmDelete({{ $selectedJabatanId }})"
+                        class="px-6 py-3 bg-red-600 border border-transparent rounded-lg font-semibold text-base text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 transition ease-in-out duration-150">
                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
@@ -213,6 +213,42 @@
         @endif
 
     </div>
+
+    {{-- Modal Konfirmasi Hapus --}}
+    @if($confirmingDeletion)
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity" wire:click="cancelDelete"></div>
+
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all max-w-md w-full p-6 animate-in fade-in zoom-in-95">
+            {{-- Icon --}}
+            <div class="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+            </div>
+
+            {{-- Content --}}
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-2">
+                Hapus Hasil Perhitungan
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">
+                Apakah Anda yakin ingin menghapus hasil perhitungan untuk jabatan ini? Data yang dihapus tidak dapat dikembalikan.
+            </p>
+
+            {{-- Buttons --}}
+            <div class="flex gap-3">
+                <button wire:click="cancelDelete" type="button"
+                    class="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                    Batal
+                </button>
+                <button wire:click="deleteResult" type="button"
+                    class="flex-1 px-4 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors shadow-lg">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <style>
         @media print {

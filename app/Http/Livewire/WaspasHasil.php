@@ -12,6 +12,8 @@ class WaspasHasil extends Component
     public $jabatanTargets;
     public $selectedJabatanId = '';
     public $results = [];
+    public $confirmingDeletion = false;
+    public $deleteJabatanId = null;
 
     protected $queryString = ['selectedJabatanId' => ['as' => 'jabatan']];
 
@@ -75,12 +77,28 @@ class WaspasHasil extends Component
         })->sortByDesc('qi')->values()->toArray();
     }
 
-    public function deleteResult($jabatanId)
+    public function confirmDelete($jabatanId)
     {
-        WaspasNilai::where('jabatan_target_id', $jabatanId)->delete();
-        session()->flash('message', 'Hasil perhitungan berhasil dihapus.');
-        $this->results = [];
-        $this->selectedJabatanId = '';
+        $this->confirmingDeletion = true;
+        $this->deleteJabatanId = $jabatanId;
+    }
+
+    public function deleteResult()
+    {
+        if ($this->deleteJabatanId) {
+            WaspasNilai::where('jabatan_target_id', $this->deleteJabatanId)->delete();
+            session()->flash('message', 'Hasil perhitungan berhasil dihapus.');
+            $this->results = [];
+            $this->selectedJabatanId = '';
+        }
+        $this->confirmingDeletion = false;
+        $this->deleteJabatanId = null;
+    }
+
+    public function cancelDelete()
+    {
+        $this->confirmingDeletion = false;
+        $this->deleteJabatanId = null;
     }
 
     public function render()
