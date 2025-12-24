@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             TingkatPendidikanSeeder::class,
             BidangIlmuSeeder::class,
             KriteriaSeeder::class,
+            MasaJabatanRangeSeeder::class, // New: Konfigurasi range masa jabatan
+            PersentaseConversionSeeder::class, // New: Konfigurasi konversi persentase
             KandidatSeeder::class,
             NilaiSeeder::class,
             SyaratJabatanSeeder::class,
@@ -32,6 +34,7 @@ class DatabaseSeeder extends Seeder
             UnitKerjaSeeder::class,
             JurusanPendidikanSeeder::class,
             JabatanTargetSeeder::class,
+            KriteriaNilaiSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Kandidat;
+use Carbon\Carbon;
 
 class KandidatSeeder extends Seeder
 {
@@ -25,6 +26,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 9, // S-3
                 'jurusan' => 'Doktor Ilmu Komputer',
                 'bidang_ilmu_id' => 1, // Teknik Informatika
+                'tmt_golongan' => Carbon::now()->subYears(3)->subMonths(2),
+                'tmt_jabatan' => Carbon::now()->subYears(5)->subMonths(3), // > 4 tahun
             ],
             [
                 'nip' => '198802022012022002',
@@ -39,6 +42,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 8, // S-2
                 'jurusan' => 'Magister Teknik Perangkat Lunak',
                 'bidang_ilmu_id' => 2, // Sistem Informasi
+                'tmt_golongan' => Carbon::now()->subYears(2)->subMonths(1),
+                'tmt_jabatan' => Carbon::now()->subYears(3)->subMonths(6), // 3-4 tahun
             ],
             [
                 'nip' => '199003032015031003',
@@ -53,6 +58,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 8, // S-2
                 'jurusan' => 'Magister Hukum Tata Negara',
                 'bidang_ilmu_id' => 4, // Hukum
+                'tmt_golongan' => Carbon::now()->subYears(1)->subMonths(8),
+                'tmt_jabatan' => Carbon::now()->subYears(2)->subMonths(8), // 2-3 tahun
             ],
             [
                 'nip' => '199204042018042004',
@@ -67,6 +74,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 8, // S-Magister Akuntansi
                 'jurusan' => 'Akuntansi Sektor Publik',
                 'bidang_ilmu_id' => 5, // Ekonomi
+                'tmt_golongan' => Carbon::now()->subYears(1)->subMonths(3),
+                'tmt_jabatan' => Carbon::now()->subYears(1)->subMonths(6), // < 2 tahun
             ],
             [
                 'nip' => '198705052011051005',
@@ -81,6 +90,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 7, // S-1
                 'jurusan' => 'Teknik Elektro',
                 'bidang_ilmu_id' => 1, // Teknik Informatika
+                'tmt_golongan' => Carbon::now()->subYears(3)->subMonths(4),
+                'tmt_jabatan' => Carbon::now()->subYears(4)->subMonths(8), // > 4 tahun
             ],
             [
                 'nip' => '198906062014062006',
@@ -95,6 +106,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 8, // S-2
                 'jurusan' => 'Magister Psikologi Profesi',
                 'bidang_ilmu_id' => 7, // Psikologi
+                'tmt_golongan' => Carbon::now()->subYears(2)->subMonths(5),
+                'tmt_jabatan' => Carbon::now()->subYears(3)->subMonths(2), // 3-4 tahun
             ],
             [
                 'nip' => '198607072010071007',
@@ -109,6 +122,8 @@ class KandidatSeeder extends Seeder
                 'tingkat_pendidikan_id' => 8, // S-2
                 'jurusan' => 'Magister Administrasi Publik',
                 'bidang_ilmu_id' => 6, // Administrasi Negara
+                'tmt_golongan' => Carbon::now()->subYears(2)->subMonths(9),
+                'tmt_jabatan' => Carbon::now()->subYears(2)->subMonths(4), // 2-3 tahun
             ],
         ];
 

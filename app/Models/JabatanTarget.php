@@ -13,11 +13,11 @@ class JabatanTarget extends Model
 
     public function eselon()
     {
-        return $this->belongsTo(Eselon::class);
+        return $this->belongsTo(Eselon::class, 'id_eselon');
     }
 
-    public function bidang_ilmu()
+    public function bidangIlmu()
     {
-        return $this->belongsTo(BidangIlmu::class, 'bidang_ilmu_id');
+        return $this->belongsTo(BidangIlmu::class, 'id_bidang');
     }
 }

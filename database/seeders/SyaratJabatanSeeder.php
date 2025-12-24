@@ -11,17 +11,17 @@ class SyaratJabatanSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-  public function run(): void
+    public function run(): void
     {
         SyaratJabatan::query()->delete();
         $data = [
             [
                 'id' => 1,
-                'id_eselon' => 32,
-                'minimal_golongan_id' => 33,
-                'minimal_pendidikan_id' => 7,
-                'minimal_eselon_id' => 41,
-                'minimal_jabatan_id' => 5,
+                'eselon_id' => 32, // Eselon III.B
+                'minimal_golongan_id' => 33, // Minimal III/c
+                'minimal_tingkat_pendidikan_id' => 7, // Minimal D-IV/S-1
+                'minimal_eselon_id' => 41, // Minimal Eselon IV.A
+                'minimal_jenjang_fungsional_id' => null,
                 'keterangan' => null,
                 'is_active' => 1,
                 'created_at' => now(),
@@ -29,16 +29,18 @@ class SyaratJabatanSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'id_eselon' => 41,
-                'minimal_golongan_id' => 32,
-                'minimal_pendidikan_id' => 6,
-                'minimal_eselon_id' => null, // Data pada gambar kosong untuk baris ini
-                'minimal_jabatan_id' => 2,
+                'eselon_id' => 41, // Eselon IV.A
+                'minimal_golongan_id' => 32, // Minimal III/b
+                'minimal_tingkat_pendidikan_id' => 6, // Minimal D-III
+                'minimal_eselon_id' => null,
+                'minimal_jenjang_fungsional_id' => null,
                 'keterangan' => null,
                 'is_active' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
+
+        SyaratJabatan::insert($data);
     }
 }

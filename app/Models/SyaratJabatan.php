@@ -17,4 +17,19 @@ class SyaratJabatan extends Model
     {
         return $this->belongsTo(Eselon::class);
     }
+
+    public function minimalGolongan()
+    {
+        return $this->belongsTo(Golongan::class, 'minimal_golongan_id');
+    }
+
+    public function minimalTingkatPendidikan()
+    {
+        return $this->belongsTo(TingkatPendidikan::class, 'minimal_tingkat_pendidikan_id');
+    }
+
+    public function minimalEselon()
+    {
+        return $this->belongsTo(Eselon::class, 'minimal_eselon_id');
+    }
 }
