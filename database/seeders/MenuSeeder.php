@@ -14,7 +14,9 @@ class MenuSeeder extends Seeder
      */
     public function run(): void
     {
-        // Menu::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Menu::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // ===== MENU UTAMA =====
         $dashboard = Menu::create([
