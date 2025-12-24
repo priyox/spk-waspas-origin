@@ -203,20 +203,16 @@ class Penilaian extends Component
                 }
 
                 if ($isValid) {
-                    $nilaiToSave = $value;
-
-                    // Konversi persentase ke nilai 1-5 untuk K9 dan K10
-                    if (in_array($kriteriaId, $this->persentaseKriterias)) {
-                        $nilaiToSave = $this->autoFillService->konversiPersentaseKeNilai($value, $kriteriaId);
-                    }
-
+                    // Simpan nilai asli tanpa konversi
+                    // Untuk K9 dan K10, nilai 0-100 disimpan apa adanya
+                    // Konversi ke 1-5 dilakukan di WaspasProses saat perhitungan
                     \App\Models\Nilai::updateOrCreate(
                         [
                             'kandidats_id' => $kandidatId,
                             'kriteria_id' => $kriteriaId,
                         ],
                         [
-                            'nilai' => $nilaiToSave
+                            'nilai' => $value
                         ]
                     );
                 }

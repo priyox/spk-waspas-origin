@@ -30,11 +30,11 @@ class NilaiSeeder extends Seeder
                 // Generate values untuk kriteria manual (4,5,6,7,9,10)
                 switch ($kriteria->id) {
                     case 4: $nilai = rand(1, 5); break;   // Diklat (1-5)
-                    case 5: $nilai = rand(3, 5); break;   // SKP (1-5)
+                    case 5: $nilai = rand(3, 5); break;   // SKP (3-5, biasanya bagus)
                     case 6: $nilai = rand(1, 5); break;   // Penghargaan (1-5)
-                    case 7: $nilai = rand(2, 5); break;   // Integritas (1-5)
-                    case 9: $nilai = rand(60, 95); break; // Potensi (0-100, akan dikonversi)
-                    case 10: $nilai = rand(60, 95); break; // Kompetensi (0-100, akan dikonversi)
+                    case 7: $nilai = rand(2, 5); break;   // Integritas (2-5, biasanya baik)
+                    case 9: $nilai = rand(60, 95); break; // Potensi (0-100, nilai asli disimpan)
+                    case 10: $nilai = rand(60, 95); break; // Kompetensi (0-100, nilai asli disimpan)
                     default: $nilai = rand(1, 5);
                 }
 

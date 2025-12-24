@@ -58,7 +58,14 @@ class WaspasProses extends Component
 
         // Fill from database (manual values: K4, K5, K6, K7, K9, K10)
         foreach ($nilais as $nilai) {
-            $this->matrix[$nilai->kandidats_id][$nilai->kriteria_id] = $nilai->nilai;
+            $nilaiValue = $nilai->nilai;
+
+            // Konversi K9 dan K10 dari 0-100 ke 1-5 untuk perhitungan
+            if (in_array($nilai->kriteria_id, [9, 10])) {
+                $nilaiValue = $this->autoFillService->konversiPersentaseKeNilai($nilai->nilai, $nilai->kriteria_id);
+            }
+
+            $this->matrix[$nilai->kandidats_id][$nilai->kriteria_id] = $nilaiValue;
         }
 
         // Calculate auto-fill values for all kandidats (K1, K2, K3, K8) based on jabatan target
