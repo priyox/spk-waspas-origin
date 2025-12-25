@@ -58,6 +58,18 @@ Route::get('profile', Profile::class)
     Route::get('/jabatan-target', \App\Http\Livewire\JabatanTarget::class)
         ->name('jabatan-target.index');
 
+    Route::get('/jabatan-pelaksana', \App\Http\Livewire\JabatanPelaksana::class)
+        ->name('jabatan-pelaksana.index');
+
+    Route::get('/jabatan-fungsional', \App\Http\Livewire\JabatanFungsional::class)
+        ->name('jabatan-fungsional.index');
+
+    Route::get('/golongan', \App\Http\Livewire\Golongan::class)
+        ->name('golongan.index');
+
+    Route::get('/unit-kerja', \App\Http\Livewire\UnitKerja::class)
+        ->name('unit-kerja.index');
+
     Route::get('/kriteria-nilai', KriteriaNilai::class)
         ->name('kriteria-nilai.index');
 
@@ -69,6 +81,12 @@ Route::get('profile', Profile::class)
 
     Route::get('/waspas/hasil', WaspasHasil::class)
         ->name('waspas.hasil');
+
+    // Manajemen (Super Admin only by menu & logic, but protected here too)
+    Route::get('/manajemen/users', \App\Http\Livewire\UserManager::class)
+        ->name('users.index');
+    Route::get('/manajemen/roles', \App\Http\Livewire\RoleManager::class)
+        ->name('roles.index');
 
 });
 

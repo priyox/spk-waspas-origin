@@ -5,36 +5,20 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
-use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserManager extends Component
 {
     use WithPagination;
 
     public $search = '';
-    public $sortField = 'id';
-    public $sortDirection = 'desc';
-    public $perPage = 10;
+    public $name, $email, $password, $user_id;
+    public $selectedRoles = [];
+    public $isModalOpen = false;
 
-    public $showModal = false;
-    public $isEdit = false;
-    public $modelId;
-
-    public $name;
-    public $email;
-    public $password;
-
-    protected $rules = [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6',
-    ];
-
-    protected $validationAttributes = [
-        'modelId' => 'user',
-    ];
-
-    protected $updatesQueryString = ['search', 'sortField', 'sortDirection', 'perPage'];
+    protected $queryString = ['search'];
 
     public function updatingSearch()
     {
@@ -43,105 +27,88 @@ class UserManager extends Component
 
     public function render()
     {
-        $query = User::query()
-            ->when($this->search, function ($q) {
-                $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('email', 'like', "%{$this->search}%");
+        $users = User::with('roles')
+            ->where(function($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                  ->orWhere('email', 'like', '%' . $this->search . '%');
             })
-            ->orderBy($this->sortField, $this->sortDirection);
-
-        $users = $query->paginate($this->perPage);
+            ->paginate(10);
 
         return view('livewire.user-manager', [
             'users' => $users,
-        ])->layout('layouts.admin');
-    }
-
-    public function sortBy($field)
-    {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortField = $field;
-            $this->sortDirection = 'asc';
-        }
+            'allRoles' => Role::all()
+        ])->layout('layouts.app');
     }
 
     public function create()
     {
-        $this->resetForm();
-        $this->isEdit = false;
-        $this->showModal = true;
-        $this->dispatchBrowserEvent('show-user-modal');
+        $this->resetInputFields();
+        $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'user-modal');
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $this->modelId = $user->id;
+        $this->user_id = $id;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->password = null;
-        $this->isEdit = true;
-        $this->showModal = true;
-        $this->dispatchBrowserEvent('show-user-modal');
+        $this->selectedRoles = $user->roles->pluck('name')->toArray();
+        $this->password = '';
+        
+        $this->isModalOpen = true;
+        $this->dispatch('open-modal', 'user-modal');
     }
 
-    public function save()
+    public function store()
     {
-        if ($this->isEdit) {
-            $rules = [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email,' . $this->modelId,
-            ];
-            if ($this->password) {
-                $rules['password'] = 'min:6';
-            }
-            $this->validate($rules);
+        $this->validate([
+            'name' => 'required',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user_id)],
+            'password' => $this->user_id ? 'nullable|min:6' : 'required|min:6',
+        ]);
 
-            $user = User::findOrFail($this->modelId);
-            $user->name = $this->name;
-            $user->email = $this->email;
-            if ($this->password) {
-                $user->password = bcrypt($this->password);
-            }
-            $user->save();
-            session()->flash('message', 'User updated');
-        } else {
-            $this->validate();
-            User::create([
-                'name' => $this->name,
-                'email' => $this->email,
-                'password' => bcrypt($this->password),
-            ]);
-            session()->flash('message', 'User created');
+        $data = [
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
+
+        if ($this->password) {
+            $data['password'] = Hash::make($this->password);
         }
 
-        $this->showModal = false;
-        $this->resetForm();
-        $this->dispatchBrowserEvent('hide-user-modal');
+        $user = User::updateOrCreate(['id' => $this->user_id], $data);
+        $user->syncRoles($this->selectedRoles);
+
+        session()->flash('message', $this->user_id ? 'User updated successfully.' : 'User created successfully.');
+        
+        $this->closeModal();
     }
 
-    public $confirmingDeleteId;
-
-    public function confirmDelete($id)
+    public function delete($id)
     {
-        $this->confirmingDeleteId = $id;
-        $this->dispatchBrowserEvent('show-delete-modal');
-    }
-
-    public function delete()
-    {
-        if ($this->confirmingDeleteId) {
-            User::find($this->confirmingDeleteId)->delete();
-            session()->flash('message', 'User deleted');
-            $this->confirmingDeleteId = null;
-            $this->dispatchBrowserEvent('hide-delete-modal');
+        if ($id == auth()->id()) {
+            session()->flash('error', 'You cannot delete yourself!');
+            return;
         }
+        
+        User::find($id)->delete();
+        session()->flash('message', 'User deleted successfully.');
     }
 
-    public function resetForm()
+    public function closeModal()
     {
-        $this->reset(['name', 'email', 'password', 'modelId', 'showModal']);
+        $this->isModalOpen = false;
+        $this->resetInputFields();
+        $this->dispatch('close-modal', 'user-modal');
+    }
+
+    private function resetInputFields()
+    {
+        $this->name = '';
+        $this->email = '';
+        $this->password = '';
+        $this->user_id = null;
+        $this->selectedRoles = [];
     }
 }
