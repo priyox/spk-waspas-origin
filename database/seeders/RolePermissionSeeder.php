@@ -18,62 +18,50 @@ class RolePermissionSeeder extends Seeder
         // PERMISSIONS
         // ======================
         $permissions = [
-            // Dashboard
             'dashboard-access',
-
-            // Master Data
-            'kandidat-manage',
+            'master-data-access',
             'kriteria-manage',
-
-            // Penilaian
-            'penilaian-access',
-            'nilai-input',
-            'waspas-process',
-            'waspas-view',
-
-            // Laporan
-            'laporan-access',
+            'kandidat-manage',
+            'penilaian-manage',
+            'hasil-akhir-view',
+            'manajemen-access',
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
+        $superAdmin = Role::where('name', 'Super Admin')->first();
+        $admin      = Role::where('name', 'Admin Kepegawaian')->first();
+        $penilai    = Role::where('name', 'Tim Penilai')->first();
+        $pimpinan   = Role::where('name', 'Pimpinan')->first();
 
-        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
-        $admin      = Role::firstOrCreate(['name' => 'Admin Kepegawaian']);
-        $penilai    = Role::firstOrCreate(['name' => 'Tim Penilai']);
-        $pimpinan   = Role::firstOrCreate(['name' => 'Pimpinan']);
-
-        // Super Admin → semua permission
+        // 1. Super Admin: All permissions
         $superAdmin->syncPermissions(Permission::all());
 
-        // Admin
+        // 2. Admin Kepegawaian: All EXCEPT Manajemen
         $admin->syncPermissions([
             'dashboard-access',
-            'kandidat-manage',
+            'master-data-access',
             'kriteria-manage',
-            'penilaian-access',
-            'nilai-input',
-            'waspas-process',
-            'waspas-view',
-            'laporan-access',
+            'kandidat-manage',
+            'penilaian-manage',
+            'hasil-akhir-view',
         ]);
 
-        // Tim Penilai
+        // 3. Tim Penilai: Kandidat, Penilaian, Hasil Akhir
         $penilai->syncPermissions([
             'dashboard-access',
-            'penilaian-access',
-            'nilai-input',
-            'waspas-process',
-            'waspas-view',
+            'kandidat-manage',
+            'penilaian-manage',
+            'hasil-akhir-view',
         ]);
 
-        // Pimpinan
+        // 4. Pimpinan: Penilaian, Hasil Akhir
         $pimpinan->syncPermissions([
             'dashboard-access',
-            'waspas-view',
-            'laporan-access',
+            'penilaian-manage',
+            'hasil-akhir-view',
         ]);
     }
 }
