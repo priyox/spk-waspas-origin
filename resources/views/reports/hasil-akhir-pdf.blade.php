@@ -175,7 +175,7 @@
 
     <div class="footer">
         <div class="signature">
-            <p>{{ config('app.location', 'Wonosobo) }}, {{ $date }}</p>
+            <p>{{ config('app.location', 'Wonosobo') }}, {{ $date }}</p>
             <p>Panitia Seleksi,</p>
             <div class="signature-space"></div>
             <p class="font-bold">__________________________</p>

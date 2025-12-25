@@ -6,9 +6,9 @@
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-xl overflow-hidden mb-8 relative">
                 <div class="px-8 py-10 relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between">
                     <div>
-                        <h3 class="text-3xl font-bold text-white mb-2">Welcome back, {{ Auth::user()->name }}!</h3>
+                        <h3 class="text-3xl font-bold text-white mb-2">Selamat Datang, {{ Auth::user()->name }}!</h3>
                         <p class="text-indigo-100 text-lg max-w-2xl">
-                            You are logged in to the SPK WASPAS Decision Support System v2.0. Everything is running smoothly.
+                            Setiap keputusan besar dimulai dari data yang akurat. Keputusan cerdas, kepemimpinan berkualitas. Lets GO!!
                         </p>
                     </div>
                     <div class="mt-6 md:mt-0">
@@ -37,10 +37,10 @@
                         </div>
                         <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ $kandidatCount }}</span>
                     </div>
-                    <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Candidates</h4>
-                    <p class="text-sm text-gray-500 mt-1">Total registered candidates</p>
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Kandidat</h4>
+                    <p class="text-sm text-gray-500 mt-1">Total Kandidat</p>
                     <a href="{{ route('kandidat.index') }}" wire:navigate class="mt-4 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                        Manage Candidates &rarr;
+                        Manage Kandidat &rarr;
                     </a>
                 </div>
 
@@ -56,14 +56,14 @@
                         <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ $kriteriaCount }}</span>
                     </div>
                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Kriteria</h4>
-                    <p class="text-sm text-gray-500 mt-1">Total kriteria penilaian</p>
+                    <p class="text-sm text-gray-500 mt-1">Total Kriteria Penilaian</p>
                     <a href="{{ route('kriteria.index') }}" wire:navigate class="mt-4 inline-flex items-center text-sm font-medium text-purple-600 hover:text-purple-700">
                         Kelola Kriteria &rarr;
                     </a>
                 </div>
 
                 <!-- Users Card -->
-                <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
+                <!-- <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
                      <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <svg class="w-24 h-24 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                     </div>
@@ -75,10 +75,10 @@
                     </div>
                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Pengguna</h4>
                     <p class="text-sm text-gray-500 mt-1">Total User terdaftar</p>
-                </div>
+                </div> -->
 
                 <!-- Jabatan Card -->
-                <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
+                <!-- <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
                      <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <svg class="w-24 h-24 text-amber-600" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                     </div>
@@ -90,7 +90,7 @@
                     </div>
                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Jabatan Target</h4>
                     <p class="text-sm text-gray-500 mt-1">Jenis jabatan tersedia</p>
-                </div>
+                </div> -->
 
                 <!-- Results Card -->
                 <div class="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700">
@@ -103,18 +103,14 @@
                         </div>
                         <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ $resultsCount }}</span>
                     </div>
-                    <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Results</h4>
-                    <p class="text-sm text-gray-500 mt-1">WASPAS Calculation Status</p>
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Hasil Perangkingan</h4>
+                    <p class="text-sm text-gray-500 mt-1">Penilaian WASPAS</p>
                     <a href="{{ route('waspas.hasil') }}" wire:navigate class="mt-4 inline-flex items-center text-sm font-medium text-pink-600 hover:text-pink-700">
                         View Ranking &rarr;
                     </a>
                 </div>
             </div>
             
-             <!-- Quick Info / Footer -->
-            <div class="mt-12 text-center text-sm text-gray-400">
-                &copy; {{ date('Y') }} SPK WASPAS System. Built with Laravel Livewire & Tailwind CSS.
-            </div>
         </div>
     </div>
 

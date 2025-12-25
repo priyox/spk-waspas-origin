@@ -91,6 +91,8 @@
                 <main class="flex-1 p-6 w-full">
                     {{ $slot }}
                 </main>
+                   {{-- Footer partial --}}
+                   @include('layouts.partials.footer')
             </div>
         </div>
         @livewireScripts

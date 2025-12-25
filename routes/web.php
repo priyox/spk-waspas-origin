@@ -26,18 +26,12 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
 Route::get('profile', Profile::class)
     ->middleware(['auth'])
     ->name('profile');
 
-    Route::middleware(['auth', 'menu.access'])->group(function () {
-
-    // Route::get('/dashboard', Dashboard::class)
-    //     ->name('dashboard');
+Route::middleware(['auth', 'menu.access'])->group(function () {
+    // Dashboard - accessible by all roles
     Route::get('/dashboard', \App\Http\Livewire\Dashboard::class)->name('dashboard');
 
     Route::get('/kandidat', Kandidat::class)

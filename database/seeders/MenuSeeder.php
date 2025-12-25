@@ -71,16 +71,19 @@ class MenuSeeder extends Seeder
         $this->createSubMenu($kriteriaParent->id, 'Daftar Kriteria', 'kriteria.index', 'bi bi-list-check', 1, $adminRoles);
         $this->createSubMenu($kriteriaParent->id, 'Nilai Kriteria', 'kriteria-nilai.index', 'bi bi-star-half', 2, $adminRoles);
 
-        // 4. KANDIDAT
+        // 4. KANDIDAT (Parent menu with submenus)
         $kandidatParent = Menu::create([
             'menu_name' => 'Kandidat',
-            'route' => 'kandidat.index',
+            'route' => null,
             'icon' => 'bi bi-people-fill',
             'parent_id' => null,
             'order' => 4,
             'is_active' => true,
         ]);
         $kandidatParent->roles()->sync($penilaiRoles);
+
+        $this->createSubMenu($kandidatParent->id, 'Daftar Kandidat', 'kandidat.index', 'bi bi-person-lines-fill', 1, $penilaiRoles);
+        $this->createSubMenu($kandidatParent->id, 'Input Nilai Kandidat', 'kandidat.input-nilai', 'bi bi-pencil-square', 2, $penilaiRoles);
 
         // 5. PENILAIAN
         $penilaian = Menu::create([
@@ -93,7 +96,7 @@ class MenuSeeder extends Seeder
         ]);
         $penilaian->roles()->sync($pimpinanRoles);
 
-        $this->createSubMenu($penilaian->id, 'Input Nilai Kandidat', 'penilaian.input', 'bi bi-pencil-square', 1, $penilaiRoles);
+        $this->createSubMenu($penilaian->id, 'Nilai Kandidat', 'penilaian.input', 'bi bi-star-fill', 1, $penilaiRoles);
         $this->createSubMenu($penilaian->id, 'Perhitungan WASPAS', 'waspas.proses', 'bi bi-calculator', 2, $penilaiRoles);
         $this->createSubMenu($penilaian->id, 'Hasil Ranking', 'waspas.hasil', 'bi bi-trophy', 3, $pimpinanRoles);
 
