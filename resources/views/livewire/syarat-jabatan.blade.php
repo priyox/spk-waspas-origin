@@ -54,6 +54,7 @@
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">No</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Eselon</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Min. Golongan</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Syarat Golongan</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Min. Pendidikan</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Min. Eselon</th>
@@ -70,6 +71,9 @@
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
                                         {{ $syarat->eselon->eselon ?? '-' }}
                                     </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                    {{ $syarat->minimalGolongan->golongan ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                     {{ $syarat->syaratGolongan->golongan ?? '-' }}
@@ -115,7 +119,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="9" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -167,6 +171,21 @@
                             @endforeach
                         </select>
                         @error('eselon_id') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                    </div>
+
+                    {{-- Minimal Golongan --}}
+                    <div>
+                        <label for="minimal_golongan_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Minimal Golongan <span class="text-red-500">*</span>
+                        </label>
+                        <select id="minimal_golongan_id" wire:model="minimal_golongan_id"
+                            class="w-full px-3 py-2.5 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 rounded-lg shadow-sm">
+                            <option value="">-- Pilih Golongan --</option>
+                            @foreach($golongans as $golongan)
+                                <option value="{{ $golongan->id }}">{{ $golongan->golongan }}</option>
+                            @endforeach
+                        </select>
+                        @error('minimal_golongan_id') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
                     {{-- Syarat Golongan --}}

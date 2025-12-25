@@ -7,7 +7,7 @@ use App\Http\Livewire\Penilaian;
 use App\Http\Livewire\WaspasProses;
 use App\Http\Livewire\WaspasHasil;
 use App\Http\Livewire\KriteriaNilai;
-use App\Http\Livewire\Report;
+use App\Http\Livewire\HasilAkhir;
 use App\Http\Livewire\Profile;
 use Illuminate\Support\Facades\Route;
 
@@ -72,10 +72,10 @@ Route::get('profile', Profile::class)
 
 });
 
-// Report page - accessible only via direct URL (not in sidebar menu)
+// Hasil Akhir page (formerly Laporan)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/report', Report::class)
-        ->name('report');
+    Route::get('/hasil-akhir', HasilAkhir::class)
+        ->name('hasil-akhir');
 });
 
 
