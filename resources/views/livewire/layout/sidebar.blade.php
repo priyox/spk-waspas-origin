@@ -8,10 +8,24 @@ new class extends Component
 
     public function mount()
     {
+        if (!auth()->check()) {
+            $this->menus = collect();
+            return;
+        }
+
+        $roleIds = auth()->user()->roles->pluck('id');
+
         $this->menus = \App\Models\Menu::where('is_active', 1)
             ->whereNull('parent_id') // Top level menus
-            ->with(['children' => function($q) {
-                $q->where('is_active', 1)->orderBy('order');
+            ->whereHas('roles', function ($q) use ($roleIds) {
+                $q->whereIn('roles.id', $roleIds);
+            })
+            ->with(['children' => function($q) use ($roleIds) {
+                $q->where('is_active', 1)
+                    ->whereHas('roles', function ($q2) use ($roleIds) {
+                        $q2->whereIn('roles.id', $roleIds);
+                    })
+                    ->orderBy('order');
             }])
             ->orderBy('order')
             ->get();

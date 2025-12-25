@@ -304,11 +304,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="md:col-span-4">
-                                            <label for="jurusan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Keterangan Jurusan (Lainnya)</label>
-                                            <input type="text" id="jurusan" wire:model="jurusan" placeholder="Gunakan jika jurusan spesifik tidak tersedia di daftar"
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
-                                        </div>
                                     </div>
                                 </div>
                             </div>

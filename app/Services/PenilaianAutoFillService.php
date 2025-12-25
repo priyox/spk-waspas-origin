@@ -114,12 +114,25 @@ class PenilaianAutoFillService
      */
     public function getNilaiBidangIlmu(Kandidat $kandidat, ?JabatanTarget $jabatanTarget): int
     {
-        if (!$jabatanTarget || !$kandidat->bidang_ilmu_id || !$jabatanTarget->id_bidang) {
+        if (!$jabatanTarget || !$kandidat->bidang_ilmu_id) {
             return 2; // Default: Tidak sesuai
         }
 
+        // Get allowed Bidang Ilmu IDs for this target position
+        // Since we changed to belongsToMany, we check the collection
+        // Note: Relation might not be loaded, so use loadMissing or direct query if needed.
+        // But usually eager loading happens in caller.
+        
+        // Safer to just check DB or ensure relation is loaded
+        $allowedBidangIds = $jabatanTarget->bidangIlmu->pluck('id')->toArray();
+
+        // If no fields defined, maybe everything is allowed? Or nothing? Assuming nothing matches if none defined.
+        if (empty($allowedBidangIds)) {
+            return 2; 
+        }
+
         // Cek kesesuaian bidang ilmu
-        if ($kandidat->bidang_ilmu_id == $jabatanTarget->id_bidang) {
+        if (in_array($kandidat->bidang_ilmu_id, $allowedBidangIds)) {
             return 5; // Sesuai
         }
 
@@ -195,8 +208,14 @@ class PenilaianAutoFillService
         // K4: Bidang Ilmu
         $nilai8 = $this->getNilaiBidangIlmu($kandidat, $jabatanTarget);
         if ($jabatanTarget) {
-            $match = ($kandidat->bidang_ilmu_id == $jabatanTarget->id_bidang) ? 'Sesuai' : 'Tidak Sesuai';
-            $explanations[4] = "Bidang Ilmu: {$kandidat->bidang_ilmu_id} vs Target: {$jabatanTarget->id_bidang} → {$match} → Nilai: {$nilai8}";
+            $allowedBidangIds = $jabatanTarget->bidangIlmu->pluck('id')->toArray();
+            $matches = in_array($kandidat->bidang_ilmu_id, $allowedBidangIds);
+            
+            $match = $matches ? 'Sesuai' : 'Tidak Sesuai';
+            // Just show count or something short
+            $targetInfo = count($allowedBidangIds) > 1 ? count($allowedBidangIds).' Bidang Target' : 'Target: '. implode(',', $allowedBidangIds);
+            
+            $explanations[4] = "Bidang Ilmu: {$kandidat->bidang_ilmu_id} vs {$targetInfo} → {$match} → Nilai: {$nilai8}";
         } else {
             $explanations[4] = "Tidak ada jabatan target → Nilai: {$nilai8}";
         }

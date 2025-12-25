@@ -18,6 +18,6 @@ class JabatanTarget extends Model
 
     public function bidangIlmu()
     {
-        return $this->belongsTo(BidangIlmu::class, 'id_bidang');
+        return $this->belongsToMany(BidangIlmu::class, 'bidang_ilmu_jabatan_target', 'jabatan_target_id', 'bidang_ilmu_id');
     }
 }

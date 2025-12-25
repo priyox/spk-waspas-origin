@@ -47,8 +47,16 @@
                                         {{ $jabatan->eselon->eselon ?? '-' }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $jabatan->bidangIlmu->bidang ?? '-' }}
+                                <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <div class="flex flex-wrap gap-1">
+                                        @forelse($jabatan->bidangIlmu as $bidang)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                {{ $bidang->bidang }}
+                                            </span>
+                                        @empty
+                                            -
+                                        @endforelse
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <div class="flex items-center justify-center gap-2">
@@ -124,20 +132,42 @@
                                     @error('id_eselon') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
 
-                                <!-- Bidang Ilmu -->
+                                <!-- Bidang Ilmu (Dynamic Repeater) -->
                                 <div>
-                                    <label for="id_bidang" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         Bidang Ilmu <span class="text-red-500">*</span>
                                     </label>
-                                    <select id="id_bidang" wire:model="id_bidang"
-                                        class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
-                                        style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
-                                        <option value="">-- Pilih Bidang Ilmu --</option>
-                                        @foreach($bidangIlmus as $bidang)
-                                            <option value="{{ $bidang->id }}">{{ $bidang->bidang }}</option>
+                                    
+                                    <div class="space-y-3">
+                                        @foreach($selectedBidangIds as $index => $selectedId)
+                                            <div class="flex gap-2">
+                                                <div class="grow relative">
+                                                    <select wire:model="selectedBidangIds.{{ $index }}"
+                                                        class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                                                        style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
+                                                        <option value="">-- Pilih Bidang Ilmu --</option>
+                                                        @foreach($bidangIlmus as $bidang)
+                                                            <option value="{{ $bidang->id }}">{{ $bidang->bidang }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                
+                                                <button type="button" wire:click="removeBidang({{ $index }})" 
+                                                    class="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 focus:ring-2 focus:ring-red-500 transition-colors"
+                                                    @if(count($selectedBidangIds) <= 1) disabled style="opacity: 0.5; cursor: not-allowed;" @endif>
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
                                         @endforeach
-                                    </select>
-                                    @error('id_bidang') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <button type="button" wire:click="addBidang"
+                                        class="mt-3 inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-500 transition-colors text-sm font-medium">
+                                        <i class="bi bi-plus-lg mr-2"></i> Tambah Bidang Ilmu
+                                    </button>
+
+                                    @error('selectedBidangIds') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                    @error('selectedBidangIds.*') <span class="text-red-500 text-xs mt-1 block">Silakan pilih bidang ilmu valid.</span> @enderror
                                 </div>
                             </div>
 
