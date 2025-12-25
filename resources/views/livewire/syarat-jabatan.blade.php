@@ -41,6 +41,8 @@
                         <div class="text-sm text-blue-700 dark:text-blue-300">
                             <p class="font-semibold">Tentang Syarat Jabatan:</p>
                             <p class="mt-1">Syarat jabatan menentukan persyaratan minimal untuk setiap level eselon, termasuk golongan minimal dan tingkat pendidikan minimal yang digunakan dalam perhitungan WASPAS.</p>
+                            <p class="mt-1">Kandidat dengan jenis jabatan Pelaksana hanya memenuhi syarat untuk menduduki jabatan eselon IV.A dan IV.b.</p>
+                            <p class="mt-1">Kandidat dengan pangkat 1 tingkat dibawah pangkat yang dipersyaratkan masih dapat diangkat dalam jabatan eselon yang sesuai.</p>
                         </div>
                     </div>
                 </div>
@@ -55,6 +57,7 @@
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Syarat Golongan</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Min. Pendidikan</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Min. Eselon</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Min. Jenjang</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
                             </tr>
@@ -76,6 +79,9 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                     {{ $syarat->minimalEselon->eselon ?? '-' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                    {{ $syarat->jenjangFungsional->jenjang ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     @if($syarat->is_active)
@@ -109,7 +115,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
+                                <td colspan="8" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -206,6 +212,21 @@
                             @endforeach
                         </select>
                         @error('minimal_eselon_id') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    {{-- Minimal Jenjang Fungsional (Optional) --}}
+                    <div>
+                        <label for="minimal_jenjang_fungsional_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Minimal Jenjang Fungsional <span class="text-gray-400 text-xs font-normal">(opsional)</span>
+                        </label>
+                        <select id="minimal_jenjang_fungsional_id" wire:model="minimal_jenjang_fungsional_id"
+                            class="w-full px-3 py-2.5 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 rounded-lg shadow-sm">
+                            <option value="">-- Tidak Ada --</option>
+                            @foreach($jenjangFungsionals as $jenjang)
+                                <option value="{{ $jenjang->id }}">{{ $jenjang->jenjang }}</option>
+                            @endforeach
+                        </select>
+                        @error('minimal_jenjang_fungsional_id') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
 

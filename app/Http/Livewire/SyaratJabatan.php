@@ -16,6 +16,7 @@ class SyaratJabatan extends Component
     public $syarat_golongan_id;
     public $minimal_tingkat_pendidikan_id;
     public $minimal_eselon_id;
+    public $minimal_jenjang_fungsional_id;
     public $keterangan;
     public $is_active = true;
 
@@ -29,6 +30,7 @@ class SyaratJabatan extends Component
         'syarat_golongan_id' => 'required|exists:golongans,id',
         'minimal_tingkat_pendidikan_id' => 'required|exists:tingkat_pendidikans,id',
         'minimal_eselon_id' => 'nullable|exists:eselons,id',
+        'minimal_jenjang_fungsional_id' => 'nullable|exists:jenjang_fungsionals,id',
         'keterangan' => 'nullable|string|max:255',
         'is_active' => 'boolean',
     ];
@@ -46,13 +48,15 @@ class SyaratJabatan extends Component
             'minimalGolongan',
             'syaratGolongan',
             'minimalTingkatPendidikan',
-            'minimalEselon'
+            'minimalEselon',
+            'jenjangFungsional'
         ])->orderBy('eselon_id')->get();
 
         return view('livewire.syarat-jabatan', [
             'eselons' => Eselon::orderBy('id')->get(),
             'golongans' => Golongan::orderBy('id')->get(),
             'tingkatPendidikans' => TingkatPendidikan::orderBy('id')->get(),
+            'jenjangFungsionals' => \App\Models\JenjangFungsional::orderBy('tingkat')->get(),
         ])->layout('layouts.app');
     }
 
@@ -75,6 +79,7 @@ class SyaratJabatan extends Component
                 'syarat_golongan_id' => $this->syarat_golongan_id,
                 'minimal_tingkat_pendidikan_id' => $this->minimal_tingkat_pendidikan_id,
                 'minimal_eselon_id' => $this->minimal_eselon_id ?: null,
+                'minimal_jenjang_fungsional_id' => $this->minimal_jenjang_fungsional_id ?: null,
                 'keterangan' => $this->keterangan,
                 'is_active' => $this->is_active,
             ]
@@ -93,6 +98,7 @@ class SyaratJabatan extends Component
         $this->syarat_golongan_id = $syaratJabatan->syarat_golongan_id;
         $this->minimal_tingkat_pendidikan_id = $syaratJabatan->minimal_tingkat_pendidikan_id;
         $this->minimal_eselon_id = $syaratJabatan->minimal_eselon_id;
+        $this->minimal_jenjang_fungsional_id = $syaratJabatan->minimal_jenjang_fungsional_id;
         $this->keterangan = $syaratJabatan->keterangan;
         $this->is_active = $syaratJabatan->is_active;
         $this->isModalOpen = true;
@@ -135,6 +141,7 @@ class SyaratJabatan extends Component
         $this->syarat_golongan_id = '';
         $this->minimal_tingkat_pendidikan_id = '';
         $this->minimal_eselon_id = '';
+        $this->minimal_jenjang_fungsional_id = '';
         $this->keterangan = '';
         $this->is_active = true;
         $this->syarat_id_to_edit = null;

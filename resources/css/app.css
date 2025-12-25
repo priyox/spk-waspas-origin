@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@layer base {
+
+    /* Global pointer cursor for interactive elements */
+    button,
+    [role="button"],
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"],
+    select,
+    input[type="checkbox"],
+    input[type="radio"],
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    /* Ensure labels for checkboxes/radios also show pointer */
+    label[for] {
+        cursor: pointer;
+    }
+}

@@ -14,7 +14,7 @@ class KriteriaNilaiSeeder extends Seeder
             ['id' => 1, 'kriteria_id' => 1, 'kategori' => 'Dalam Jenjang Pangkat Lebih Tinggi Yang Dipersyaratkan', 'nilai' => 5],
             ['id' => 2, 'kriteria_id' => 1, 'kategori' => 'Dalam Jenjang Pangkat Sama Dengan Yang Dipersyaratkan Lebih Dari 4 tahun', 'nilai' => 4],
             ['id' => 3, 'kriteria_id' => 1, 'kategori' => 'Dalam Jenjang Pangkat Sama Dengan Yang Dipersyaratkan Kurang Dari atau Sama Dengan 4 Tahun', 'nilai' => 3],
-            ['id' => 4, 'kriteria_id' => 1, 'kategori' => 'Satu Tingkat Dibawah Jenjang Pangkat Yang Dipersyaratkan', 'nilai' => 1],
+            ['id' => 4, 'kriteria_id' => 1, 'kategori' => 'Dibawah Jenjang Pangkat Yang Dipersyaratkan', 'nilai' => 1],
 
             // kriteria_id 2
             ['id' => 5, 'kriteria_id' => 2, 'kategori' => '>= 4 tahun', 'nilai' => 5],
