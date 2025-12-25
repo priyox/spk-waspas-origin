@@ -76,6 +76,8 @@ Route::get('profile', Profile::class)
 Route::middleware(['auth'])->group(function () {
     Route::get('/hasil-akhir', HasilAkhir::class)
         ->name('hasil-akhir');
+    Route::get('/hasil-akhir/pdf', [\App\Http\Controllers\ReportController::class, 'downloadHasilAkhir'])
+        ->name('hasil-akhir.pdf');
 });
 
 
