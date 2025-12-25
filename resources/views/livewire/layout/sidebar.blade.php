@@ -18,7 +18,8 @@ new class extends Component
     }
 }; ?>
 
-<div class="h-screen w-64 bg-indigo-900 text-white fixed left-0 top-0 overflow-y-auto flex flex-col shadow-2xl transition-all duration-300 z-50">
+<div class="h-screen w-64 bg-indigo-900 text-white fixed left-0 top-0 overflow-y-auto flex flex-col shadow-2xl transition-all duration-300 z-50"
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
     <!-- Logo -->
     <div class="flex items-center justify-center h-20 border-b border-indigo-800 bg-indigo-950">
         <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-3">

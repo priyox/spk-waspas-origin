@@ -18,18 +18,27 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900" style="font-family: 'Outfit', sans-serif;">
+    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900" style="font-family: 'Outfit', sans-serif;" 
+        x-data="{ sidebarOpen: true }">
         <div class="flex min-h-screen">
             <!-- Sidebar -->
             <livewire:layout.sidebar />
 
             <!-- Main Content -->
-            <div class="flex-1 ml-64 flex flex-col min-h-screen transition-all duration-300">
+            <div class="flex-1 flex flex-col min-h-screen transition-all duration-300"
+                :class="sidebarOpen ? 'ml-64' : 'ml-0'">
                 
                 <!-- Top Navbar (Sticky) -->
                 <header class="bg-white dark:bg-gray-800 shadow-sm h-16 flex items-center justify-between px-6 sticky top-0 z-40">
                     <!-- Header Title -->
-                    <div>
+                    <div class="flex items-center gap-4">
+                        <!-- Toggle Button -->
+                        <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path :class="sidebarOpen ? 'hidden' : 'block'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path :class="sidebarOpen ? 'block' : 'hidden'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+                        </button>
                          @if (isset($header))
                             <div class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                                 {{ $header }}

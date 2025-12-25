@@ -17,9 +17,9 @@ class KriteriaNilaiSeeder extends Seeder
             ['id' => 4, 'kriteria_id' => 1, 'kategori' => 'Satu Tingkat Dibawah Jenjang Pangkat Yang Dipersyaratkan', 'nilai' => 1],
 
             // kriteria_id 2
-            ['id' => 5, 'kriteria_id' => 2, 'kategori' => '> 4 tahun', 'nilai' => 5],
-            ['id' => 6, 'kriteria_id' => 2, 'kategori' => '3 - 4 tahun', 'nilai' => 4],
-            ['id' => 7, 'kriteria_id' => 2, 'kategori' => '2 - 3 tahun', 'nilai' => 3],
+            ['id' => 5, 'kriteria_id' => 2, 'kategori' => '>= 4 tahun', 'nilai' => 5],
+            ['id' => 6, 'kriteria_id' => 2, 'kategori' => '3 tahun', 'nilai' => 4],
+            ['id' => 7, 'kriteria_id' => 2, 'kategori' => '2 tahun', 'nilai' => 3],
             ['id' => 8, 'kriteria_id' => 2, 'kategori' => '< 2 tahun', 'nilai' => 1],
 
             // kriteria_id 3
@@ -32,8 +32,8 @@ class KriteriaNilaiSeeder extends Seeder
             ['id' => 13, 'kriteria_id' => 4, 'kategori' => '> 24 JP', 'nilai' => 5],
             ['id' => 14, 'kriteria_id' => 4, 'kategori' => '19 - 24 JP', 'nilai' => 4],
             ['id' => 15, 'kriteria_id' => 4, 'kategori' => '13 - 18 JP', 'nilai' => 3],
-            ['id' => 16, 'kriteria_id' => 4, 'kategori' => '7 - 12 JP', 'nilai' => 2],
-            ['id' => 17, 'kriteria_id' => 4, 'kategori' => '0 - 6 JP', 'nilai' => 1],
+            ['id' => 16, 'kriteria_id' => 4, 'kategori' => '6 - 12 JP', 'nilai' => 2],
+            ['id' => 17, 'kriteria_id' => 4, 'kategori' => '< 6 JP', 'nilai' => 1],
 
             // kriteria_id 5
             ['id' => 18, 'kriteria_id' => 5, 'kategori' => 'Sangat Baik', 'nilai' => 5],

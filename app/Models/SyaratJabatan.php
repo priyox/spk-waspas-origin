@@ -32,4 +32,9 @@ class SyaratJabatan extends Model
     {
         return $this->belongsTo(Eselon::class, 'minimal_eselon_id');
     }
+
+    public function syaratGolongan()
+    {
+        return $this->belongsTo(Golongan::class, 'syarat_golongan_id');
+    }
 }

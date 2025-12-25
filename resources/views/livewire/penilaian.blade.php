@@ -88,20 +88,13 @@
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-widest border-b border-gray-200 dark:border-gray-600 sticky left-0 bg-gray-100 dark:bg-gray-700 z-10">
+                                    <th scope="col" class="px-6 py-4 text-center text-base font-bold text-gray-700 dark:text-gray-200 tracking-wide border-b border-gray-200 dark:border-gray-600 sticky left-0 bg-gray-100 dark:bg-gray-700 z-10">
                                         Nama Kandidat
                                     </th>
                                     @foreach($kriterias as $kriteria)
                                     <th scope="col" class="px-4 py-4 text-center text-sm font-bold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-600 min-w-[120px]">
                                         <div class="font-bold">{{ $kriteria->kriteria }}</div>
                                         <div class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-1">Bobot: {{ $kriteria->bobot }}%</div>
-
-                                        {{-- Badge untuk tipe input --}}
-                                        @if(in_array($kriteria->id, [1,2,3,4]))
-                                            <span class="inline-block mt-2 px-3 py-1 text-xs font-bold bg-blue-200 text-blue-800 dark:bg-blue-800 dark:text-blue-200 rounded-full">AUTO</span>
-                                        @elseif(in_array($kriteria->id, [5,6,7,8,9,10]))
-                                            <span class="inline-block mt-2 px-3 py-1 text-xs font-bold bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full">DATA KANDIDAT</span>
-                                        @endif
                                     </th>
                                     @endforeach
                                 </tr>
@@ -110,12 +103,12 @@
                                 @forelse($kandidats as $kandidat)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white dark:bg-gray-800 z-10">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-lg">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-lg mb-1">
                                                 {{ substr($kandidat->nama, 0, 1) }}
                                             </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $kandidat->nama }}</div>
+                                            <div class="text-center">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">{{ $kandidat->nama }}</div>
                                                 <div class="text-xs text-gray-500 dark:text-gray-400">NIP: {{ $kandidat->nip }}</div>
                                             </div>
                                         </div>
@@ -128,22 +121,18 @@
                                             @php
                                                 $catData = $autoFillCategories[$kandidat->id][$kriteria->id] ?? null;
                                             @endphp
-                                            <div class="flex flex-col items-center gap-1">
-                                                <div class="relative inline-block">
+                                            <div class="flex flex-col items-center justify-center gap-1">
+                                                <div class="inline-block">
                                                     <input type="number" step="1"
                                                         wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
-                                                        class="w-16 px-2 py-2 rounded-lg border-2 border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/40 shadow-sm text-lg text-center font-bold text-blue-700 dark:text-blue-300 cursor-not-allowed"
+                                                        class="w-16 py-2 rounded-lg border-2 border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/40 shadow-sm text-lg text-center font-bold text-blue-700 dark:text-blue-300 cursor-not-allowed"
                                                         readonly
                                                         title="Nilai auto-filled berdasarkan data kandidat">
-                                                    <span class="absolute -top-1.5 -right-1.5 flex h-4 w-4">
-                                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                                        <span class="relative inline-flex rounded-full h-4 w-4 bg-blue-500 border-2 border-white dark:border-gray-800"></span>
-                                                    </span>
                                                 </div>
                                                 @if($catData)
-                                                <div class="text-xs text-center max-w-[140px]">
-                                                    <div class="font-semibold text-blue-700 dark:text-blue-300">{{ $catData['kategori'] }}</div>
-                                                    <div class="text-gray-500 dark:text-gray-400 text-[10px] truncate" title="{{ $catData['detail'] }}">{{ $catData['detail'] }}</div>
+                                                <div class="text-xs text-center w-full max-w-[140px] flex flex-col items-center">
+                                                    <div class="font-semibold text-blue-700 dark:text-blue-300 leading-tight w-full">{{ $catData['kategori'] }}</div>
+                                                    <div class="text-gray-500 dark:text-gray-400 text-[10px] truncate w-full" title="{{ $catData['detail'] }}">{{ $catData['detail'] }}</div>
                                                 </div>
                                                 @endif
                                             </div>
@@ -154,24 +143,28 @@
                                                 // Map relation dynamically
                                                 $map = [
                                                     5 => 'knSkp', 6 => 'knPenghargaan', 
-                                                    7 => 'knIntegritas', 8 => 'knDiklat', // ID 8 = Diklat
+                                                    7 => 'knIntegritas', 8 => 'knDiklat',
                                                     9 => 'knPotensi', 10 => 'knKompetensi'
                                                 ];
                                                 $rel = $map[$kriteria->id] ?? null;
                                                 $kn = $rel ? $kandidat->$rel : null;
                                             @endphp
-                                            <div class="flex flex-col items-center">
+                                            <div class="flex flex-col items-center gap-1">
                                                 @if($kn)
-                                                    <span class="font-bold text-gray-900 dark:text-gray-100 text-sm text-center">
-                                                        {{ $kn->kategori }}
-                                                    </span>
-                                                    <span class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
-                                                        (Nilai: {{ $kn->nilai }})
-                                                    </span>
-                                                    {{-- Hidden input for form submission if needed (though we should skip saving these) --}}
-                                                    <input type="hidden" wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}" value="{{ $kn->nilai }}">
+                                                    <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm text-lg font-bold text-gray-700 dark:text-gray-200" 
+                                                        title="Nilai berdasarkan data kandidat">
+                                                        {{ $kn->nilai }}
+                                                    </div>
+                                                    <div class="text-xs text-center max-w-[140px]">
+                                                        <div class="font-semibold text-gray-700 dark:text-gray-300">{{ $kn->kategori }}</div>
+                                                    </div>
+                                                    {{-- Hidden input for form submission --}}
+                                                    <input type="hidden" wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}">
                                                 @else
-                                                    <span class="text-gray-400 text-xs italic">Belum diisi</span>
+                                                    <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-400 font-bold">
+                                                        -
+                                                    </div>
+                                                    <div class="text-[10px] text-gray-400 italic">Belum diisi</div>
                                                 @endif
                                             </div>
 
@@ -248,7 +241,7 @@
                         <div class="text-sm text-blue-700 dark:text-blue-300">
                             <p class="font-semibold mb-1">Catatan Penting:</p>
                             <ul class="list-disc list-inside space-y-1 text-xs">
-                                <li>Kriteria dengan badge <strong>AUTO</strong> akan terisi otomatis berdasarkan data kandidat</li>
+                                <li>Kriteria <strong>Pangkat, Masa Jabatan, Pendidikan, dan Bidang Ilmu</strong> akan terisi otomatis berdasarkan data kandidat</li>
                                 <li>Kriteria <strong>Potensi (K9)</strong> dan <strong>Kompetensi (K10)</strong> input dalam bentuk persentase (0-100)</li>
                                 <li>Persentase akan otomatis dikonversi ke skala 1-5 saat disimpan</li>
                                 <li>Pastikan semua kriteria terisi sebelum menyimpan</li>
