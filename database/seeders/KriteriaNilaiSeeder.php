@@ -28,12 +28,12 @@ class KriteriaNilaiSeeder extends Seeder
             ['id' => 11, 'kriteria_id' => 3, 'kategori' => 'DIII', 'nilai' => 3],
             ['id' => 12, 'kriteria_id' => 3, 'kategori' => 'Dibawah DIII', 'nilai' => 1],
 
-            // kriteria_id 4
-            ['id' => 13, 'kriteria_id' => 4, 'kategori' => '> 24 JP', 'nilai' => 5],
-            ['id' => 14, 'kriteria_id' => 4, 'kategori' => '19 - 24 JP', 'nilai' => 4],
-            ['id' => 15, 'kriteria_id' => 4, 'kategori' => '13 - 18 JP', 'nilai' => 3],
-            ['id' => 16, 'kriteria_id' => 4, 'kategori' => '6 - 12 JP', 'nilai' => 2],
-            ['id' => 17, 'kriteria_id' => 4, 'kategori' => '< 6 JP', 'nilai' => 1],
+            // kriteria_id 8 (Diklat) - Static
+            ['id' => 13, 'kriteria_id' => 8, 'kategori' => '> 24 JP', 'nilai' => 5],
+            ['id' => 14, 'kriteria_id' => 8, 'kategori' => '19 - 24 JP', 'nilai' => 4],
+            ['id' => 15, 'kriteria_id' => 8, 'kategori' => '13 - 18 JP', 'nilai' => 3],
+            ['id' => 16, 'kriteria_id' => 8, 'kategori' => '6 - 12 JP', 'nilai' => 2],
+            ['id' => 17, 'kriteria_id' => 8, 'kategori' => '< 6 JP', 'nilai' => 1],
 
             // kriteria_id 5
             ['id' => 18, 'kriteria_id' => 5, 'kategori' => 'Sangat Baik', 'nilai' => 5],
@@ -54,9 +54,9 @@ class KriteriaNilaiSeeder extends Seeder
             ['id' => 29, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Sedang', 'nilai' => 1],
             ['id' => 30, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Berat', 'nilai' => 0],
 
-            // kriteria_id 8
-            ['id' => 31, 'kriteria_id' => 8, 'kategori' => 'Sesuai', 'nilai' => 5],
-            ['id' => 32, 'kriteria_id' => 8, 'kategori' => 'Tidak Sesuai', 'nilai' => 2],
+            // kriteria_id 4 (Bidang Ilmu) - Dynamic
+            ['id' => 31, 'kriteria_id' => 4, 'kategori' => 'Sesuai', 'nilai' => 5],
+            ['id' => 32, 'kriteria_id' => 4, 'kategori' => 'Tidak Sesuai', 'nilai' => 2],
        
             // kriteria_id 9
             ['id' => 33, 'kriteria_id' => 9, 'kategori' => 'Potensi Tinggi', 'nilai' => 3],

@@ -13,6 +13,7 @@ class SyaratJabatan extends Component
     public $syaratJabatans;
     public $eselon_id;
     public $minimal_golongan_id;
+    public $syarat_golongan_id;
     public $minimal_tingkat_pendidikan_id;
     public $minimal_eselon_id;
     public $keterangan;
@@ -25,7 +26,7 @@ class SyaratJabatan extends Component
 
     protected $rules = [
         'eselon_id' => 'required|exists:eselons,id',
-        'minimal_golongan_id' => 'required|exists:golongans,id',
+        'syarat_golongan_id' => 'required|exists:golongans,id',
         'minimal_tingkat_pendidikan_id' => 'required|exists:tingkat_pendidikans,id',
         'minimal_eselon_id' => 'nullable|exists:eselons,id',
         'keterangan' => 'nullable|string|max:255',
@@ -34,7 +35,7 @@ class SyaratJabatan extends Component
 
     protected $messages = [
         'eselon_id.required' => 'Eselon wajib dipilih',
-        'minimal_golongan_id.required' => 'Minimal golongan wajib dipilih',
+        'syarat_golongan_id.required' => 'Syarat golongan wajib dipilih',
         'minimal_tingkat_pendidikan_id.required' => 'Minimal tingkat pendidikan wajib dipilih',
     ];
 
@@ -43,6 +44,7 @@ class SyaratJabatan extends Component
         $this->syaratJabatans = SyaratJabatanModel::with([
             'eselon',
             'minimalGolongan',
+            'syaratGolongan',
             'minimalTingkatPendidikan',
             'minimalEselon'
         ])->orderBy('eselon_id')->get();
@@ -69,7 +71,8 @@ class SyaratJabatan extends Component
             ['id' => $this->syarat_id_to_edit],
             [
                 'eselon_id' => $this->eselon_id,
-                'minimal_golongan_id' => $this->minimal_golongan_id,
+                'minimal_golongan_id' => $this->syarat_golongan_id, // Match for DB integrity
+                'syarat_golongan_id' => $this->syarat_golongan_id,
                 'minimal_tingkat_pendidikan_id' => $this->minimal_tingkat_pendidikan_id,
                 'minimal_eselon_id' => $this->minimal_eselon_id ?: null,
                 'keterangan' => $this->keterangan,
@@ -87,7 +90,7 @@ class SyaratJabatan extends Component
         $syaratJabatan = SyaratJabatanModel::findOrFail($id);
         $this->syarat_id_to_edit = $id;
         $this->eselon_id = $syaratJabatan->eselon_id;
-        $this->minimal_golongan_id = $syaratJabatan->minimal_golongan_id;
+        $this->syarat_golongan_id = $syaratJabatan->syarat_golongan_id;
         $this->minimal_tingkat_pendidikan_id = $syaratJabatan->minimal_tingkat_pendidikan_id;
         $this->minimal_eselon_id = $syaratJabatan->minimal_eselon_id;
         $this->keterangan = $syaratJabatan->keterangan;
@@ -129,6 +132,7 @@ class SyaratJabatan extends Component
     {
         $this->eselon_id = '';
         $this->minimal_golongan_id = '';
+        $this->syarat_golongan_id = '';
         $this->minimal_tingkat_pendidikan_id = '';
         $this->minimal_eselon_id = '';
         $this->keterangan = '';

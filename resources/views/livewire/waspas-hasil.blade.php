@@ -130,7 +130,7 @@
                         <thead class="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Rank</th>
-                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Kandidat</th>
+                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Kandidat</th>
                                 <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Gol.</th>
                                 @foreach($kriterias as $kriteria)
                                 <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase" title="{{ $kriteria->kriteria }}">

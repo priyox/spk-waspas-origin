@@ -17,4 +17,9 @@ class JabatanFungsional extends Model
     {
         return $this->hasMany(Kandidat::class, 'jabatan_fungsional_id');
     }
+
+    public function jenjang()
+    {
+        return $this->belongsTo(JenjangFungsional::class, 'jenjang_id');
+    }
 }

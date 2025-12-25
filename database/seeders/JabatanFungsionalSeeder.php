@@ -17,72 +17,72 @@ class JabatanFungsionalSeeder extends Seeder
         $data = [
             [
                 'id' => 1,
-                'jenjang' => 'Terampil',
+                'jenjang_id' => 1,
                 'nama_jabatan' => 'Arsiparis Terampil',
             ],
             [
                 'id' => 2,
-                'jenjang' => 'Mahir',
+                'jenjang_id' => 2,
                 'nama_jabatan' => 'Arsiparis Mahir',
             ],
              [
                 'id' => 3,
-                'jenjang' => 'Penyelia',
+                'jenjang_id' => 3,
                 'nama_jabatan' => 'Arsiparis Penyelia',
             ],
              [
                 'id' => 4,
-                'jenjang' => 'Ahli Pertama',
+                'jenjang_id' => 4,
                 'nama_jabatan' => 'Arsiparis Ahli Pertama',
             ],
              [
                 'id' => 5,
-                'jenjang' => 'Ahli Muda',
+                'jenjang_id' => 5,
                 'nama_jabatan' => 'Arsiparis Ahli Muda',
             ],
              [
                 'id' => 6,
-                'jenjang' => 'Ahli Madya',
+                'jenjang_id' => 6,
                 'nama_jabatan' => 'Arsiparis Ahli Madya',
             ],
              [
                 'id' => 7,
-                'jenjang' => 'Ahli Utama',
+                'jenjang_id' => 7,
                 'nama_jabatan' => 'Arsiparis Ahli Utama',
             ],
              [
                 'id' => 8,
-                'jenjang' => 'Terampil',
+                'jenjang_id' => 1,
                 'nama_jabatan' => 'Pranata Komputer Terampil',
             ],
             [
                 'id' => 9,
-                'jenjang' => 'Mahir',
+                'jenjang_id' => 2,
                 'nama_jabatan' => 'Pranata Komputer Mahir',
             ],
              [
                 'id' => 10,
-                'jenjang' => 'Penyelia',
+                'jenjang_id' => 3,
                 'nama_jabatan' => 'Pranata Komputer Penyelia',
             ],
              [
                 'id' => 11,
-                'jenjang' => 'Ahli Pertama',
+                'jenjang_id' => 4,
                 'nama_jabatan' => 'Pranata Komputer Ahli Pertama',
             ],
              [
                 'id' => 12,
-                'jenjang' => 'Ahli Muda',
+                'jenjang_id' => 5,
                 'nama_jabatan' => 'Pranata Komputer Ahli Muda',
             ],
              [
                 'id' => 13,
-                'jenjang' => 'Ahli Madya',
+                'jenjang_id' => 6,
                 'nama_jabatan' => 'Pranata Komputer Ahli Madya',
             ],
              [
                 'id' => 14,
-                'jenjang' => 'Ahli Utama',
+                'jenjang_id' => 7,
                 'nama_jabatan' => 'Pranata Komputer Ahli Utama',
             ],
         ];

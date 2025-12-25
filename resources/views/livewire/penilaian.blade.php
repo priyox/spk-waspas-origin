@@ -103,16 +103,16 @@
                                 @forelse($kandidats as $kandidat)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white dark:bg-gray-800 z-10">
-                                        <div class="flex flex-col items-center justify-center">
-                                            <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-lg mb-1">
-                                                {{ substr($kandidat->nama, 0, 1) }}
-                                            </div>
-                                            <div class="text-center">
-                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">{{ $kandidat->nama }}</div>
-                                                <div class="text-xs text-gray-500 dark:text-gray-400">NIP: {{ $kandidat->nip }}</div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                         <div class="flex items-center justify-start gap-4">
+                                             <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-lg">
+                                                 {{ substr($kandidat->nama, 0, 1) }}
+                                             </div>
+                                             <div class="text-left">
+                                                 <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">{{ $kandidat->nama }}</div>
+                                                 <div class="text-xs text-gray-500 dark:text-gray-400">NIP: {{ $kandidat->nip }}</div>
+                                             </div>
+                                         </div>
+                                     </td>
 
                                     @foreach($kriterias as $kriteria)
                                     <td class="px-3 py-4 text-center align-top">

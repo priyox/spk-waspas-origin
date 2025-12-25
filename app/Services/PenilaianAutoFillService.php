@@ -46,7 +46,7 @@ class PenilaianAutoFillService
             return 1; // Default jika tidak ada syarat
         }
 
-        $minimalGolongan = $syarat->minimal_golongan_id;
+        $minimalGolongan = $syarat->syarat_golongan_id ?? $syarat->minimal_golongan_id;
         $golonganKandidat = $kandidat->golongan_id;
 
         // Lebih tinggi dari yang dipersyaratkan

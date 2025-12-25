@@ -353,7 +353,7 @@ class KandidatSeeder extends Seeder
 
         foreach ($data as $row) {
             // Populate Static Criteria (Randomly)
-            // K4: Diklat (ID 13-17)
+            // K8: Diklat (ID 13-17)
             $row['kn_id_diklat'] = rand(13, 17);
             // K5: SKP (ID 18-22, usually good 18-20)
             $row['kn_id_skp'] = rand(18, 20); 

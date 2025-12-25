@@ -37,4 +37,9 @@ class SyaratJabatan extends Model
     {
         return $this->belongsTo(Golongan::class, 'syarat_golongan_id');
     }
+
+    public function jenjangFungsional()
+    {
+        return $this->belongsTo(JenjangFungsional::class, 'minimal_jenjang_fungsional_id');
+    }
 }

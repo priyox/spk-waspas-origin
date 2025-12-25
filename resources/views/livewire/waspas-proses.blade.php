@@ -89,7 +89,7 @@
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border text-sm">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase sticky left-0 bg-gray-50 dark:bg-gray-700">Kandidat</th>
+                                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase sticky left-0 bg-gray-50 dark:bg-gray-700">Kandidat</th>
                                     @foreach($kriterias as $kriteria)
                                     <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">
                                         K{{ $kriteria->id }}
@@ -127,7 +127,7 @@
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border text-sm">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase sticky left-0 bg-gray-50 dark:bg-gray-700">Kandidat</th>
+                                    <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase sticky left-0 bg-gray-50 dark:bg-gray-700">Kandidat</th>
                                     @foreach($kriterias as $kriteria)
                                     <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">
                                         K{{ $kriteria->id }}
@@ -165,7 +165,7 @@
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
                                     <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Rank</th>
-                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Kandidat</th>
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Kandidat</th>
                                     <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Q1 (WSM)</th>
                                     <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Q2 (WPM)</th>
                                     <th class="px-4 py-3 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">Qi (Final)</th>
