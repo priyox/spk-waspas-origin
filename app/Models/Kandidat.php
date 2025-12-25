@@ -11,7 +11,14 @@ class Kandidat extends Model
 
     protected $table = 'kandidats';
 
-    protected $guarded = [];
+    protected $fillable = [
+        'nip', 'nama', 'tempat_lahir', 'tanggal_lahir', 
+        'golongan_id', 'jenis_jabatan_id', 'eselon_id', 
+        'jabatan', 'unit_kerja_id', 'tingkat_pendidikan_id', 
+        'jurusan_pendidikan_id', 'bidang_ilmu_id', 'tmt_golongan', 'tmt_jabatan',
+        'kn_id_diklat', 'kn_id_skp', 'kn_id_penghargaan', 'kn_id_integritas',
+        'kn_id_potensi', 'kn_id_kompetensi'
+    ];
 
     public function golongan()
     {
@@ -21,6 +28,41 @@ class Kandidat extends Model
     public function jenis_jabatan()
     {
         return $this->belongsTo(JenisJabatan::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships for Static Criteria
+    |--------------------------------------------------------------------------
+    */
+    public function knDiklat()
+    {
+        return $this->belongsTo(KriteriaNilai::class, 'kn_id_diklat');
+    }
+
+    public function knSkp()
+    {
+        return $this->belongsTo(KriteriaNilai::class, 'kn_id_skp');
+    }
+
+    public function knPenghargaan()
+    {
+        return $this->belongsTo(KriteriaNilai::class, 'kn_id_penghargaan');
+    }
+
+    public function knIntegritas()
+    {
+        return $this->belongsTo(KriteriaNilai::class, 'kn_id_integritas');
+    }
+
+    public function knPotensi()
+    {
+        return $this->belongsTo(KriteriaNilai::class, 'kn_id_potensi');
+    }
+
+    public function knKompetensi()
+    {
+        return $this->belongsTo(KriteriaNilai::class, 'kn_id_kompetensi');
     }
 
     public function jabatan_fungsional()

@@ -352,6 +352,20 @@ class KandidatSeeder extends Seeder
         ];
 
         foreach ($data as $row) {
+            // Populate Static Criteria (Randomly)
+            // K4: Diklat (ID 13-17)
+            $row['kn_id_diklat'] = rand(13, 17);
+            // K5: SKP (ID 18-22, usually good 18-20)
+            $row['kn_id_skp'] = rand(18, 20); 
+            // K6: Penghargaan (ID 23-26, mostly none 26)
+            $row['kn_id_penghargaan'] = (rand(1, 10) > 7) ? rand(23, 25) : 26;
+            // K7: Integritas (ID 27-30, mostly good 27)
+            $row['kn_id_integritas'] = (rand(1, 100) > 5) ? 27 : rand(28, 29);
+            // K9: Potensi (ID 33-35)
+            $row['kn_id_potensi'] = rand(33, 35);
+            // K10: Kompetensi (ID 36-38)
+            $row['kn_id_kompetensi'] = rand(36, 38);
+
             Kandidat::create($row);
         }
     }

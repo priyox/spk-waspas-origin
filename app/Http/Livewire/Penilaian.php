@@ -16,13 +16,15 @@ class Penilaian extends Component
     public $validationErrors = []; // Menyimpan error validasi
 
     // Kriteria yang di-auto-fill
-    public $autoFilledKriterias = [1, 2, 3, 8];
+    // ID 4 = Bidang Ilmu (Auto)
+    public $autoFilledKriterias = [1, 2, 3, 4];
 
-    // Kriteria dropdown
-    public $dropdownKriterias = [4, 5, 6, 7];
+    // Kriteria dropdown (Semua static jadi dropdown/mapped)
+    // ID 8 = Diklat (Static)
+    public $dropdownKriterias = [5, 6, 7, 8, 9, 10];
 
-    // Kriteria input persentase
-    public $persentaseKriterias = [9, 10];
+    // Kriteria input persentase (Deprecated)
+    public $persentaseKriterias = [];
 
     protected $autoFillService;
 
@@ -36,19 +38,30 @@ class Penilaian extends Component
         $this->jabatanTargets = \App\Models\JabatanTarget::all();
         $this->kriterias = \App\Models\Kriteria::all();
 
-        // Load kandidats dulu
+        // Load kandidats dengan eager loading
         $this->loadKandidats();
 
-        // Load existing values (hanya untuk kriteria manual)
-        $existingNilais = \App\Models\Nilai::all();
-        foreach ($existingNilais as $nilai) {
-            // Jangan load nilai untuk kriteria auto-fill, biarkan di-override
-            if (!in_array($nilai->kriteria_id, $this->autoFilledKriterias)) {
-                $this->nilais[$nilai->kandidats_id][$nilai->kriteria_id] = $nilai->nilai;
-            }
+        // Populate Nilai dari data Kandidat (Static Criteria)
+        foreach ($this->kandidats as $k) {
+             // Mapping: Kriteria ID => Relation Name
+             $map = [
+                5 => 'knSkp',
+                6 => 'knPenghargaan',
+                7 => 'knIntegritas',
+                8 => 'knDiklat', // ID 8 = Diklat
+                9 => 'knPotensi',
+                10 => 'knKompetensi'
+             ];
+             
+             foreach ($map as $kId => $rel) {
+                 // Ambil 'nilai' (1-5) dari relasi jika ada
+                 if ($k->$rel) {
+                     $this->nilais[$k->id][$kId] = $k->$rel->nilai;
+                 }
+             }
         }
 
-        // Auto-fill kriteria yang bisa di-auto-fill
+        // Auto-fill kriteria yang bisa di-auto-fill (Dynamic)
         $this->autoFillNilai();
     }
 
@@ -95,7 +108,7 @@ class Penilaian extends Component
      */
     private function loadKandidats()
     {
-        $this->kandidats = \App\Models\Kandidat::all();
+        $this->kandidats = \App\Models\Kandidat::with(['knDiklat', 'knSkp', 'knPenghargaan', 'knIntegritas', 'knPotensi', 'knKompetensi'])->get();
     }
 
     /**

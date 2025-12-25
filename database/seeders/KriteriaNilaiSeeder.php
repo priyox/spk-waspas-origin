@@ -57,6 +57,17 @@ class KriteriaNilaiSeeder extends Seeder
             // kriteria_id 8
             ['id' => 31, 'kriteria_id' => 8, 'kategori' => 'Sesuai', 'nilai' => 5],
             ['id' => 32, 'kriteria_id' => 8, 'kategori' => 'Tidak Sesuai', 'nilai' => 2],
+       
+            // kriteria_id 9
+            ['id' => 33, 'kriteria_id' => 9, 'kategori' => 'Potensi Tinggi', 'nilai' => 3],
+            ['id' => 34, 'kriteria_id' => 9, 'kategori' => 'Potensi Sedang', 'nilai' => 2],
+            ['id' => 35, 'kriteria_id' => 9, 'kategori' => 'Potensi Rendah', 'nilai' => 1],
+
+            // kriteria_id 10
+            ['id' => 36, 'kriteria_id' => 10, 'kategori' => 'Memenuhi Syarat', 'nilai' => 3],
+            ['id' => 37, 'kriteria_id' => 10, 'kategori' => 'Masih Memenuhi Syarat', 'nilai' => 2],
+            ['id' => 38, 'kriteria_id' => 10, 'kategori' => 'Kurang Memenuhi Syarat', 'nilai' => 1],
+        
         ];
 
         foreach ($data as $item) {

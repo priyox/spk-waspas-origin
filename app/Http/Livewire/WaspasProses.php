@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Kandidat;
 use App\Models\Kriteria;
-use App\Models\Nilai;
 use App\Models\JabatanTarget;
 use App\Models\WaspasNilai;
 use App\Services\PenilaianAutoFillService;
@@ -48,28 +47,34 @@ class WaspasProses extends Component
             return;
         }
 
-        $kandidats = Kandidat::all();
-        $kriterias = Kriteria::orderBy('id')->get();
-        $nilais = Nilai::all();
-        $jabatanTarget = JabatanTarget::find($this->selectedJabatanId);
-
         // 1. Build Matrix X
         $this->matrix = [];
 
-        // Fill from database (manual values: K4, K5, K6, K7, K9, K10)
-        foreach ($nilais as $nilai) {
-            $nilaiValue = $nilai->nilai;
+        // Eager load relations
+        $kandidats = Kandidat::with(['knDiklat', 'knSkp', 'knPenghargaan', 'knIntegritas', 'knPotensi', 'knKompetensi'])->get();
+        
+        $kriterias = Kriteria::orderBy('id')->get();
+        $jabatanTarget = JabatanTarget::find($this->selectedJabatanId);
 
-            // Konversi K9 dan K10 dari 0-100 ke 1-5 untuk perhitungan
-            if (in_array($nilai->kriteria_id, [9, 10])) {
-                $nilaiValue = $this->autoFillService->konversiPersentaseKeNilai($nilai->nilai, $nilai->kriteria_id);
+        foreach ($kandidats as $kandidat) {
+            // A. Static Criteria (From Kandidat Table)
+            // Map Kriteria ID => Relation Name
+            $staticMap = [
+                5 => 'knSkp', 
+                6 => 'knPenghargaan', 
+                7 => 'knIntegritas', 
+                8 => 'knDiklat',  // ID 8 = Diklat
+                9 => 'knPotensi', 
+                10 => 'knKompetensi'
+            ];
+
+            foreach ($staticMap as $kId => $rel) {
+                // Get nilai (1-5) from relation, default to 1 (min) or 0 if missing
+                $this->matrix[$kandidat->id][$kId] = $kandidat->$rel->nilai ?? 0;
             }
 
-            $this->matrix[$nilai->kandidats_id][$nilai->kriteria_id] = $nilaiValue;
-        }
-
-        // Calculate auto-fill values for all kandidats (K1, K2, K3, K8) based on jabatan target
-        foreach ($kandidats as $kandidat) {
+            // B. Dynamic/Auto-filled Criteria (K1, K2, K3, K8)
+            // Uses current logic
             $autoFilledValues = $this->autoFillService->autoFillKandidat($kandidat, $jabatanTarget);
             foreach ($autoFilledValues as $kriteriaId => $nilai) {
                 $this->matrix[$kandidat->id][$kriteriaId] = $nilai;
@@ -176,11 +181,11 @@ class WaspasProses extends Component
                 'pangkat' => $matrixData[1] ?? 0,           // K1
                 'masa_jabatan' => $matrixData[2] ?? 0,      // K2
                 'tingkat_pendidikan' => $matrixData[3] ?? 0, // K3
-                'diklat' => $matrixData[4] ?? 0,            // K4
+                'diklat' => $matrixData[8] ?? 0,            // Diklat (Now K8)
                 'skp' => $matrixData[5] ?? 0,               // K5
                 'penghargaan' => $matrixData[6] ?? 0,       // K6
                 'hukdis' => $matrixData[7] ?? 0,            // K7 (Integritas)
-                'bidang_ilmu' => $matrixData[8] ?? 0,       // K8
+                'bidang_ilmu' => $matrixData[4] ?? 0,       // Bidang Ilmu (Now K4)
                 'potensi' => $matrixData[9] ?? 0,           // K9
                 'kompetensi' => $matrixData[10] ?? 0,       // K10
                 'wsm' => $result['q1'],

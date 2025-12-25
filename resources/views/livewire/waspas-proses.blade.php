@@ -93,7 +93,7 @@
                                     @foreach($kriterias as $kriteria)
                                     <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">
                                         K{{ $kriteria->id }}
-                                        @if(in_array($kriteria->id, [1,2,3,8]))
+                                        @if(in_array($kriteria->id, [1,2,3,4]))
                                             <span class="block text-[9px] text-blue-500">auto</span>
                                         @endif
                                     </th>
@@ -105,7 +105,7 @@
                                 <tr>
                                     <td class="px-3 py-2 text-sm font-medium sticky left-0 bg-white dark:bg-gray-800">{{ $result['nama'] }}</td>
                                     @foreach($kriterias as $kriteria)
-                                    <td class="px-3 py-2 text-center {{ in_array($kriteria->id, [1,2,3,8]) ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' : '' }}">
+                                    <td class="px-3 py-2 text-center {{ in_array($kriteria->id, [1,2,3,4]) ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' : '' }}">
                                         {{ $matrix[$result['kandidat_id']][$kriteria->id] ?? 0 }}
                                     </td>
                                     @endforeach

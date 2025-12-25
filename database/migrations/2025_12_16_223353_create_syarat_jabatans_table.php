@@ -21,7 +21,8 @@ return new class extends Migration
 
             $table->unsignedBigInteger('minimal_tingkat_pendidikan_id');
 
-            // Syarat asal jabatan (OPSIONAL)
+            $table->unsignedBigInteger('tingkat_pendidikan_id');
+           // Syarat asal jabatan (OPSIONAL)
             $table->unsignedBigInteger('minimal_eselon_id')->nullable(); // jika struktural
             $table->unsignedBigInteger('minimal_jenjang_fungsional_id')->nullable(); // jika fungsional
 

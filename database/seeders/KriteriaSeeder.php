@@ -36,10 +36,10 @@ class KriteriaSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'kriteria' => 'Diklat',
-                'bobot' => 5,
+                'kriteria' => 'Bidang Ilmu',
+                'bobot' => 10,
                 'jenis' => 'benefit',
-                'keterangan' => 'Diklat yang diikuti dalam 3 tahun terakhir',
+                'keterangan' => 'Kesesuaian bidang ilmu dengan syarat jabatan',
             ],
             [
                 'id' => 5,
@@ -64,10 +64,10 @@ class KriteriaSeeder extends Seeder
             ],
             [
                 'id' => 8,
-                'kriteria' => 'Bidang Ilmu',
-                'bobot' => 10,
+                'kriteria' => 'Diklat',
+                'bobot' => 5,
                 'jenis' => 'benefit',
-                'keterangan' => 'Kesesuaian bidang ilmu dengan syarat jabatan',
+                'keterangan' => 'Diklat yang diikuti dalam 3 tahun terakhir',
             ],
             [
                 'id' => 9,

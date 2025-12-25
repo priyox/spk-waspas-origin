@@ -60,32 +60,23 @@
                 {{-- Legend Box --}}
                 <div class="mb-6 p-5 bg-gradient-to-r from-blue-50 to-green-50 dark:from-gray-700 dark:to-gray-700 rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-sm">
                     <h3 class="font-bold text-base text-gray-800 dark:text-gray-200 mb-4">Panduan Input Penilaian:</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex items-center gap-3 p-3 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
                             <div class="w-6 h-6 bg-blue-200 dark:bg-blue-800 border-2 border-blue-400 dark:border-blue-600 rounded-lg flex items-center justify-center">
                                 <span class="text-blue-700 dark:text-blue-300 text-xs font-bold">A</span>
                             </div>
                             <div>
-                                <span class="font-bold text-sm text-blue-800 dark:text-blue-200">Auto-filled</span>
-                                <p class="text-xs text-blue-600 dark:text-blue-300">K1, K2, K3, K8 - Terisi otomatis</p>
+                                <span class="font-bold text-sm text-blue-800 dark:text-blue-200">Auto-filled (K1-K4)</span>
+                                <p class="text-xs text-blue-600 dark:text-blue-300">Pangkat, Masa Jabatan, Pendidikan, Bidang Ilmu</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3 p-3 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg">
-                            <div class="w-6 h-6 bg-yellow-200 dark:bg-yellow-800 border-2 border-yellow-400 dark:border-yellow-600 rounded-lg flex items-center justify-center">
-                                <span class="text-yellow-700 dark:text-yellow-300 text-xs font-bold">▼</span>
+                        <div class="flex items-center gap-3 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                            <div class="w-6 h-6 bg-gray-200 dark:bg-gray-600 border-2 border-gray-400 dark:border-gray-500 rounded-lg flex items-center justify-center">
+                                <span class="text-gray-700 dark:text-gray-300 text-xs font-bold">S</span>
                             </div>
                             <div>
-                                <span class="font-bold text-sm text-yellow-800 dark:text-yellow-200">Pilih Dropdown</span>
-                                <p class="text-xs text-yellow-600 dark:text-yellow-300">K4, K5, K6, K7 - Pilih dari daftar</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                            <div class="w-6 h-6 bg-green-200 dark:bg-green-800 border-2 border-green-400 dark:border-green-600 rounded-lg flex items-center justify-center">
-                                <span class="text-green-700 dark:text-green-300 text-xs font-bold">%</span>
-                            </div>
-                            <div>
-                                <span class="font-bold text-sm text-green-800 dark:text-green-200">Persentase</span>
-                                <p class="text-xs text-green-600 dark:text-green-300">K9, K10 - Input nilai 0-100</p>
+                                <span class="font-bold text-sm text-gray-800 dark:text-gray-200">Data Kandidat (K5-K10)</span>
+                                <p class="text-xs text-gray-600 dark:text-gray-300">SKP, Penghargaan, Integritas, Diklat, Potensi, Kompetensi</p>
                             </div>
                         </div>
                     </div>
@@ -106,12 +97,10 @@
                                         <div class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-1">Bobot: {{ $kriteria->bobot }}%</div>
 
                                         {{-- Badge untuk tipe input --}}
-                                        @if(in_array($kriteria->id, [1,2,3,8]))
+                                        @if(in_array($kriteria->id, [1,2,3,4]))
                                             <span class="inline-block mt-2 px-3 py-1 text-xs font-bold bg-blue-200 text-blue-800 dark:bg-blue-800 dark:text-blue-200 rounded-full">AUTO</span>
-                                        @elseif(in_array($kriteria->id, [4,5,6,7]))
-                                            <span class="inline-block mt-2 px-3 py-1 text-xs font-bold bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200 rounded-full">PILIH</span>
-                                        @elseif(in_array($kriteria->id, [9,10]))
-                                            <span class="inline-block mt-2 px-3 py-1 text-xs font-bold bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200 rounded-full">0-100%</span>
+                                        @elseif(in_array($kriteria->id, [5,6,7,8,9,10]))
+                                            <span class="inline-block mt-2 px-3 py-1 text-xs font-bold bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 rounded-full">DATA KANDIDAT</span>
                                         @endif
                                     </th>
                                     @endforeach
@@ -134,8 +123,8 @@
 
                                     @foreach($kriterias as $kriteria)
                                     <td class="px-3 py-4 text-center align-top">
-                                        {{-- Auto-filled Kriteria (1,2,3,8) --}}
-                                        @if(in_array($kriteria->id, [1,2,3,8]))
+                                        {{-- Auto-filled Kriteria (1,2,3,4) --}}
+                                        @if(in_array($kriteria->id, [1,2,3,4]))
                                             @php
                                                 $catData = $autoFillCategories[$kandidat->id][$kriteria->id] ?? null;
                                             @endphp
@@ -159,75 +148,34 @@
                                                 @endif
                                             </div>
 
-                                        {{-- Dropdown Kriteria (4,5,6,7) --}}
-                                        @elseif(in_array($kriteria->id, [4,5,6,7]))
+                                        {{-- Static Kriteria (5,6,7,8,9,10) - Read from relation --}}
+                                        @elseif(in_array($kriteria->id, [5,6,7,8,9,10]))
                                             @php
-                                                $selectedValue = $nilais[$kandidat->id][$kriteria->id] ?? null;
-                                                $selectedOption = collect($this->getKriteriaNilaiOptions($kriteria->id))->firstWhere('nilai', $selectedValue);
-                                                $hasError = isset($validationErrors[$kandidat->id][$kriteria->id]);
+                                                // Map relation dynamically
+                                                $map = [
+                                                    5 => 'knSkp', 6 => 'knPenghargaan', 
+                                                    7 => 'knIntegritas', 8 => 'knDiklat', // ID 8 = Diklat
+                                                    9 => 'knPotensi', 10 => 'knKompetensi'
+                                                ];
+                                                $rel = $map[$kriteria->id] ?? null;
+                                                $kn = $rel ? $kandidat->$rel : null;
                                             @endphp
-                                            <div class="flex flex-col items-center gap-1">
-                                                <div class="relative">
-                                                    <select wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
-                                                        class="w-full min-w-[200px] lg:min-w-[260px] px-3 py-2.5 rounded-lg border-2 shadow-sm focus:ring-2 text-sm font-semibold text-gray-800 dark:text-gray-200 transition-all cursor-pointer
-                                                        {{ $hasError
-                                                            ? 'border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-900/30 focus:border-red-500 focus:ring-red-500 animate-pulse'
-                                                            : 'border-yellow-300 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-900/30 focus:border-yellow-500 focus:ring-yellow-500 hover:border-yellow-400'
-                                                        }}">
-                                                        <option value="" class="text-gray-500">-- Pilih Nilai --</option>
-                                                        @foreach($this->getKriteriaNilaiOptions($kriteria->id) as $option)
-                                                            <option value="{{ $option['nilai'] }}">{{ $option['kategori'] }} ({{ $option['nilai'] }})</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if($hasError)
-                                                    <span class="absolute -top-2 -right-2 flex h-5 w-5">
-                                                        <span class="relative inline-flex items-center justify-center rounded-full h-5 w-5 bg-red-500 text-white text-xs font-bold">!</span>
+                                            <div class="flex flex-col items-center">
+                                                @if($kn)
+                                                    <span class="font-bold text-gray-900 dark:text-gray-100 text-sm text-center">
+                                                        {{ $kn->kategori }}
                                                     </span>
-                                                    @endif
-                                                </div>
-                                                @if($selectedOption)
-                                                <div class="text-xs text-center">
-                                                    <span class="inline-flex items-center px-2 py-1 rounded-full bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 font-bold">
-                                                        Nilai: {{ $selectedOption['nilai'] }}
+                                                    <span class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+                                                        (Nilai: {{ $kn->nilai }})
                                                     </span>
-                                                </div>
-                                                @elseif($hasError)
-                                                <div class="text-xs text-center text-red-600 dark:text-red-400 font-semibold">
-                                                    Wajib diisi!
-                                                </div>
+                                                    {{-- Hidden input for form submission if needed (though we should skip saving these) --}}
+                                                    <input type="hidden" wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}" value="{{ $kn->nilai }}">
+                                                @else
+                                                    <span class="text-gray-400 text-xs italic">Belum diisi</span>
                                                 @endif
                                             </div>
 
-                                        {{-- Persentase Input (9,10) --}}
-                                        @elseif(in_array($kriteria->id, [9,10]))
-                                            @php
-                                                $hasError = isset($validationErrors[$kandidat->id][$kriteria->id]);
-                                            @endphp
-                                            <div class="flex flex-col items-center gap-1">
-                                                <div class="relative">
-                                                    <input type="number" step="1" min="0" max="100"
-                                                        wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
-                                                        class="w-24 lg:w-28 px-3 py-2.5 rounded-lg border-2 shadow-sm focus:ring-2 text-base text-center font-bold transition-all
-                                                        {{ $hasError
-                                                            ? 'border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-900/30 focus:border-red-500 focus:ring-red-500 text-red-700 dark:text-red-300 animate-pulse'
-                                                            : 'border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/30 focus:border-green-500 focus:ring-green-500 text-green-700 dark:text-green-300'
-                                                        }}"
-                                                        placeholder="0-100">
-                                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 {{ $hasError ? 'text-red-500' : 'text-green-500' }} font-bold text-sm">%</span>
-                                                    @if($hasError)
-                                                    <span class="absolute -top-2 -right-2 flex h-5 w-5">
-                                                        <span class="relative inline-flex items-center justify-center rounded-full h-5 w-5 bg-red-500 text-white text-xs font-bold">!</span>
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                                @if($hasError)
-                                                <div class="text-xs text-center text-red-600 dark:text-red-400 font-semibold">
-                                                    Wajib diisi!
-                                                </div>
-                                                @endif
-                                            </div>
-
-                                        {{-- Default (jika ada kriteria lain) --}}
+                                        {{-- Default (jika ada kriteria lain yang dinamis manual) --}}
                                         @else
                                             <input type="number" step="0.01"
                                                 wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"

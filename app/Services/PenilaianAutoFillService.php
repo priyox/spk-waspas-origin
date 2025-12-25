@@ -164,7 +164,7 @@ class PenilaianAutoFillService
             1 => $this->getNilaiPangkatGolongan($kandidat, $jabatanTarget), // Pangkat/Golongan
             2 => $this->hitungMasaJabatan($kandidat), // Masa Jabatan
             3 => $this->getNilaiTingkatPendidikan($kandidat), // Tingkat Pendidikan
-            8 => $this->getNilaiBidangIlmu($kandidat, $jabatanTarget), // Bidang Ilmu
+            4 => $this->getNilaiBidangIlmu($kandidat, $jabatanTarget), // K4: Bidang Ilmu
         ];
     }
 
@@ -192,13 +192,13 @@ class PenilaianAutoFillService
         $nilai3 = $this->getNilaiTingkatPendidikan($kandidat);
         $explanations[3] = "Tingkat Pendidikan ID: {$kandidat->tingkat_pendidikan_id} → Nilai: {$nilai3}";
 
-        // K8: Bidang Ilmu
+        // K4: Bidang Ilmu
         $nilai8 = $this->getNilaiBidangIlmu($kandidat, $jabatanTarget);
         if ($jabatanTarget) {
             $match = ($kandidat->bidang_ilmu_id == $jabatanTarget->id_bidang) ? 'Sesuai' : 'Tidak Sesuai';
-            $explanations[8] = "Bidang Ilmu: {$kandidat->bidang_ilmu_id} vs Target: {$jabatanTarget->id_bidang} → {$match} → Nilai: {$nilai8}";
+            $explanations[4] = "Bidang Ilmu: {$kandidat->bidang_ilmu_id} vs Target: {$jabatanTarget->id_bidang} → {$match} → Nilai: {$nilai8}";
         } else {
-            $explanations[8] = "Tidak ada jabatan target → Nilai: {$nilai8}";
+            $explanations[4] = "Tidak ada jabatan target → Nilai: {$nilai8}";
         }
 
         return $explanations;
@@ -240,10 +240,10 @@ class PenilaianAutoFillService
             'detail' => $pendidikanNama,
         ];
 
-        // K8: Bidang Ilmu
+        // K8 -> K4: Bidang Ilmu
         $nilai8 = $this->getNilaiBidangIlmu($kandidat, $jabatanTarget);
         $bidangNama = $kandidat->bidang_ilmu->nama ?? '-';
-        $categories[8] = [
+        $categories[4] = [  // ID 4
             'nilai' => $nilai8,
             'kategori' => $nilai8 == 5 ? 'Sesuai' : 'Tidak Sesuai',
             'detail' => $bidangNama,

@@ -43,6 +43,9 @@ Route::get('profile', Profile::class)
     Route::get('/kandidat', Kandidat::class)
         ->name('kandidat.index');
 
+    Route::get('/kandidat/input-nilai', \App\Http\Livewire\InputNilaiKandidat::class)
+        ->name('kandidat.input-nilai');
+
     Route::get('/kriteria', Kriteria::class)
         ->name('kriteria.index');
 
