@@ -18,6 +18,11 @@ class InputNilaiKandidat extends Component
     public $editingKandidatId = null;
     public $editingKandidatName = null;
 
+    // Reset/Delete state
+    public $isDeleteModalOpen = false;
+    public $kandidatIdToDelete = null;
+    public $kandidatNameToDelete = null;
+
     // Kriteria yang di-auto-fill (ReadOnly)
     // Kriteria yang di-auto-fill (ReadOnly)
     // ID 4 is now Bidang Ilmu (Auto), ID 8 is Diklat (Static)
@@ -136,6 +141,39 @@ class InputNilaiKandidat extends Component
 
         $this->closeModal(); // This already dispatches the event
         session()->flash('message', "Nilai untuk {$this->editingKandidatName} berhasil disimpan.");
+    }
+
+    public function confirmReset($id)
+    {
+        $kandidat = \App\Models\Kandidat::find($id);
+        if ($kandidat) {
+            $this->kandidatIdToDelete = $id;
+            $this->kandidatNameToDelete = $kandidat->nama;
+            $this->isDeleteModalOpen = true;
+        }
+    }
+
+    public function resetNilai()
+    {
+        if ($this->kandidatIdToDelete) {
+            $kandidat = \App\Models\Kandidat::find($this->kandidatIdToDelete);
+            if ($kandidat) {
+                // Set only manual dynamic criteria to null
+                foreach ($this->criterionColumnMap as $col) {
+                    $kandidat->$col = null;
+                }
+                $kandidat->save();
+                session()->flash('message', "Nilai untuk {$this->kandidatNameToDelete} berhasil di-reset.");
+            }
+        }
+        $this->closeDeleteModal();
+    }
+
+    public function closeDeleteModal()
+    {
+        $this->isDeleteModalOpen = false;
+        $this->kandidatIdToDelete = null;
+        $this->kandidatNameToDelete = null;
     }
 
     public function render()

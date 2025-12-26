@@ -62,7 +62,7 @@
                                         {{ $kandidat->jabatan_fungsional?->nama_jabatan ?? '' }}
                                         {{ $kandidat->jabatan_pelaksana?->nama_jabatan ?? '' }}
                                     </div>
-                                    <div class="text-[10px] text-gray-500 mt-1">{{ $kandidat->unit_kerja?->unit_kerja ?? $kandidat->unit_kerja }}</div>
+                                    <div class="text-[10px] text-gray-500 mt-1">{{ $kandidat->unitKerja?->unit_kerja ?? '-' }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900 dark:text-gray-100">{{ $kandidat->tingkat_pendidikan?->tingkat ?? '-' }}</div>

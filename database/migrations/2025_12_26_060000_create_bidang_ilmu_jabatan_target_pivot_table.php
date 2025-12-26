@@ -32,7 +32,7 @@ return new class extends Migration
 
         // Drop old column
         Schema::table('jabatan_targets', function (Blueprint $table) {
-            $table->dropForeign(['id_bidang']);
+            // No foreign key to drop based on original migration
             $table->dropColumn('id_bidang');
         });
     }
@@ -43,8 +43,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('jabatan_targets', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_bidang')->nullable();
-            $table->foreign('id_bidang')->references('id')->on('bidang_ilmus');
+            $table->integer('id_bidang')->nullable();
         });
 
         // Restore data (take first one if multiple)

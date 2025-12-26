@@ -41,7 +41,7 @@ class Kandidat extends Component
             'eselon', 
             'tingkat_pendidikan', 
             'bidang_ilmu', 
-            'unit_kerja',
+            'unitKerja',
             'jurusan_pendidikan',
             'jabatan_fungsional',
             'jabatan_pelaksana'

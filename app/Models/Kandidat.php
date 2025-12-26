@@ -100,7 +100,7 @@ class Kandidat extends Model
         return $this->belongsTo(JurusanPendidikan::class, 'jurusan_pendidikan_id');
     }
 
-    public function unit_kerja()
+    public function unitKerja()
     {
         return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
@@ -113,5 +113,25 @@ class Kandidat extends Model
     public function waspasNilais()
     {
         return $this->hasMany(WaspasNilai::class, 'id');
+    }
+    public function isDinilai()
+    {
+        // Columns for dynamic criteria that must be filled
+        $columns = [
+            'kn_id_skp', 
+            'kn_id_penghargaan', 
+            'kn_id_integritas', 
+            'kn_id_diklat', 
+            'kn_id_potensi', 
+            'kn_id_kompetensi'
+        ];
+
+        foreach ($columns as $col) {
+            if (is_null($this->$col)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

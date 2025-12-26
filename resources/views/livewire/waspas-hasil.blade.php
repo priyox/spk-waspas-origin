@@ -80,13 +80,13 @@
                             Dihitung pada: {{ \Carbon\Carbon::parse($results[0]['created_at'])->format('d M Y, H:i') }}
                         </p>
                     </div>
-                    <button onclick="window.print()"
-                        class="no-print px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors duration-150 flex items-center">
+                    <a href="{{ route('waspas.hasil.pdf', ['jabatan' => $selectedJabatanId]) }}" target="_blank"
+                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors duration-150 flex items-center">
                         <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                         </svg>
-                        Cetak / Simpan PDF
-                    </button>
+                        Cetak PDF
+                    </a>
                 </div>
 
                 {{-- Ranking Cards for Top 3 --}}
@@ -164,11 +164,11 @@
                                 <td class="px-2 py-3 text-center text-xs bg-blue-50 dark:bg-blue-900/10">{{ $result['pangkat'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs bg-blue-50 dark:bg-blue-900/10">{{ $result['masa_jabatan'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs bg-blue-50 dark:bg-blue-900/10">{{ $result['tingkat_pendidikan'] }}</td>
-                                <td class="px-2 py-3 text-center text-xs">{{ $result['diklat'] }}</td>
+                                <td class="px-2 py-3 text-center text-xs bg-blue-50 dark:bg-blue-900/10">{{ $result['bidang_ilmu'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs">{{ $result['skp'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs">{{ $result['penghargaan'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs">{{ $result['hukdis'] }}</td>
-                                <td class="px-2 py-3 text-center text-xs bg-blue-50 dark:bg-blue-900/10">{{ $result['bidang_ilmu'] }}</td>
+                                <td class="px-2 py-3 text-center text-xs">{{ $result['diklat'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs">{{ $result['potensi'] }}</td>
                                 <td class="px-2 py-3 text-center text-xs">{{ $result['kompetensi'] }}</td>
                                 <td class="px-4 py-3 text-center font-mono text-sm">{{ number_format($result['q1'], 4) }}</td>

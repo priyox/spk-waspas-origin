@@ -47,8 +47,8 @@ class DatabaseSeeder extends Seeder
             PersentaseConversionSeeder::class, // Percentage conversion table
 
             // === CANDIDATES & ASSESSMENTS ===
-            KandidatSeeder::class,          // Candidate data
-            NilaiSeeder::class,             // Assessment scores
+            // KandidatSeeder::class,          // Candidate data
+            // NilaiSeeder::class,             // Assessment scores
         ]);
     }
 }

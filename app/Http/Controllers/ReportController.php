@@ -124,4 +124,56 @@ class ReportController extends Controller
 
         return $pdf->setPaper('a4', 'landscape')->download('Laporan_Hasil_Akhir_' . str_replace(' ', '_', $jabatanTarget->nama_jabatan) . '.pdf');
     }
+
+    public function downloadWaspasHasil(Request $request)
+    {
+        $jabatanId = $request->query('jabatan');
+
+        if (!$jabatanId) {
+            return redirect()->back()->with('error', 'Jabatan tidak dipilih.');
+        }
+
+        $jabatanTarget = JabatanTarget::with('eselon')->findOrFail($jabatanId);
+        $kriterias = Kriteria::orderBy('id')->get();
+
+        $waspasNilais = WaspasNilai::where('jabatan_target_id', $jabatanId)
+            ->with(['kandidat.golongan'])
+            ->get();
+
+        if ($waspasNilais->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada data perhitungan untuk jabatan ini.');
+        }
+
+        // Calculate Qi from stored WSM and WPM and format data
+        $results = $waspasNilais->map(function ($item) {
+            $qi = (0.5 * $item->wsm) + (0.5 * $item->wpm);
+            return [
+                'nama' => $item->kandidat->nama ?? '-',
+                'nip' => $item->kandidat->nip ?? '-',
+                'golongan' => $item->kandidat->golongan->golongan ?? '-',
+                'pangkat' => $item->pangkat,
+                'masa_jabatan' => $item->masa_jabatan,
+                'tingkat_pendidikan' => $item->tingkat_pendidikan,
+                'diklat' => $item->diklat,
+                'skp' => $item->skp,
+                'penghargaan' => $item->penghargaan,
+                'hukdis' => $item->hukdis,
+                'bidang_ilmu' => $item->bidang_ilmu,
+                'potensi' => $item->potensi,
+                'kompetensi' => $item->kompetensi,
+                'q1' => $item->wsm,
+                'q2' => $item->wpm,
+                'qi' => $qi,
+            ];
+        })->sortByDesc('qi')->values();
+
+        $pdf = Pdf::loadView('reports.waspas-hasil-pdf', [
+            'jabatan' => $jabatanTarget,
+            'results' => $results,
+            'kriterias' => $kriterias,
+            'date' => now()->translatedFormat('d F Y'),
+        ]);
+
+        return $pdf->setPaper('a4', 'landscape')->download('Laporan_WASPAS_' . str_replace(' ', '_', $jabatanTarget->nama_jabatan) . '.pdf');
+    }
 }
