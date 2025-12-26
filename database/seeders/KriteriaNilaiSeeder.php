@@ -29,11 +29,11 @@ class KriteriaNilaiSeeder extends Seeder
             ['id' => 12, 'kriteria_id' => 3, 'kategori' => 'Dibawah DIII', 'nilai' => 1],
 
             // kriteria_id 8 (Diklat) - Static
-            ['id' => 13, 'kriteria_id' => 8, 'kategori' => '> 24 JP', 'nilai' => 5],
-            ['id' => 14, 'kriteria_id' => 8, 'kategori' => '19 - 24 JP', 'nilai' => 4],
-            ['id' => 15, 'kriteria_id' => 8, 'kategori' => '13 - 18 JP', 'nilai' => 3],
-            ['id' => 16, 'kriteria_id' => 8, 'kategori' => '6 - 12 JP', 'nilai' => 2],
-            ['id' => 17, 'kriteria_id' => 8, 'kategori' => '< 6 JP', 'nilai' => 1],
+            ['id' => 13, 'kriteria_id' => 8, 'kategori' => '> 40 JP', 'nilai' => 5],
+            ['id' => 14, 'kriteria_id' => 8, 'kategori' => '30 - 40 JP', 'nilai' => 4],
+            ['id' => 15, 'kriteria_id' => 8, 'kategori' => '20 - 29 JP', 'nilai' => 3],
+            ['id' => 16, 'kriteria_id' => 8, 'kategori' => '10 - 19 JP', 'nilai' => 2],
+            ['id' => 17, 'kriteria_id' => 8, 'kategori' => '< 10 JP', 'nilai' => 1],
 
             // kriteria_id 5
             ['id' => 18, 'kriteria_id' => 5, 'kategori' => 'Sangat Baik', 'nilai' => 5],
