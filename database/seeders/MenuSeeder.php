@@ -19,13 +19,12 @@ class MenuSeeder extends Seeder
         // Get Roles
         $superAdmin = Role::where('name', 'Super Admin')->first();
         $adminKepegawaian = Role::where('name', 'Admin Kepegawaian')->first();
-        $timPenilai = Role::where('name', 'Tim Penilai')->first();
         $pimpinan = Role::where('name', 'Pimpinan')->first();
 
-        $allRoles = [$superAdmin->id, $adminKepegawaian->id, $timPenilai->id, $pimpinan->id];
+        $allRoles = [$superAdmin->id, $adminKepegawaian->id, $pimpinan->id];
         $adminRoles = [$superAdmin->id, $adminKepegawaian->id];
-        $penilaiRoles = [$superAdmin->id, $adminKepegawaian->id, $timPenilai->id];
-        $pimpinanRoles = [$superAdmin->id, $adminKepegawaian->id, $timPenilai->id, $pimpinan->id];
+        $penilaiRoles = [$adminKepegawaian->id]; // Only Admin Kepegawaian (Tim Penilai removed)
+        $pimpinanRoles = [$adminKepegawaian->id, $pimpinan->id]; // Removed Super Admin
 
         // 1. DASHBOARD
         $dashboard = Menu::create([
@@ -80,10 +79,10 @@ class MenuSeeder extends Seeder
             'order' => 4,
             'is_active' => true,
         ]);
-        $kandidatParent->roles()->sync($penilaiRoles);
+        $kandidatParent->roles()->sync([$superAdmin->id, $adminKepegawaian->id]); // Super Admin view-only, Admin Kepegawaian full access
 
-        $this->createSubMenu($kandidatParent->id, 'Daftar Kandidat', 'kandidat.index', 'bi bi-person-lines-fill', 1, $penilaiRoles);
-        $this->createSubMenu($kandidatParent->id, 'Input Nilai Kandidat', 'kandidat.input-nilai', 'bi bi-pencil-square', 2, $penilaiRoles);
+        $this->createSubMenu($kandidatParent->id, 'Daftar Kandidat', 'kandidat.index', 'bi bi-person-lines-fill', 1, [$superAdmin->id, $adminKepegawaian->id]); // Super Admin view-only
+        $this->createSubMenu($kandidatParent->id, 'Input Nilai Kandidat', 'kandidat.input-nilai', 'bi bi-pencil-square', 2, [$adminKepegawaian->id]); // Only Admin Kepegawaian
 
         // 5. PENILAIAN
         $penilaian = Menu::create([
@@ -94,7 +93,7 @@ class MenuSeeder extends Seeder
             'order' => 5,
             'is_active' => true,
         ]);
-        $penilaian->roles()->sync($pimpinanRoles);
+        $penilaian->roles()->sync($pimpinanRoles); // No Super Admin
 
         $this->createSubMenu($penilaian->id, 'Nilai Kandidat', 'penilaian.input', 'bi bi-star-fill', 1, $penilaiRoles);
         $this->createSubMenu($penilaian->id, 'Perhitungan WASPAS', 'waspas.proses', 'bi bi-calculator', 2, $penilaiRoles);
@@ -109,7 +108,7 @@ class MenuSeeder extends Seeder
             'order' => 6,
             'is_active' => true,
         ]);
-        $hasilAkhir->roles()->sync($pimpinanRoles);
+        $hasilAkhir->roles()->sync($pimpinanRoles); // No Super Admin
 
         // 7. MANAJEMEN
         $manajemen = Menu::create([

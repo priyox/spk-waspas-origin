@@ -34,6 +34,13 @@ class Kriteria extends Component
 
     public function store()
     {
+        // Super Admin view-only restriction
+        if (auth()->user()->hasRole('Super Admin')) {
+            session()->flash('error', 'Super Admin hanya memiliki akses view. Tidak dapat menambah/mengubah data.');
+            $this->closeModal();
+            return;
+        }
+
         $this->validate();
 
         \App\Models\Kriteria::updateOrCreate(['id' => $this->kriteria_id_to_edit], [
@@ -68,6 +75,14 @@ class Kriteria extends Component
 
     public function deleteKriteria()
     {
+        // Super Admin view-only restriction
+        if (auth()->user()->hasRole('Super Admin')) {
+            session()->flash('error', 'Super Admin hanya memiliki akses view. Tidak dapat menghapus data.');
+            $this->confirmingDeletion = false;
+            $this->deleteKriteriaId = null;
+            return;
+        }
+
         if ($this->deleteKriteriaId) {
             \App\Models\Kriteria::find($this->deleteKriteriaId)->delete();
             session()->flash('message', 'Kriteria deleted successfully.');

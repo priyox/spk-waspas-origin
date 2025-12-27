@@ -41,6 +41,7 @@
                     </div>
 
                     @if($selectedJabatanId && count($results) > 0)
+                    @unless(auth()->user()->hasRole('Pimpinan'))
                     <button type="button" wire:click="confirmDelete({{ $selectedJabatanId }})"
                         class="px-6 py-3 bg-red-600 border border-transparent rounded-lg font-semibold text-base text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 transition ease-in-out duration-150">
                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,6 +49,7 @@
                         </svg>
                         Hapus Hasil
                     </button>
+                    @endunless
                     @endif
                 </div>
 

@@ -115,6 +115,13 @@ class Kandidat extends Component
 
     public function store()
     {
+        // Super Admin view-only restriction
+        if (auth()->user()->hasRole('Super Admin')) {
+            session()->flash('error', 'Super Admin hanya memiliki akses view. Tidak dapat menambah/mengubah data.');
+            $this->closeModal();
+            return;
+        }
+
         $this->validate();
 
         \App\Models\Kandidat::updateOrCreate(['nip' => $this->nip], [
@@ -180,6 +187,14 @@ class Kandidat extends Component
 
     public function deleteKandidat()
     {
+        // Super Admin view-only restriction
+        if (auth()->user()->hasRole('Super Admin')) {
+            session()->flash('error', 'Super Admin hanya memiliki akses view. Tidak dapat menghapus data.');
+            $this->confirmingDeletion = false;
+            $this->deleteNip = null;
+            return;
+        }
+
         if ($this->deleteNip) {
             \App\Models\Kandidat::where('nip', $this->deleteNip)->delete();
             session()->flash('message', 'Kandidat deleted successfully.');

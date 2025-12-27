@@ -85,6 +85,14 @@ class WaspasHasil extends Component
 
     public function deleteResult()
     {
+        // Pimpinan cannot delete results
+        if (auth()->user()->hasRole('Pimpinan')) {
+            session()->flash('error', 'Pimpinan hanya memiliki akses view. Tidak dapat menghapus hasil perhitungan.');
+            $this->confirmingDeletion = false;
+            $this->deleteJabatanId = null;
+            return;
+        }
+
         if ($this->deleteJabatanId) {
             WaspasNilai::where('jabatan_target_id', $this->deleteJabatanId)->delete();
             session()->flash('message', 'Hasil perhitungan berhasil dihapus.');

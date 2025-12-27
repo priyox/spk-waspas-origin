@@ -26,13 +26,6 @@ class UserSeeder extends Seeder
         ]);
         $admin->assignRole('Admin Kepegawaian');
 
-        $penilai = User::create([
-            "email" => "penilai@app.com",
-            "password" => bcrypt('password'),
-            "name" => "Tim Penilai"
-        ]);
-        $penilai->assignRole('Tim Penilai');
-
         $pimpinan = User::create([
             "email" => "pimpinan@app.com",
             "password" => bcrypt('password'),

@@ -40,6 +40,13 @@ class KriteriaNilai extends Component
 
     public function store()
     {
+        // Super Admin view-only restriction
+        if (auth()->user()->hasRole('Super Admin')) {
+            session()->flash('error', 'Super Admin hanya memiliki akses view. Tidak dapat menambah/mengubah data.');
+            $this->closeModal();
+            return;
+        }
+
         $this->validate();
 
         KriteriaNilaiModel::updateOrCreate(
@@ -78,6 +85,14 @@ class KriteriaNilai extends Component
 
     public function deleteKriteriaNilai()
     {
+        // Super Admin view-only restriction
+        if (auth()->user()->hasRole('Super Admin')) {
+            session()->flash('error', 'Super Admin hanya memiliki akses view. Tidak dapat menghapus data.');
+            $this->confirmingDeletion = false;
+            $this->deleteKriteriaNilaiId = null;
+            return;
+        }
+
         if ($this->deleteKriteriaNilaiId) {
             KriteriaNilaiModel::find($this->deleteKriteriaNilaiId)->delete();
             session()->flash('message', 'Kriteria Nilai berhasil dihapus.');
