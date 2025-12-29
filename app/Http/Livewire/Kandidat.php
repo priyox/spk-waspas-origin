@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Services\PenilaianAutoFillService;
 
 class Kandidat extends Component
 {
@@ -12,6 +13,17 @@ class Kandidat extends Component
     public $kandidat_id_to_edit = null;
     public $confirmingDeletion = false;
     public $deleteNip = null;
+    public $showingDetail = false;
+    public $detailKandidatNip = null;
+    
+    // Assessment fields (K5-K10)
+    public $kn_id_skp, $kn_id_penghargaan, $kn_id_integritas;
+    public $kn_id_diklat, $kn_id_potensi, $kn_id_kompetensi;
+    
+    // Kriteria nilai options for dropdowns
+    public $kriteriaNilaiOptions = [];
+    
+    protected $autoFillService;
 
     protected $rules = [
         'nip' => 'required|string|max:20',
@@ -32,7 +44,19 @@ class Kandidat extends Component
         'bidang_ilmu_id' => 'nullable|exists:bidang_ilmus,id',
         'unit_kerja_id' => 'nullable|exists:unit_kerjas,id',
         'jurusan' => 'nullable|string|max:255',
+        // Assessment fields
+        'kn_id_skp' => 'nullable|exists:kriteria_nilais,id',
+        'kn_id_penghargaan' => 'nullable|exists:kriteria_nilais,id',
+        'kn_id_integritas' => 'nullable|exists:kriteria_nilais,id',
+        'kn_id_diklat' => 'nullable|exists:kriteria_nilais,id',
+        'kn_id_potensi' => 'nullable|exists:kriteria_nilais,id',
+        'kn_id_kompetensi' => 'nullable|exists:kriteria_nilais,id',
     ];
+
+    public function boot()
+    {
+        $this->autoFillService = app(PenilaianAutoFillService::class);
+    }
 
     public function render()
     {
@@ -46,6 +70,16 @@ class Kandidat extends Component
             'jabatan_fungsional',
             'jabatan_pelaksana'
         ])->get();
+        
+        // Load kriteria nilai options for assessment dropdowns
+        $this->kriteriaNilaiOptions = [
+            5 => $this->autoFillService->getOptionsForKriteria(5),  // SKP
+            6 => $this->autoFillService->getOptionsForKriteria(6),  // Penghargaan
+            7 => $this->autoFillService->getOptionsForKriteria(7),  // Integritas
+            8 => $this->autoFillService->getOptionsForKriteria(8),  // Diklat
+            9 => $this->autoFillService->getOptionsForKriteria(9),  // Potensi
+            10 => $this->autoFillService->getOptionsForKriteria(10), // Kompetensi
+        ];
         
         return view('livewire.kandidat', [
             'golongans' => \App\Models\Golongan::all(),
@@ -124,7 +158,8 @@ class Kandidat extends Component
 
         $this->validate();
 
-        \App\Models\Kandidat::updateOrCreate(['nip' => $this->nip], [
+        $data = [
+            'nip' => $this->nip,
             'nama' => $this->nama,
             'tempat_lahir' => $this->tempat_lahir,
             'tanggal_lahir' => $this->tanggal_lahir ?: null,
@@ -139,13 +174,28 @@ class Kandidat extends Component
             'jabatan_fungsional_id' => $this->jabatan_fungsional_id ?: null,
             'jabatan_pelaksana_id' => $this->jabatan_pelaksana_id ?: null,
             'jabatan_target_id' => $this->jabatan_target_id ?: null,
-            'jabatan_target_id' => $this->jabatan_target_id ?: null,
             'bidang_ilmu_id' => $this->bidang_ilmu_id ?: null,
             'unit_kerja_id' => $this->unit_kerja_id ?: null,
             'jurusan' => $this->jurusan,
-        ]);
+            // Assessment fields
+            'kn_id_skp' => $this->kn_id_skp ?: null,
+            'kn_id_penghargaan' => $this->kn_id_penghargaan ?: null,
+            'kn_id_integritas' => $this->kn_id_integritas ?: null,
+            'kn_id_diklat' => $this->kn_id_diklat ?: null,
+            'kn_id_potensi' => $this->kn_id_potensi ?: null,
+            'kn_id_kompetensi' => $this->kn_id_kompetensi ?: null,
+        ];
 
-        session()->flash('message', $this->kandidat_id_to_edit ? 'Kandidat updated successfully.' : 'Kandidat created successfully.');
+        if ($this->kandidat_id_to_edit) {
+            // Update existing kandidat by ID
+            $kandidat = \App\Models\Kandidat::findOrFail($this->kandidat_id_to_edit);
+            $kandidat->update($data);
+            session()->flash('message', 'Kandidat updated successfully.');
+        } else {
+            // Create new kandidat
+            \App\Models\Kandidat::create($data);
+            session()->flash('message', 'Kandidat created successfully.');
+        }
 
         $this->closeModal();
     }
@@ -172,7 +222,15 @@ class Kandidat extends Component
         $this->unit_kerja_id = $kandidat->unit_kerja_id;
         $this->jurusan = $kandidat->jurusan;
         
-        $this->kandidat_id_to_edit = $nip;
+        // Load assessment values
+        $this->kn_id_skp = $kandidat->kn_id_skp;
+        $this->kn_id_penghargaan = $kandidat->kn_id_penghargaan;
+        $this->kn_id_integritas = $kandidat->kn_id_integritas;
+        $this->kn_id_diklat = $kandidat->kn_id_diklat;
+        $this->kn_id_potensi = $kandidat->kn_id_potensi;
+        $this->kn_id_kompetensi = $kandidat->kn_id_kompetensi;
+        
+        $this->kandidat_id_to_edit = $kandidat->id; // Store ID instead of NIP
         $this->isModalOpen = true;
 
         
@@ -209,6 +267,18 @@ class Kandidat extends Component
         $this->deleteNip = null;
     }
 
+    public function showDetail($nip)
+    {
+        $this->detailKandidatNip = $nip;
+        $this->showingDetail = true;
+    }
+
+    public function closeDetailModal()
+    {
+        $this->showingDetail = false;
+        $this->detailKandidatNip = null;
+    }
+
     public function closeModal()
     {
         $this->isModalOpen = false;
@@ -236,6 +306,13 @@ class Kandidat extends Component
         $this->bidang_ilmu_id = '';
         $this->unit_kerja_id = '';
         $this->jurusan = '';
+        // Reset assessment fields
+        $this->kn_id_skp = null;
+        $this->kn_id_penghargaan = null;
+        $this->kn_id_integritas = null;
+        $this->kn_id_diklat = null;
+        $this->kn_id_potensi = null;
+        $this->kn_id_kompetensi = null;
         $this->kandidat_id_to_edit = null;
     }
 }

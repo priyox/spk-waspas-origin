@@ -82,7 +82,7 @@ class MenuSeeder extends Seeder
         $kandidatParent->roles()->sync([$superAdmin->id, $adminKepegawaian->id]); // Super Admin view-only, Admin Kepegawaian full access
 
         $this->createSubMenu($kandidatParent->id, 'Daftar Kandidat', 'kandidat.index', 'bi bi-person-lines-fill', 1, [$superAdmin->id, $adminKepegawaian->id]); // Super Admin view-only
-        $this->createSubMenu($kandidatParent->id, 'Input Nilai Kandidat', 'kandidat.input-nilai', 'bi bi-pencil-square', 2, [$adminKepegawaian->id]); // Only Admin Kepegawaian
+
 
         // 5. PENILAIAN
         $penilaian = Menu::create([

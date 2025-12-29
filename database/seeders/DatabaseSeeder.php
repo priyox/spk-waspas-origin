@@ -44,7 +44,6 @@ class DatabaseSeeder extends Seeder
             KriteriaNilaiSeeder::class,     // Criteria value ranges
             SyaratJabatanSeeder::class,     // Position requirements
             MasaJabatanRangeSeeder::class,  // Tenure ranges
-            PersentaseConversionSeeder::class, // Percentage conversion table
 
             // === CANDIDATES & ASSESSMENTS ===
             // KandidatSeeder::class,          // Candidate data

@@ -71,6 +71,13 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <div class="flex items-center justify-center gap-2">
+                                        <button wire:click="showDetail('{{ $kandidat->nip }}')" class="inline-flex items-center px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/50 dark:hover:bg-blue-900 dark:text-blue-300 rounded-lg transition-colors">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                            Detail
+                                        </button>
                                         <button wire:click="edit('{{ $kandidat->nip }}')" class="inline-flex items-center px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/50 dark:hover:bg-amber-900 dark:text-amber-300 rounded-lg transition-colors">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -123,8 +130,8 @@
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
                                         <div>
                                             <label for="nip" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">NIP <span class="text-red-500">*</span></label>
-                                            <input type="text" id="nip" wire:model="nip" placeholder="19XXXXXXXXXXXXXX" {{ $kandidat_id_to_edit ? 'disabled' : '' }}
-                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors" />
+                                            <input type="text" id="nip" wire:model="nip" placeholder="19XXXXXXXXXXXXXX"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
                                             @error('nip') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
@@ -308,6 +315,115 @@
                                 </div>
                             </div>
 
+                            <!-- Section 5: Penilaian (Optional) -->
+                            <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg">
+                                <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center">
+                                    <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-2 text-sm font-bold">5</span>
+                                    Penilaian (Opsional)
+                                </h4>
+                                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-5">
+                                    <div class="flex items-start">
+                                        <i class="bi bi-info-circle text-blue-600 dark:text-blue-400 text-lg mr-3 mt-0.5"></i>
+                                        <div class="text-sm text-blue-800 dark:text-blue-200">
+                                            <p class="font-semibold mb-1">Nilai penilaian dapat diisi sekarang atau nanti saat edit.</p>
+                                            <p class="text-xs">Kriteria K1-K4 (Pangkat, Masa Jabatan, Pendidikan, Bidang Ilmu) akan dihitung otomatis berdasarkan data kandidat.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <!-- K5: SKP -->
+                                    <div>
+                                        <label for="kn_id_skp" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                            K5: Predikat Kinerja (SKP)
+                                        </label>
+                                        <select id="kn_id_skp" wire:model="kn_id_skp"
+                                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors">
+                                            <option value="">-- Pilih Predikat --</option>
+                                            @foreach($kriteriaNilaiOptions[5] ?? [] as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['kategori'] }} (Nilai: {{ $option['nilai'] }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kn_id_skp') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <!-- K6: Penghargaan -->
+                                    <div>
+                                        <label for="kn_id_penghargaan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                            K6: Penghargaan
+                                        </label>
+                                        <select id="kn_id_penghargaan" wire:model="kn_id_penghargaan"
+                                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors">
+                                            <option value="">-- Pilih Penghargaan --</option>
+                                            @foreach($kriteriaNilaiOptions[6] ?? [] as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['kategori'] }} (Nilai: {{ $option['nilai'] }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kn_id_penghargaan') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <!-- K7: Integritas -->
+                                    <div>
+                                        <label for="kn_id_integritas" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                            K7: Integritas
+                                        </label>
+                                        <select id="kn_id_integritas" wire:model="kn_id_integritas"
+                                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors">
+                                            <option value="">-- Pilih Integritas --</option>
+                                            @foreach($kriteriaNilaiOptions[7] ?? [] as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['kategori'] }} (Nilai: {{ $option['nilai'] }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kn_id_integritas') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <!-- K8: Diklat -->
+                                    <div>
+                                        <label for="kn_id_diklat" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                            K8: Diklat Struktural
+                                        </label>
+                                        <select id="kn_id_diklat" wire:model="kn_id_diklat"
+                                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors">
+                                            <option value="">-- Pilih Diklat --</option>
+                                            @foreach($kriteriaNilaiOptions[8] ?? [] as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['kategori'] }} (Nilai: {{ $option['nilai'] }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kn_id_diklat') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <!-- K9: Potensi -->
+                                    <div>
+                                        <label for="kn_id_potensi" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                            K9: Potensi
+                                        </label>
+                                        <select id="kn_id_potensi" wire:model="kn_id_potensi"
+                                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors">
+                                            <option value="">-- Pilih Potensi --</option>
+                                            @foreach($kriteriaNilaiOptions[9] ?? [] as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['kategori'] }} (Nilai: {{ $option['nilai'] }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kn_id_potensi') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <!-- K10: Kompetensi -->
+                                    <div>
+                                        <label for="kn_id_kompetensi" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                            K10: Kompetensi
+                                        </label>
+                                        <select id="kn_id_kompetensi" wire:model="kn_id_kompetensi"
+                                            class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors">
+                                            <option value="">-- Pilih Kompetensi --</option>
+                                            @foreach($kriteriaNilaiOptions[10] ?? [] as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['kategori'] }} (Nilai: {{ $option['nilai'] }})</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kn_id_kompetensi') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="mt-8 flex justify-center gap-x-4">
                                 <button type="button" wire:click="closeModal"
                                     class="px-8 py-3 text-base font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
@@ -348,6 +464,225 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Detail Modal -->
+                @if($showingDetail && $detailKandidatNip)
+                    @php
+                        $detailKandidat = \App\Models\Kandidat::with([
+                            'golongan', 'eselon', 'tingkat_pendidikan', 'bidang_ilmu', 
+                            'unitKerja', 'jurusan_pendidikan', 'jabatan_fungsional', 
+                            'jabatan_pelaksana', 'jenis_jabatan',
+                            'knDiklat', 'knSkp', 'knPenghargaan', 'knIntegritas', 
+                            'knPotensi', 'knKompetensi'
+                        ])->where('nip', $detailKandidatNip)->first();
+                    @endphp
+
+                    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                            <!-- Modal Header -->
+                            <div class="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-t-xl">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="h-16 w-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                                            <i class="bi bi-person-badge text-3xl text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-2xl font-bold text-white">Detail Kandidat</h3>
+                                            <p class="text-blue-100 text-sm">Informasi Lengkap Pegawai</p>
+                                        </div>
+                                    </div>
+                                    <button wire:click="closeDetailModal" class="text-white/80 hover:text-white transition-colors">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Modal Body -->
+                            <div class="p-6 space-y-6">
+                                <!-- Personal Information -->
+                                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-5 border border-blue-200 dark:border-blue-800">
+                                    <h4 class="text-lg font-bold text-blue-900 dark:text-blue-100 mb-4 flex items-center">
+                                        <i class="bi bi-person-circle mr-2"></i>
+                                        Data Pribadi
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">NIP</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->nip }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Lengkap</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->nama }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tempat Lahir</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->tempat_lahir ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tanggal Lahir</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">
+                                                {{ $detailKandidat->tanggal_lahir ? \Carbon\Carbon::parse($detailKandidat->tanggal_lahir)->translatedFormat('d F Y') : '-' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Position Information -->
+                                <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg p-5 border border-purple-200 dark:border-purple-800">
+                                    <h4 class="text-lg font-bold text-purple-900 dark:text-purple-100 mb-4 flex items-center">
+                                        <i class="bi bi-briefcase-fill mr-2"></i>
+                                        Informasi Jabatan
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Jenis Jabatan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->jenis_jabatan?->jenis_jabatan ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Jabatan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->jabatan ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Eselon</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->eselon?->eselon ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">TMT Jabatan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">
+                                                {{ $detailKandidat->tmt_jabatan ? \Carbon\Carbon::parse($detailKandidat->tmt_jabatan)->translatedFormat('d F Y') : '-' }}
+                                            </p>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Unit Kerja</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->unitKerja?->unit_kerja ?? '-' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Rank Information -->
+                                <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-lg p-5 border border-amber-200 dark:border-amber-800">
+                                    <h4 class="text-lg font-bold text-amber-900 dark:text-amber-100 mb-4 flex items-center">
+                                        <i class="bi bi-award-fill mr-2"></i>
+                                        Kepangkatan
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Golongan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->golongan?->golongan ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pangkat</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->golongan?->pangkat ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">TMT Golongan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">
+                                                {{ $detailKandidat->tmt_golongan ? \Carbon\Carbon::parse($detailKandidat->tmt_golongan)->translatedFormat('d F Y') : '-' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Education Information -->
+                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-5 border border-green-200 dark:border-green-800">
+                                    <h4 class="text-lg font-bold text-green-900 dark:text-green-100 mb-4 flex items-center">
+                                        <i class="bi bi-mortarboard-fill mr-2"></i>
+                                        Latar Belakang Pendidikan
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tingkat Pendidikan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->tingkat_pendidikan?->tingkat ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Jurusan</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->jurusan_pendidikan?->jurusan ?? $detailKandidat->jurusan ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Bidang Ilmu</label>
+                                            <p class="text-base font-medium text-gray-900 dark:text-gray-100 mt-1">{{ $detailKandidat->bidang_ilmu?->bidang ?? '-' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Assessment Scores -->
+                                <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-lg p-5 border border-indigo-200 dark:border-indigo-800">
+                                    <h4 class="text-lg font-bold text-indigo-900 dark:text-indigo-100 mb-4 flex items-center">
+                                        <i class="bi bi-clipboard-data-fill mr-2"></i>
+                                        Nilai
+                                    </h4>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        <div class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">SKP</label>
+                                            <p class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                                                {{ $detailKandidat->knSkp?->kategori ?? '-' }}
+                                            </p>
+                                            @if($detailKandidat->knSkp)
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nilai: {{ $detailKandidat->knSkp->nilai }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Penghargaan</label>
+                                            <p class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                                                {{ $detailKandidat->knPenghargaan?->kategori ?? '-' }}
+                                            </p>
+                                            @if($detailKandidat->knPenghargaan)
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nilai: {{ $detailKandidat->knPenghargaan->nilai }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Integritas</label>
+                                            <p class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                                                {{ $detailKandidat->knIntegritas?->kategori ?? '-' }}
+                                            </p>
+                                            @if($detailKandidat->knIntegritas)
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nilai: {{ $detailKandidat->knIntegritas->nilai }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Diklat</label>
+                                            <p class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                                                {{ $detailKandidat->knDiklat?->kategori ?? '-' }}
+                                            </p>
+                                            @if($detailKandidat->knDiklat)
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nilai: {{ $detailKandidat->knDiklat->nilai }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Potensi</label>
+                                            <p class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                                                {{ $detailKandidat->knPotensi?->kategori ?? '-' }}
+                                            </p>
+                                            @if($detailKandidat->knPotensi)
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nilai: {{ $detailKandidat->knPotensi->nilai }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
+                                            <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Kompetensi</label>
+                                            <p class="text-base font-bold text-indigo-600 dark:text-indigo-400 mt-1">
+                                                {{ $detailKandidat->knKompetensi?->kategori ?? '-' }}
+                                            </p>
+                                            @if($detailKandidat->knKompetensi)
+                                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nilai: {{ $detailKandidat->knKompetensi->nilai }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <div class="sticky bottom-0 bg-gray-50 dark:bg-gray-700/50 px-6 py-4 rounded-b-xl border-t border-gray-200 dark:border-gray-600">
+                                <button wire:click="closeDetailModal" type="button"
+                                    class="w-full px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                                    <i class="bi bi-x-circle mr-2"></i>
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
             </div>
         </div>

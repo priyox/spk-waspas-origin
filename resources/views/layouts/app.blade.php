@@ -44,8 +44,39 @@
                                 {{ $header }}
                             </div>
                         @else
+                            @php
+                                // Get current route name
+                                $currentRoute = request()->route()->getName();
+                                
+                                // Try to find menu by route
+                                $currentMenu = \App\Models\Menu::where('route', $currentRoute)->first();
+                                
+                                // If not found, try to match parent menu
+                                if (!$currentMenu) {
+                                    // Extract base route (e.g., 'kandidat.index' -> 'kandidat')
+                                    $baseRoute = explode('.', $currentRoute)[0] ?? '';
+                                    $currentMenu = \App\Models\Menu::where('route', 'like', $baseRoute . '%')->first();
+                                }
+                                
+                                // Build breadcrumb-style title
+                                if ($currentMenu) {
+                                    // Exception: Dashboard always shows only "Dashboard"
+                                    if ($currentMenu->route === 'dashboard') {
+                                        $pageTitle = 'Dashboard';
+                                    } elseif ($currentMenu->parent_id) {
+                                        // Has parent - show "Parent / Submenu"
+                                        $parentMenu = \App\Models\Menu::find($currentMenu->parent_id);
+                                        $pageTitle = $parentMenu ? $parentMenu->menu_name . ' / ' . $currentMenu->menu_name : $currentMenu->menu_name;
+                                    } else {
+                                        // Top-level menu (not Dashboard)
+                                        $pageTitle = $currentMenu->menu_name;
+                                    }
+                                } else {
+                                    $pageTitle = 'SPK WASPAS';
+                                }
+                            @endphp
                             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                                SPK WASPAS
+                                {{ $pageTitle }}
                             </h2>
                         @endif
                     </div>
