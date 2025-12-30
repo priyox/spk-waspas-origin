@@ -335,7 +335,7 @@
                             <!-- Section 5: Penilaian (Optional) -->
                             <div class="bg-gray-50 dark:bg-gray-700/30 p-5 rounded-lg">
                                 <h4 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 flex items-center">
-                                    <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-2 text-sm font-bold">5</span>
+                                    <span class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mr-2 text-sm font-bold">4</span>
                                     Penilaian (Opsional)
                                 </h4>
                                 <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-5">
