@@ -5,9 +5,15 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\JabatanTarget as JabatanTargetModel;
 
+use Livewire\WithPagination;
+
 class JabatanTarget extends Component
 {
-    public $jabatanTargets, $nama_jabatan, $id_eselon;
+    use WithPagination;
+
+    // public $jabatanTargets; // Removed to use direct view passing
+    public $nama_jabatan, $id_eselon;
+    public $search = '';
     public $selectedBidangIds = []; // Changed from single ID to array
     public $isModalOpen = false;
     public $jabatan_id_to_edit = null;
@@ -21,11 +27,20 @@ class JabatanTarget extends Component
         'selectedBidangIds.*' => 'integer|exists:bidang_ilmus,id',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $this->jabatanTargets = JabatanTargetModel::with(['eselon', 'bidangIlmu'])->get();
+        $jabatanTargets = JabatanTargetModel::with(['eselon', 'bidangIlmu'])
+            ->where('nama_jabatan', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
         
         return view('livewire.jabatan-target', [
+            'jabatanTargets' => $jabatanTargets,
             'eselons' => \App\Models\Eselon::all(),
             'bidangIlmus' => \App\Models\BidangIlmu::all()
         ])->layout('layouts.app');

@@ -5,9 +5,15 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\UnitKerja as UnitKerjaModel;
 
+use Livewire\WithPagination;
+
 class UnitKerja extends Component
 {
-    public $unitKerjas, $unit_kerja;
+    use WithPagination;
+
+    // public $unitKerjas; // Removed
+    public $unit_kerja;
+    public $search = '';
     public $isModalOpen = false;
     public $unit_id_to_edit = null;
 
@@ -15,12 +21,20 @@ class UnitKerja extends Component
         'unit_kerja' => 'required|string|max:255',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $this->unitKerjas = UnitKerjaModel::all();
+        $unitKerjas = UnitKerjaModel::where('unit_kerja', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
         
-        return view('livewire.unit-kerja')
-            ->layout('layouts.app');
+        return view('livewire.unit-kerja', [
+            'unitKerjas' => $unitKerjas
+        ])->layout('layouts.app');
     }
 
     public function create()

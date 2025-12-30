@@ -6,9 +6,15 @@ use Livewire\Component;
 use App\Models\JabatanFungsional as JabatanFungsionalModel;
 use App\Models\JenjangFungsional;
 
+use Livewire\WithPagination;
+
 class JabatanFungsional extends Component
 {
-    public $jabatanFungsionals, $nama_jabatan, $jenjang_id;
+    use WithPagination;
+
+    // public $jabatanFungsionals; // Removed
+    public $nama_jabatan, $jenjang_id;
+    public $search = '';
     public $isModalOpen = false;
     public $jabatan_id_to_edit = null;
 
@@ -17,12 +23,22 @@ class JabatanFungsional extends Component
         'jenjang_id' => 'required|exists:jenjang_fungsionals,id',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $this->jabatanFungsionals = JabatanFungsionalModel::with('jenjang')->get();
+        $jabatanFungsionals = JabatanFungsionalModel::with('jenjang')
+            ->where('nama_jabatan', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+            
         $jenjangs = JenjangFungsional::orderBy('tingkat')->get();
         
         return view('livewire.jabatan-fungsional', [
+            'jabatanFungsionals' => $jabatanFungsionals,
             'jenjangs' => $jenjangs
         ])->layout('layouts.app');
     }

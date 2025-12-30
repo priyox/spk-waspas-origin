@@ -55,6 +55,8 @@ class MenuSeeder extends Seeder
         $this->createSubMenu($masterData->id, 'Bidang Ilmu', 'bidang-ilmu.index', 'bi bi-journal-text', 5, $adminRoles);
         $this->createSubMenu($masterData->id, 'Jabatan Target', 'jabatan-target.index', 'bi bi-target', 6, $adminRoles);
         $this->createSubMenu($masterData->id, 'Syarat Jabatan', 'syarat-jabatan.index', 'bi bi-card-checklist', 7, $adminRoles);
+        $this->createSubMenu($masterData->id, 'Eselon', 'eselon.index', 'bi bi-bar-chart-steps', 8, $adminRoles);
+        $this->createSubMenu($masterData->id, 'Jurusan Pendidikan', 'jurusan-pendidikan.index', 'bi bi-mortarboard', 9, $adminRoles);
 
         // 3. KRITERIA
         $kriteriaParent = Menu::create([

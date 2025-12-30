@@ -5,9 +5,15 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\BidangIlmu as BidangIlmuModel;
 
+use Livewire\WithPagination;
+
 class BidangIlmu extends Component
 {
-    public $bidangIlmus, $bidang;
+    use WithPagination;
+
+    // public $bidangIlmus; // Removed
+    public $bidang;
+    public $search = '';
     public $isModalOpen = false;
     public $bidang_id_to_edit = null;
 
@@ -15,12 +21,20 @@ class BidangIlmu extends Component
         'bidang' => 'required|string|max:100',
     ];
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $this->bidangIlmus = BidangIlmuModel::all();
+        $bidangIlmus = BidangIlmuModel::where('bidang', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
         
-        return view('livewire.bidang-ilmu')
-            ->layout('layouts.app');
+        return view('livewire.bidang-ilmu', [
+            'bidangIlmus' => $bidangIlmus
+        ])->layout('layouts.app');
     }
 
     public function create()

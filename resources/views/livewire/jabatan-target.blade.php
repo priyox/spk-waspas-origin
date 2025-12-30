@@ -14,14 +14,24 @@
                     </div>
                 @endif
 
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Jabatan Target</h2>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Kelola data jabatan target untuk penilaian WASPAS</p>
                     </div>
-                    <button wire:click="create" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors duration-150 shadow-lg hover:shadow-xl">
-                        + Tambah Jabatan Target
+                    <button wire:click="create" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-indigo-200 dark:shadow-none hover:scale-[1.02] active:scale-[0.98]">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                        Tambah Jabatan Target
                     </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="mb-8 relative max-w-md">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </span>
+                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari Jabatan..." 
+                        class="block w-full pl-11 pr-4 py-3 border-2 border-gray-100 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all dark:text-white">
                 </div>
 
                 <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
@@ -90,6 +100,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $jabatanTargets->links() }}
                 </div>
 
                 <x-modal name="jabatan-modal" :show="$isModalOpen" maxWidth="xl">

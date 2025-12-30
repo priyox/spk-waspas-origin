@@ -5,10 +5,18 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Services\PenilaianAutoFillService;
 
+use Livewire\WithPagination;
+
 class Kandidat extends Component
 {
-    public $kandidats, $nip, $nama, $tempat_lahir, $tanggal_lahir, $jabatan, $tmt_golongan, $tmt_jabatan, $jurusan;
+    use WithPagination;
+
+    // public $kandidats; // Removed
+    public $nip, $nama, $tempat_lahir, $tanggal_lahir, $jabatan, $tmt_golongan, $tmt_jabatan, $jurusan;
     public $golongan_id, $jenis_jabatan_id, $eselon_id, $tingkat_pendidikan_id, $jurusan_pendidikan_id, $jabatan_fungsional_id, $jabatan_pelaksana_id, $jabatan_target_id, $bidang_ilmu_id, $unit_kerja_id;
+    
+    public $search = '';
+    
     public $isModalOpen = false;
     public $kandidat_id_to_edit = null;
     public $confirmingDeletion = false;
@@ -57,10 +65,15 @@ class Kandidat extends Component
     {
         $this->autoFillService = app(PenilaianAutoFillService::class);
     }
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
-        $this->kandidats = \App\Models\Kandidat::with([
+        $kandidats = \App\Models\Kandidat::with([
             'golongan', 
             'eselon', 
             'tingkat_pendidikan', 
@@ -69,7 +82,14 @@ class Kandidat extends Component
             'jurusan_pendidikan',
             'jabatan_fungsional',
             'jabatan_pelaksana'
-        ])->get();
+        ])
+        ->where(function($query) {
+            $query->where('nama', 'like', '%' . $this->search . '%')
+                  ->orWhere('nip', 'like', '%' . $this->search . '%')
+                  ->orWhere('jabatan', 'like', '%' . $this->search . '%');
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(10);
         
         // Load kriteria nilai options for assessment dropdowns
         $this->kriteriaNilaiOptions = [
@@ -82,6 +102,7 @@ class Kandidat extends Component
         ];
         
         return view('livewire.kandidat', [
+            'kandidats' => $kandidats,
             'golongans' => \App\Models\Golongan::all(),
             'jenis_jabatans' => \App\Models\JenisJabatan::all(),
             'tingkat_pendidikans' => \App\Models\TingkatPendidikan::all(),

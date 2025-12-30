@@ -63,6 +63,12 @@ Route::middleware(['auth', 'menu.access'])->group(function () {
     Route::get('/unit-kerja', \App\Http\Livewire\UnitKerja::class)
         ->name('unit-kerja.index');
 
+    Route::get('/eselon', \App\Http\Livewire\Eselon::class)
+        ->name('eselon.index');
+
+    Route::get('/jurusan-pendidikan', \App\Http\Livewire\JurusanPendidikan::class)
+        ->name('jurusan-pendidikan.index');
+
     Route::get('/kriteria-nilai', KriteriaNilai::class)
         ->name('kriteria-nilai.index');
 
