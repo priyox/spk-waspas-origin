@@ -23,8 +23,8 @@ class MenuSeeder extends Seeder
 
         $allRoles = [$superAdmin->id, $adminKepegawaian->id, $pimpinan->id];
         $adminRoles = [$superAdmin->id, $adminKepegawaian->id];
-        $penilaiRoles = [$adminKepegawaian->id]; // Only Admin Kepegawaian (Tim Penilai removed)
-        $pimpinanRoles = [$adminKepegawaian->id, $pimpinan->id]; // Removed Super Admin
+        $penilaiRoles = [$superAdmin->id, $adminKepegawaian->id]; // Includes Super Admin
+        $pimpinanRoles = [$superAdmin->id, $adminKepegawaian->id, $pimpinan->id]; // Includes Super Admin
 
         // 1. DASHBOARD
         $dashboard = Menu::create([
