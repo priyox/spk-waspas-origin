@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             UnitKerjaSeeder::class,         // Work units
             JabatanPelaksanaSeeder::class,  // Operational positions
             JabatanFungsionalSeeder::class, // Functional positions
-            JabatanTargetSeeder::class,     // Target positions for selection
+            // JabatanTargetSeeder::class,     // Target positions for selection
 
             // === CRITERIA & REQUIREMENTS ===
             KriteriaSeeder::class,          // Assessment criteria

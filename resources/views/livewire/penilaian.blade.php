@@ -8,21 +8,21 @@
     <div class="w-full px-4 lg:px-6">
         {{-- Flash Messages --}}
         @if (session()->has('message'))
-            <div class="mb-4 p-4 bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 rounded-lg flex items-center gap-3">
-                <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span>{{ session('message') }}</span>
-            </div>
+        <div class="mb-4 p-4 bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 rounded-lg flex items-center gap-3">
+            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span>{{ session('message') }}</span>
+        </div>
         @endif
 
         @if (session()->has('error'))
-            <div class="mb-4 p-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 rounded-lg flex items-center gap-3">
-                <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                </svg>
-                <span class="font-semibold">{{ session('error') }}</span>
-            </div>
+        <div class="mb-4 p-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 rounded-lg flex items-center gap-3">
+            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <span class="font-semibold">{{ session('error') }}</span>
+        </div>
         @endif
 
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -37,23 +37,23 @@
                         style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
                         <option value="">-- Pilih Jabatan Target --</option>
                         @foreach($jabatanTargets as $target)
-                            <option value="{{ $target->id }}">{{ $target->nama_jabatan }}</option>
+                        <option value="{{ $target->id }}">{{ $target->nama_jabatan }}</option>
                         @endforeach
                     </select>
                     @if($selectedJabatanId)
-                        @php
-                            $selectedTarget = $jabatanTargets->find($selectedJabatanId);
-                            $syarat = \App\Models\SyaratJabatan::where('eselon_id', $selectedTarget?->id_eselon)->first();
-                        @endphp
-                        @if($syarat)
-                        <div class="mt-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg text-xs text-indigo-700 dark:text-indigo-300">
-                            <p class="font-semibold mb-1">Syarat Jabatan ({{ $selectedTarget->eselon->eselon ?? '-' }}):</p>
-                            <ul class="list-disc list-inside space-y-0.5">
-                                <li>Min. Golongan: {{ $syarat->minimalGolongan->golongan ?? '-' }}</li>
-                                <li>Min. Pendidikan: {{ $syarat->minimalTingkatPendidikan->tingkat ?? '-' }}</li>
-                            </ul>
-                        </div>
-                        @endif
+                    @php
+                    $selectedTarget = $jabatanTargets->find($selectedJabatanId);
+                    $syarat = \App\Models\SyaratJabatan::where('eselon_id', $selectedTarget?->id_eselon)->first();
+                    @endphp
+                    @if($syarat)
+                    <div class="mt-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg text-xs text-indigo-700 dark:text-indigo-300">
+                        <p class="font-semibold mb-1">Syarat Jabatan ({{ $selectedTarget->eselon->eselon ?? '-' }}):</p>
+                        <ul class="list-disc list-inside space-y-0.5">
+                            <li>Min. Golongan: {{ $syarat->minimalGolongan->golongan ?? '-' }}</li>
+                            <li>Min. Pendidikan: {{ $syarat->minimalTingkatPendidikan->tingkat ?? '-' }}</li>
+                        </ul>
+                    </div>
+                    @endif
                     @endif
                 </div>
 
@@ -103,77 +103,77 @@
                                 @forelse($kandidats as $kandidat)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white dark:bg-gray-800 z-10">
-                                         <div class="flex items-center justify-start gap-4">
-                                             <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-lg">
-                                                 {{ substr($kandidat->nama, 0, 1) }}
-                                             </div>
-                                             <div class="text-left">
-                                                 <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">{{ $kandidat->nama }}</div>
-                                                 <div class="text-xs text-gray-500 dark:text-gray-400">NIP: {{ $kandidat->nip }}</div>
-                                             </div>
-                                         </div>
-                                     </td>
+                                        <div class="flex items-center justify-start gap-4">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-lg">
+                                                {{ substr($kandidat->nama, 0, 1) }}
+                                            </div>
+                                            <div class="text-left">
+                                                <div class="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight">{{ $kandidat->nama }}</div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400">NIP: {{ $kandidat->nip }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
 
                                     @foreach($kriterias as $kriteria)
                                     <td class="px-3 py-4 text-center align-top">
                                         {{-- Auto-filled Kriteria (1,2,3,4) --}}
                                         @if(in_array($kriteria->id, [1,2,3,4]))
-                                            @php
-                                                $catData = $autoFillCategories[$kandidat->id][$kriteria->id] ?? null;
-                                            @endphp
-                                            <div class="flex flex-col items-center justify-center gap-1">
-                                                <div class="inline-block">
-                                                    <input type="number" step="1"
-                                                        wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
-                                                        class="w-16 py-2 rounded-lg border-2 border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/40 shadow-sm text-lg text-center font-bold text-blue-700 dark:text-blue-300 cursor-not-allowed"
-                                                        readonly
-                                                        title="Nilai auto-filled berdasarkan data kandidat">
-                                                </div>
-                                                @if($catData)
-                                                <div class="text-xs text-center w-full max-w-[140px] flex flex-col items-center">
-                                                    <div class="font-semibold text-blue-700 dark:text-blue-300 leading-tight w-full">{{ $catData['kategori'] }}</div>
-                                                    <div class="text-gray-500 dark:text-gray-400 text-[10px] truncate w-full" title="{{ $catData['detail'] }}">{{ $catData['detail'] }}</div>
-                                                </div>
-                                                @endif
+                                        @php
+                                        $catData = $autoFillCategories[$kandidat->id][$kriteria->id] ?? null;
+                                        @endphp
+                                        <div class="flex flex-col items-center justify-center gap-1">
+                                            <div class="inline-block">
+                                                <input type="number" step="1"
+                                                    wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
+                                                    class="w-16 py-2 rounded-lg border-2 border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/40 shadow-sm text-lg text-center font-bold text-blue-700 dark:text-blue-300 cursor-not-allowed"
+                                                    readonly
+                                                    title="Nilai auto-filled berdasarkan data kandidat">
                                             </div>
+                                            @if($catData)
+                                            <div class="text-xs text-center w-full max-w-[140px] flex flex-col items-center">
+                                                <div class="font-semibold text-blue-700 dark:text-blue-300 leading-tight w-full">{{ $catData['kategori'] }}</div>
+                                                <div class="text-gray-500 dark:text-gray-400 text-[10px] truncate w-full" title="{{ $catData['detail'] }}">{{ $catData['detail'] }}</div>
+                                            </div>
+                                            @endif
+                                        </div>
 
                                         {{-- Static Kriteria (5,6,7,8,9,10) - Read from relation --}}
                                         @elseif(in_array($kriteria->id, [5,6,7,8,9,10]))
-                                            @php
-                                                // Map relation dynamically
-                                                $map = [
-                                                    5 => 'knSkp', 6 => 'knPenghargaan', 
-                                                    7 => 'knIntegritas', 8 => 'knDiklat',
-                                                    9 => 'knPotensi', 10 => 'knKompetensi'
-                                                ];
-                                                $rel = $map[$kriteria->id] ?? null;
-                                                $kn = $rel ? $kandidat->$rel : null;
-                                            @endphp
-                                            <div class="flex flex-col items-center gap-1">
-                                                @if($kn)
-                                                    <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm text-lg font-bold text-gray-700 dark:text-gray-200" 
-                                                        title="Nilai berdasarkan data kandidat">
-                                                        {{ $kn->nilai }}
-                                                    </div>
-                                                    <div class="text-xs text-center max-w-[140px]">
-                                                        <div class="font-semibold text-gray-700 dark:text-gray-300">{{ $kn->kategori }}</div>
-                                                    </div>
-                                                    {{-- Hidden input for form submission --}}
-                                                    <input type="hidden" wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}">
-                                                @else
-                                                    <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-400 font-bold">
-                                                        -
-                                                    </div>
-                                                    <div class="text-[10px] text-gray-400 italic">Belum diisi</div>
-                                                @endif
+                                        @php
+                                        // Map relation dynamically
+                                        $map = [
+                                        5 => 'knSkp', 6 => 'knPenghargaan',
+                                        7 => 'knIntegritas', 8 => 'knDiklat',
+                                        9 => 'knPotensi', 10 => 'knKompetensi'
+                                        ];
+                                        $rel = $map[$kriteria->id] ?? null;
+                                        $kn = $rel ? $kandidat->$rel : null;
+                                        @endphp
+                                        <div class="flex flex-col items-center gap-1">
+                                            @if($kn)
+                                            <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm text-lg font-bold text-gray-700 dark:text-gray-200"
+                                                title="Nilai berdasarkan data kandidat">
+                                                {{ $kn->nilai }}
                                             </div>
+                                            <div class="text-xs text-center max-w-[140px]">
+                                                <div class="font-semibold text-gray-700 dark:text-gray-300">{{ $kn->kategori }}</div>
+                                            </div>
+                                            {{-- Hidden input for form submission --}}
+                                            <input type="hidden" wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}">
+                                            @else
+                                            <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-400 font-bold">
+                                                -
+                                            </div>
+                                            <div class="text-[10px] text-gray-400 italic">Belum diisi</div>
+                                            @endif
+                                        </div>
 
                                         {{-- Default (jika ada kriteria lain yang dinamis manual) --}}
                                         @else
-                                            <input type="number" step="0.01"
-                                                wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
-                                                class="w-24 lg:w-28 px-3 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-base dark:bg-gray-900 text-center font-semibold transition-all"
-                                                placeholder="0.0">
+                                        <input type="number" step="0.01"
+                                            wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
+                                            class="w-24 lg:w-28 px-3 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-base dark:bg-gray-900 text-center font-semibold transition-all"
+                                            placeholder="0.0">
                                         @endif
                                     </td>
                                     @endforeach
@@ -242,8 +242,6 @@
                             <p class="font-semibold mb-1">Catatan Penting:</p>
                             <ul class="list-disc list-inside space-y-1 text-xs">
                                 <li>Kriteria <strong>Pangkat, Masa Jabatan, Pendidikan, dan Bidang Ilmu</strong> akan terisi otomatis berdasarkan data kandidat</li>
-                                <li>Kriteria <strong>Potensi (K9)</strong> dan <strong>Kompetensi (K10)</strong> input dalam bentuk persentase (0-100)</li>
-                                <li>Persentase akan otomatis dikonversi ke skala 1-5 saat disimpan</li>
                                 <li>Pastikan semua kriteria terisi sebelum menyimpan</li>
                             </ul>
                         </div>
