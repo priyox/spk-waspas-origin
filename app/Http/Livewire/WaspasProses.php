@@ -17,6 +17,7 @@ class WaspasProses extends Component
     public $results = [];
     public $normalized = [];
     public $matrix = [];
+    public $minMaxValues = [];
 
     protected $autoFillService;
 
@@ -101,6 +102,8 @@ class WaspasProses extends Component
                 $minMax[$kriteria->id]['max'] = 1;
             }
         }
+        
+        $this->minMaxValues = $minMax;
 
         // Calculate Normalized values
         foreach ($kandidats as $kandidat) {
@@ -134,7 +137,7 @@ class WaspasProses extends Component
                 $q1 += ($norm * $weight);
 
                 // WPM: Product (Norm ^ Weight)
-                $q2 *= pow($norm + 0.0001, $weight);
+                $q2 *= pow($norm, $weight);
             }
 
             $qi = (0.5 * $q1) + (0.5 * $q2);
@@ -178,18 +181,20 @@ class WaspasProses extends Component
             WaspasNilai::create([
                 'jabatan_target_id' => $this->selectedJabatanId,
                 'kandidats_id' => $result['kandidat_id'],
-                'pangkat' => $matrixData[1] ?? 0,           // K1
-                'masa_jabatan' => $matrixData[2] ?? 0,      // K2
-                'tingkat_pendidikan' => $matrixData[3] ?? 0, // K3
-                'diklat' => $matrixData[8] ?? 0,            // Diklat (Now K8)
-                'skp' => $matrixData[5] ?? 0,               // K5
-                'penghargaan' => $matrixData[6] ?? 0,       // K6
-                'hukdis' => $matrixData[7] ?? 0,            // K7 (Integritas)
-                'bidang_ilmu' => $matrixData[4] ?? 0,       // Bidang Ilmu (Now K4)
-                'potensi' => $matrixData[9] ?? 0,           // K9
-                'kompetensi' => $matrixData[10] ?? 0,       // K10
-                'wsm' => $result['q1'],
-                'wpm' => $result['q2'],
+                // Bulatkan semua nilai ke 4 desimal
+                'pangkat' => round($matrixData[1] ?? 0, 4),
+                'masa_jabatan' => round($matrixData[2] ?? 0, 4),
+                'tingkat_pendidikan' => round($matrixData[3] ?? 0, 4),
+                'diklat' => round($matrixData[8] ?? 0, 4),
+                'skp' => round($matrixData[5] ?? 0, 4),
+                'penghargaan' => round($matrixData[6] ?? 0, 4),
+                'hukdis' => round($matrixData[7] ?? 0, 4),
+                'bidang_ilmu' => round($matrixData[4] ?? 0, 4),
+                'potensi' => round($matrixData[9] ?? 0, 4),
+                'kompetensi' => round($matrixData[10] ?? 0, 4),
+                // Bulatkan WSM dan WPM ke 4 desimal
+                'wsm' => round($result['q1'], 4),
+                'wpm' => round($result['q2'], 4),
             ]);
         }
 

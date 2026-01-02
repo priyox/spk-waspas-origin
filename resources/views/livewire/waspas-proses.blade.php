@@ -112,6 +112,24 @@
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot class="bg-gray-50 dark:bg-gray-700 font-semibold text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-600">
+                                <tr>
+                                    <td class="px-3 py-2 text-sm text-center sticky left-0 bg-gray-100 dark:bg-gray-600">Min</td>
+                                    @foreach($kriterias as $kriteria)
+                                    <td class="px-3 py-2 text-center text-sm">
+                                        {{ isset($minMaxValues[$kriteria->id]['min']) ? $minMaxValues[$kriteria->id]['min'] : '-' }}
+                                    </td>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-sm text-center sticky left-0 bg-gray-100 dark:bg-gray-600">Max</td>
+                                    @foreach($kriterias as $kriteria)
+                                    <td class="px-3 py-2 text-center text-sm">
+                                        {{ isset($minMaxValues[$kriteria->id]['max']) ? $minMaxValues[$kriteria->id]['max'] : '-' }}
+                                    </td>
+                                    @endforeach
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

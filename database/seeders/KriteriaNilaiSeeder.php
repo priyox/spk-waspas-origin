@@ -50,9 +50,9 @@ class KriteriaNilaiSeeder extends Seeder
 
             // kriteria_id 7
             ['id' => 27, 'kriteria_id' => 7, 'kategori' => 'Tidak pernah dijatuhi Hukuman Disiplin', 'nilai' => 5],
-            ['id' => 28, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Ringan', 'nilai' => 2],
-            ['id' => 29, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Sedang', 'nilai' => 1],
-            ['id' => 30, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Berat', 'nilai' => 0],
+            ['id' => 28, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Ringan', 'nilai' => 3],
+            ['id' => 29, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Sedang', 'nilai' => 2],
+            ['id' => 30, 'kriteria_id' => 7, 'kategori' => 'Pernah Dijatuhi Hukuman Disiplin Berat', 'nilai' => 1],
 
             // kriteria_id 4 (Bidang Ilmu) - Dynamic
             ['id' => 31, 'kriteria_id' => 4, 'kategori' => 'Sesuai', 'nilai' => 5],
