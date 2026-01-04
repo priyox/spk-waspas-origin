@@ -26,9 +26,10 @@ class WaspasProses extends Component
         $this->autoFillService = app(PenilaianAutoFillService::class);
     }
 
-    public function mount($jabatan = null)
+    public function mount()
     {
         $this->jabatanTargets = JabatanTarget::all();
+        $jabatan = request()->query('jabatan');
         if ($jabatan) {
             $this->selectedJabatanId = $jabatan;
         }
