@@ -234,7 +234,7 @@ class Penilaian extends Component
 
         $this->validationErrors = []; // Clear errors setelah berhasil
         session()->flash('message', 'Penilaian berhasil disimpan.');
-        $this->redirect(route('waspas.proses'), navigate: true);
+        $this->redirect(route('waspas.proses', ['jabatan' => $this->selectedJabatanId]), navigate: true);
     }
 
     public function render()
