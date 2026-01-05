@@ -28,35 +28,51 @@ new class extends Component
 
         // Helper function for access check
         $checkAccess = function ($menuItem) use ($user) {
+            // Debug for Super Admin
+            $isSuperAdmin = $user->hasRole('Super Admin');
+            
             // Priority 1: Check specific permission
-            if (!empty($menuItem->permission_name)) {
-                return $user->can($menuItem->permission_name);
+            // Ensure we access the attribute directly and check for null/empty string
+            $permName = $menuItem->permission_name;
+            
+            if ($permName !== null && $permName !== '') {
+                // strict check: if permission is defined, User MUST have it.
+                $canAccess = $user->can($permName);
+                
+                if ($isSuperAdmin) {
+                     \Illuminate\Support\Facades\Log::info("SuperAdmin Check: Menu [{$menuItem->menu_name}] - Perm [{$permName}] - Access: " . ($canAccess ? 'YES' : 'NO'));
+                }
+                
+                return $canAccess;
             }
             
             // Priority 2: Fallback to Role-based check
-            if ($menuItem->roles->isEmpty()) {
-                // If defined roles is empty, decide policy. 
-                // Usually imply unrestricted, but to be safe lets return true or check logic
-                // For now, let's allow if no roles defined (public?) OR strict. 
-                // Given previous logic was strict (must have role), let's keep strict-ish or lax?
-                // Actually, previous logic was: whereHas('roles', ...). Meaning if NO ROLE assigned to menu, it wouldn't show.
-                // So if roles empty -> false.
-                return false; 
+            // If No permission defined, check if User has one of the allowed Roles.
+            if ($menuItem->roles->isNotEmpty()) {
+                 $hasRole = $user->hasAnyRole($menuItem->roles->pluck('name')->toArray());
+                 if ($isSuperAdmin) {
+                     \Illuminate\Support\Facades\Log::info("SuperAdmin Check: Menu [{$menuItem->menu_name}] - No Specific Perm - Falling back to Roles - Access: " . ($hasRole ? 'YES' : 'NO'));
+                 }
+                 return $hasRole;
             }
             
-            return $user->hasAnyRole($menuItem->roles->pluck('name')->toArray());
+            // Priority 3: No permission AND No roles defined -> Decide policy
+            // For safety, let's hide it to avoid "ghost menus"
+            return false;
         };
 
         // Filter Parents
+        // We use values() to reset keys, which helps with potential serialization issues
         $this->menus = $menus->filter(function ($menu) use ($checkAccess) {
             return $checkAccess($menu);
-        });
+        })->values();
 
         // Filter Children
         foreach ($this->menus as $menu) {
             $filteredChildren = $menu->children->filter(function ($child) use ($checkAccess) {
                 return $checkAccess($child);
-            });
+            })->values(); // Reset keys for children too
+            
             $menu->setRelation('children', $filteredChildren);
         }
     }
