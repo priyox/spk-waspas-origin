@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-        {{ __('Penilaian Kandidat') }}
+        {{ __('Preview Penilaian Kandidat') }}
     </h2>
 </x-slot>
 
@@ -84,7 +84,7 @@
 
                 {{-- Table --}}
                 <div class="overflow-x-auto">
-                    <form wire:submit.prevent="save">
+                    {{-- <form wire:submit.prevent="save"> REMOVED FORM --}} 
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
@@ -124,9 +124,10 @@
                                         <div class="flex flex-col items-center justify-center gap-1">
                                             <div class="inline-block">
                                                 <input type="number" step="1"
-                                                    wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
+                                                    value="{{ $nilais[$kandidat->id][$kriteria->id] ?? 0 }}"
                                                     class="w-16 py-2 rounded-lg border-2 border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900/40 shadow-sm text-lg text-center font-bold text-blue-700 dark:text-blue-300 cursor-not-allowed"
                                                     readonly
+                                                    disabled
                                                     title="Nilai auto-filled berdasarkan data kandidat">
                                             </div>
                                             @if($catData)
@@ -159,7 +160,7 @@
                                                 <div class="font-semibold text-gray-700 dark:text-gray-300">{{ $kn->kategori }}</div>
                                             </div>
                                             {{-- Hidden input for form submission --}}
-                                            <input type="hidden" wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}">
+                                            {{-- Hidden input removed --}}
                                             @else
                                             <div class="w-16 py-2 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-400 font-bold">
                                                 -
@@ -170,10 +171,9 @@
 
                                         {{-- Default (jika ada kriteria lain yang dinamis manual) --}}
                                         @else
-                                        <input type="number" step="0.01"
-                                            wire:model.defer="nilais.{{ $kandidat->id }}.{{ $kriteria->id }}"
-                                            class="w-24 lg:w-28 px-3 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 text-base dark:bg-gray-900 text-center font-semibold transition-all"
-                                            placeholder="0.0">
+                                        <div class="w-24 lg:w-28 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-center font-semibold text-gray-700 dark:text-gray-300">
+                                            {{ $nilais[$kandidat->id][$kriteria->id] ?? '-' }}
+                                        </div>
                                         @endif
                                     </td>
                                     @endforeach
@@ -202,26 +202,9 @@
                             </div>
 
                             <div class="flex flex-wrap justify-center gap-3">
-                                <button type="submit"
-                                    class="inline-flex items-center px-6 py-2.5 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 shadow-lg hover:shadow-xl">
-                                    <span wire:loading.remove wire:target="save">
-                                        <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Simpan Penilaian
-                                    </span>
-                                    <span wire:loading wire:target="save">
-                                        <svg class="animate-spin h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Menyimpan...
-                                    </span>
-                                </button>
-
                                 <a href="{{ route('waspas.proses', ['jabatan' => $selectedJabatanId]) }}" wire:navigate
-                                    class="inline-flex items-center px-6 py-2.5 bg-gray-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 shadow-lg hover:shadow-xl">
-                                    Lanjut ke Perhitungan
+                                    class="inline-flex items-center px-6 py-2.5 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 shadow-lg hover:shadow-xl">
+                                    Lanjut ke Proses Perhitungan
                                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                                     </svg>
@@ -229,7 +212,7 @@
                             </div>
                         </div>
                         @endif
-                    </form>
+                    {{-- </form> REMOVED FORM --}}
                 </div>
 
                 {{-- Info Box --}}
@@ -241,8 +224,9 @@
                         <div class="text-sm text-blue-700 dark:text-blue-300">
                             <p class="font-semibold mb-1">Catatan Penting:</p>
                             <ul class="list-disc list-inside space-y-1 text-xs">
-                                <li>Kriteria <strong>Pangkat, Masa Jabatan, Pendidikan, dan Bidang Ilmu</strong> akan terisi otomatis berdasarkan data kandidat</li>
-                                <li>Pastikan semua kriteria terisi sebelum menyimpan</li>
+                                <li>Semua nilai diambil (preview) dari Data Master Kandidat</li>
+                                <li>Silakan update Data Kandidat jika ada nilai yang kurang sesuai</li>
+                                <li>Klik "Lanjut ke Proses Perhitungan" untuk memproses rangking</li>
                             </ul>
                         </div>
                     </div>
