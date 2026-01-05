@@ -62,13 +62,13 @@ new #[Layout('layouts.auth-modern')] class extends Component
                 <label for="remember" class="ml-2 block text-sm text-gray-900">Remember me</label>
             </div>
 
-            @if (Route::has('password.request'))
+            <!-- @if (Route::has('password.request'))
                 <div class="text-sm">
                     <a href="{{ route('password.request') }}" wire:navigate class="font-medium text-indigo-600 hover:text-indigo-500">
                         Forgot your password?
                     </a>
                 </div>
-            @endif
+            @endif -->
         </div>
 
         <div class="mt-6">

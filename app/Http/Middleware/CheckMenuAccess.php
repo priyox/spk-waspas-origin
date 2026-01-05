@@ -33,6 +33,14 @@ class CheckMenuAccess
             return $next($request);
         }
 
+        if ($menu->permission_name) {
+            if (!auth()->user()->hasPermissionTo($menu->permission_name)) {
+                abort(403, 'Anda tidak memiliki hak akses (permission) untuk menu ini.');
+            }
+            return $next($request);
+        }
+
+        // Jika tidak ada permission khusus, fallback ke Role check
         // Ambil role user
         $roleIds = auth()->user()->roles->pluck('id');
 
@@ -42,7 +50,7 @@ class CheckMenuAccess
             ->exists();
 
         if (!$hasAccess) {
-            abort(403, 'Anda tidak memiliki akses ke menu ini');
+            abort(403, 'Anda tidak memiliki akses role ke menu ini');
         }
 
         return $next($request);

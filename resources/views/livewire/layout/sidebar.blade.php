@@ -13,22 +13,52 @@ new class extends Component
             return;
         }
 
-        $roleIds = auth()->user()->roles->pluck('id');
-
-        $this->menus = \App\Models\Menu::where('is_active', 1)
+        $user = auth()->user();
+        
+        // Eager load roles for fallback check
+        $menus = \App\Models\Menu::where('is_active', 1)
             ->whereNull('parent_id') // Top level menus
-            ->whereHas('roles', function ($q) use ($roleIds) {
-                $q->whereIn('roles.id', $roleIds);
-            })
-            ->with(['children' => function($q) use ($roleIds) {
+            ->with(['roles', 'children' => function($q) {
                 $q->where('is_active', 1)
-                    ->whereHas('roles', function ($q2) use ($roleIds) {
-                        $q2->whereIn('roles.id', $roleIds);
-                    })
-                    ->orderBy('order');
+                  ->with('roles')
+                  ->orderBy('order');
             }])
             ->orderBy('order')
             ->get();
+
+        // Helper function for access check
+        $checkAccess = function ($menuItem) use ($user) {
+            // Priority 1: Check specific permission
+            if (!empty($menuItem->permission_name)) {
+                return $user->can($menuItem->permission_name);
+            }
+            
+            // Priority 2: Fallback to Role-based check
+            if ($menuItem->roles->isEmpty()) {
+                // If defined roles is empty, decide policy. 
+                // Usually imply unrestricted, but to be safe lets return true or check logic
+                // For now, let's allow if no roles defined (public?) OR strict. 
+                // Given previous logic was strict (must have role), let's keep strict-ish or lax?
+                // Actually, previous logic was: whereHas('roles', ...). Meaning if NO ROLE assigned to menu, it wouldn't show.
+                // So if roles empty -> false.
+                return false; 
+            }
+            
+            return $user->hasAnyRole($menuItem->roles->pluck('name')->toArray());
+        };
+
+        // Filter Parents
+        $this->menus = $menus->filter(function ($menu) use ($checkAccess) {
+            return $checkAccess($menu);
+        });
+
+        // Filter Children
+        foreach ($this->menus as $menu) {
+            $filteredChildren = $menu->children->filter(function ($child) use ($checkAccess) {
+                return $checkAccess($child);
+            });
+            $menu->setRelation('children', $filteredChildren);
+        }
     }
 }; ?>
 

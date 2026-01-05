@@ -19,7 +19,7 @@
 			@endphp
 
 			<a class="nav-link d-flex justify-content-between align-items-center {{ $isActive ? 'active font-weight-bold' : 'text-dark' }}" href="{{ $href }}">
-				<span><i class="{{ $menu->icon ?? 'fa fa-circle' }} mr-2"></i> {{ $menu->nama }}</span>
+				<span><i class="{{ $menu->icon ?? 'fa fa-circle' }} mr-2"></i> {{ $menu->menu_name }}</span>
 				@if($hasChildren)
 					<i class="fa fa-chevron-down small"></i>
 				@endif
@@ -38,7 +38,7 @@
 								$childHref = $childRoute;
 							}
 						@endphp
-						<a class="nav-link small text-muted" href="{{ $childHref }}"> <i class="{{ $child->icon ?? 'fa fa-circle' }} mr-2"></i> {{ $child->nama }}</a>
+						<a class="nav-link small text-muted" href="{{ $childHref }}"> <i class="{{ $child->icon ?? 'fa fa-circle' }} mr-2"></i> {{ $child->menu_name }}</a>
 					@endforeach
 				</div>
 			@endif

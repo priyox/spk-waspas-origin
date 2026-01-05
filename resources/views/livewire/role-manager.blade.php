@@ -39,7 +39,7 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     @foreach($roles as $role)
-                    <div class="bg-gray-50 dark:bg-gray-900/40 rounded-2xl border-2 border-gray-100 dark:border-gray-700 p-6 group hover:border-indigo-500 transition-all">
+                    <div wire:key="role-{{ $role->id }}" class="bg-gray-50 dark:bg-gray-900/40 rounded-2xl border-2 border-gray-100 dark:border-gray-700 p-6 group hover:border-indigo-500 transition-all">
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <h3 class="text-xl font-extrabold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors uppercase tracking-wider">{{ $role->name }}</h3>
@@ -95,7 +95,7 @@
                         <x-input-label :value="__('Daftar Izin (Permissions)')" class="font-bold mb-4" />
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
                             @foreach($allPermissions as $perm)
-                                <label class="flex items-start p-3 border-2 border-gray-50 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-all has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50">
+                                <label wire:key="perm-{{ $perm->id }}" class="flex items-start p-3 border-2 border-gray-50 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-all has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50">
                                     <input type="checkbox" wire:model="selectedPermissions" value="{{ $perm->name }}" class="mt-1 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                     <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 leading-tight">{{ $perm->name }}</span>
                                 </label>
