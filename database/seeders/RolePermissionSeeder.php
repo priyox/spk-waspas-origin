@@ -48,9 +48,12 @@ class RolePermissionSeeder extends Seeder
             'hasil-akhir-view',
         ]);
 
-        // 3. Pimpinan: Penilaian, Hasil Akhir
+        // 3. Pimpinan: Penilaian, Hasil Akhir + Read Only Master, Kriteria, Kandidat
         $pimpinan->syncPermissions([
             'dashboard-access',
+            'master-data-access', // Added
+            'kriteria-manage',    // Added (will limit in UI)
+            'kandidat-manage',    // Added (will limit in UI)
             'penilaian-manage',
             'hasil-akhir-view',
         ]);

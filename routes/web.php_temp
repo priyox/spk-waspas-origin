@@ -1,0 +1,46 @@
+
+// Temporary route to update Pimpinan permissions
+Route::get('/update-pimpinan-access', function () {
+    try {
+        // 1. Give Pimpinan Permissions
+        $pimpinan = \Spatie\Permission\Models\Role::where('name', 'Pimpinan')->firstOrFail();
+        $pimpinan->givePermissionTo(['master-data-access', 'kriteria-manage', 'kandidat-manage']);
+
+        // 2. Attach Pimpinan Role to Menus
+        $pimpinanId = $pimpinan->id;
+
+        // List of Menus to update (Parent + Submenus)
+        $menuNames = [
+            'Master Data',
+            'Jabatan Pelaksana',
+            'Jabatan Fungsional',
+            'Golongan',
+            'Unit Kerja',
+            'Bidang Ilmu',
+            'Jabatan Target',
+            'Syarat Jabatan',
+            'Eselon',
+            'Jurusan Pendidikan',
+            'Kriteria',
+            'Daftar Kriteria',
+            'Nilai Kriteria',
+            'Kandidat',
+            'Daftar Kandidat' // Main sub-menu under Kandidat
+        ];
+
+        $menus = \App\Models\Menu::whereIn('menu_name', $menuNames)->get();
+
+        $count = 0;
+        foreach($menus as $menu) {
+            // Check if attached via checking the pivot table or roles collection
+            if (!$menu->roles->contains($pimpinanId)) {
+                $menu->roles()->attach($pimpinanId);
+                $count++;
+            }
+        }
+
+        return "Success! Updated permissions and attached Pimpinan to $count new menus.";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});

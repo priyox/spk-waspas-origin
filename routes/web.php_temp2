@@ -1,0 +1,103 @@
+
+// Temporary debug route
+Route::get('/debug-ms', function () {
+    $output = "";
+    
+    $jabatanId = 3; 
+    $output .= "<h1>Debugging Jabatan ID: $jabatanId</h1>";
+
+    $jabatan = \App\Models\JabatanTarget::find($jabatanId);
+
+    if (!$jabatan) {
+        return "Jabatan Target ID 3 not found.";
+    }
+
+    $output .= "Jabatan Target: {$jabatan->nama_jabatan} (ID: 3)<br>";
+    $output .= "Eselon ID: {$jabatan->id_eselon}<br>";
+
+    $syarat = \App\Models\SyaratJabatan::where('eselon_id', $jabatan->id_eselon)->first();
+
+    if (!$syarat) {
+        $output .= "Syarat Jabatan not found for Eselon ID {$jabatan->id_eselon}<br>";
+    } else {
+        $output .= "<h3>Syarat Jabatan Found:</h3>";
+        $output .= "<ul>";
+        $output .= "<li>Min Golongan ID: {$syarat->minimal_golongan_id}</li>";
+        $output .= "<li>Syarat Golongan ID: {$syarat->syarat_golongan_id}</li>";
+        $output .= "<li>Min Tingkat Pendidikan ID: {$syarat->minimal_tingkat_pendidikan_id}</li>";
+        $output .= "<li>Min Jenjang Fungsional ID: {$syarat->minimal_jenjang_fungsional_id}</li>";
+        
+        if ($syarat->minimal_jenjang_fungsional_id) {
+            $syaratJenjang = \App\Models\JenjangFungsional::find($syarat->minimal_jenjang_fungsional_id);
+            if ($syaratJenjang) {
+                $output .= "<li><strong>Jenjang Name:</strong> {$syaratJenjang->jenjang}, <strong>Tingkat:</strong> {$syaratJenjang->tingkat}</li>";
+            }
+        }
+        $output .= "</ul>";
+    }
+
+    $output .= "<h3>Checking Candidates (WaspasNilai for this Jabatan Target)</h3>";
+
+    $waspasNilais = \App\Models\WaspasNilai::where('jabatan_target_id', $jabatanId)
+        ->with(['kandidat.jabatan_fungsional.jenjang', 'kandidat.golongan'])
+        ->get();
+
+    $output .= "<table border='1' cellpadding='5' style='border-collapse: collapse;'>";
+    $output .= "<tr><th>Nama</th><th>Jenis Jabatan ID</th><th>Is Fungsional?</th><th>Jabatan Fungsional</th><th>Jenjang (Tingkat)</th><th>Golongan</th><th>Status Logic</th></tr>";
+
+    foreach ($waspasNilais as $wn) {
+        $k = $wn->kandidat;
+        $output .= "<tr>";
+        $output .= "<td>{$k->nama} (NIP: {$k->nip})</td>";
+        $output .= "<td>{$k->jenis_jabatan_id}</td>";
+        
+        $isFungsional = ($k->jenis_jabatan_id == 2);
+        $output .= "<td>" . ($isFungsional ? "YES" : "NO") . "</td>";
+        
+        $jfName = "-";
+        $jenjangInfo = "-";
+        
+        $statusLog = "";
+
+        if ($isFungsional) {
+            $kf = $k->jabatan_fungsional;
+            if ($kf) {
+                 $jfName = $kf->nama_jabatan;
+                 $kj = $kf->jenjang;
+                 if ($kj) {
+                     $jenjangInfo = "{$kj->jenjang} ({$kj->tingkat})";
+                     
+                     // Simulate Logic
+                     if ($syarat && $syarat->minimal_jenjang_fungsional_id) {
+                          $syaratJenjang = \App\Models\JenjangFungsional::find($syarat->minimal_jenjang_fungsional_id);
+                          if ($kj->tingkat < $syaratJenjang->tingkat) {
+                              $statusLog .= "<span style='color:red'>TMS: Tingkat {$kj->tingkat} < Syarat {$syaratJenjang->tingkat}</span>";
+                          } else {
+                              $statusLog .= "<span style='color:green'>MS (Jenjang OK)</span>";
+                          }
+                     }
+                 } else {
+                     $jenjangInfo = "Jenjang NOT FOUND";
+                 }
+            } else {
+                $jfName = "NULL (Relation)";
+            }
+        }
+        
+        $output .= "<td>$jfName</td>";
+        $output .= "<td>$jenjangInfo</td>";
+        $output .= "<td>{$k->golongan_id}</td>";
+
+        if ($syarat) {
+            if ($k->golongan_id < $syarat->minimal_golongan_id) {
+                 $statusLog .= "<br><span style='color:red'>TMS: Golongan < Min</span>";
+            }
+        }
+        
+        $output .= "<td>$statusLog</td>";
+        $output .= "</tr>";
+    }
+    $output .= "</table>";
+
+    return $output;
+});

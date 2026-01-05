@@ -13,9 +13,11 @@
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Golongan</h2>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Kelola data golongan dan pangkat</p>
                     </div>
+                    @if(!auth()->user()->hasRole('Pimpinan'))
                     <button wire:click="create" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium transition-colors duration-150">
                         + Tambah Golongan
                     </button>
+                    @endif
                 </div>
 
                 <div class="overflow-x-auto">
@@ -25,7 +27,9 @@
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No</th>
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Golongan</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pangkat</th>
+                                @if(!auth()->user()->hasRole('Pimpinan'))
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -34,10 +38,12 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold text-gray-900 dark:text-white">{{ $g->golongan }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ $g->pangkat }}</td>
+                                @if(!auth()->user()->hasRole('Pimpinan'))
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <button wire:click="edit({{ $g->id }})" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-2">Edit</button>
                                     <button wire:click="delete({{ $g->id }})" onclick="return confirm('Yakin ingin menghapus data ini?')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Hapus</button>
                                 </td>
+                                @endif
                             </tr>
                             @empty
                             <tr>

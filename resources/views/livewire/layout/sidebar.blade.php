@@ -38,11 +38,6 @@ new class extends Component
             if ($permName !== null && $permName !== '') {
                 // strict check: if permission is defined, User MUST have it.
                 $canAccess = $user->can($permName);
-                
-                if ($isSuperAdmin) {
-                     \Illuminate\Support\Facades\Log::info("SuperAdmin Check: Menu [{$menuItem->menu_name}] - Perm [{$permName}] - Access: " . ($canAccess ? 'YES' : 'NO'));
-                }
-                
                 return $canAccess;
             }
             
@@ -50,9 +45,6 @@ new class extends Component
             // If No permission defined, check if User has one of the allowed Roles.
             if ($menuItem->roles->isNotEmpty()) {
                  $hasRole = $user->hasAnyRole($menuItem->roles->pluck('name')->toArray());
-                 if ($isSuperAdmin) {
-                     \Illuminate\Support\Facades\Log::info("SuperAdmin Check: Menu [{$menuItem->menu_name}] - No Specific Perm - Falling back to Roles - Access: " . ($hasRole ? 'YES' : 'NO'));
-                 }
                  return $hasRole;
             }
             
@@ -82,7 +74,7 @@ new class extends Component
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
     <!-- Logo -->
     <div class="flex items-center justify-center h-20 border-b border-indigo-800 bg-indigo-950">
-        <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center gap-3">
+        <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
             <x-application-logo class="block h-10 w-auto fill-current text-white" />
             <span class="text-xl font-bold tracking-wider">SPK WASPAS</span>
         </a>
@@ -133,7 +125,7 @@ new class extends Component
                     {{-- Submenu Items --}}
                     <div x-show="open" x-cloak class="mt-2 space-y-1 pl-11">
                         @foreach($menu->children as $child)
-                             <a href="{{ Route::has($child->route) ? route($child->route) : '#' }}" wire:navigate 
+                             <a href="{{ Route::has($child->route) ? route($child->route) : '#' }}" wire:navigate
                                 class="block px-4 py-2 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs($child->route . '*') ? 'text-white bg-indigo-700' : 'text-indigo-300 hover:text-white hover:bg-indigo-800' }}">
                                 {{ $child->menu_name }}
                             </a>
@@ -143,7 +135,7 @@ new class extends Component
             @else
                 {{-- Single Menu Item --}}
                 @if($menu->route && $menu->route !== '#')
-                    <a href="{{ Route::has($menu->route) ? route($menu->route) : '#' }}" wire:navigate 
+                    <a href="{{ Route::has($menu->route) ? route($menu->route) : '#' }}" wire:navigate
                     class="flex items-center px-4 py-3 rounded-lg transition-colors duration-200 {{ request()->routeIs($menu->route . '*') ? 'bg-indigo-700 text-white shadow-lg' : 'text-indigo-100 hover:bg-indigo-800 hover:text-white' }}">
                         @if($menu->icon)
                             <!-- Assuming icon is a class name like 'fas fa-home' or SVG path data if stored that way. 

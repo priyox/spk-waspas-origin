@@ -19,10 +19,12 @@
                         <h3 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Kelola Data Kandidat</h3>
                         <p class="text-gray-500 dark:text-gray-400 mt-2">Daftar semua kandidat yang terdaftar dalam sistem</p>
                     </div>
+                    @if(!auth()->user()->hasRole('Pimpinan'))
                     <button wire:click="create" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-indigo-200 dark:shadow-none hover:scale-[1.02] active:scale-[0.98]">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                         Tambah Kandidat
                     </button>
+                    @endif
                 </div>
 
                 <!-- Filters -->
@@ -43,7 +45,9 @@
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Golongan & TMT</th>
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Jabatan & Unit Kerja</th>
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pendidikan</th>
+                                @if(!auth()->user()->hasRole('Pimpinan'))
                                 <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -82,6 +86,7 @@
                                     <div class="text-xs text-gray-500 truncate max-w-[150px]">{{ $kandidat->jurusan_pendidikan?->jurusan ?? $kandidat->jurusan }}</div>
                                     <div class="text-[10px] text-indigo-500">{{ $kandidat->bidang_ilmu?->bidang ?? '-' }}</div>
                                 </td>
+                                @if(!auth()->user()->hasRole('Pimpinan'))
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <div class="flex items-center justify-center gap-2">
                                         <button wire:click="showDetail('{{ $kandidat->nip }}')" class="inline-flex items-center px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/50 dark:hover:bg-blue-900 dark:text-blue-300 rounded-lg transition-colors">
@@ -105,6 +110,7 @@
                                         </button>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @empty
                             <tr>
@@ -310,12 +316,15 @@
                                                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%236b7280%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-size: 1.5em;">
                                                 <option value="">-- Pilih Jurusan Spesifik --</option>
                                                 @foreach($jurusan_pendidikans as $jp)
-                                                    @if($jp->tingkat_pendidikan_id == $tingkat_pendidikan_id)
-                                                        <option value="{{ $jp->id }}">{{ $jp->jurusan }}</option>
-                                                    @endif
+                                                    <option value="{{ $jp->id }}">{{ $jp->nama_jurusan }}</option>
                                                 @endforeach
                                             </select>
-                                            <p class="text-xs text-gray-400 mt-1">Jika tidak ada, isi di kolom "Keterangan Jurusan" di bawah</p>
+                                            <p class="text-xs text-gray-400 mt-1">Jika nama jurusan tidak ada dalam pilihan di atas, pilih pendekatan terdekat lalu tulis detail di bawah.</p>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="jurusan" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Keterangan Jurusan (Detail)</label>
+                                            <input type="text" id="jurusan" wire:model="jurusan" placeholder="Detail Jurusan / Konsentrasi"
+                                                class="w-full px-4 py-3 text-base border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-gray-100 transition-colors" />
                                         </div>
                                         <div>
                                             <label for="bidang_ilmu_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Kelompok Bidang</label>

@@ -48,17 +48,17 @@ class MenuSeeder extends Seeder
             'permission_name' => 'master-data-access',
             'is_active' => true,
         ]);
-        $masterData->roles()->sync($adminRoles);
+        $masterData->roles()->sync($pimpinanRoles); // Changed to include Pimpinan
 
-        $this->createSubMenu($masterData->id, 'Jabatan Pelaksana', 'jabatan-pelaksana.index', 'bi bi-person-workspace', 1, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Jabatan Fungsional', 'jabatan-fungsional.index', 'bi bi-person-gear', 2, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Golongan', 'golongan.index', 'bi bi-chevron-double-up', 3, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Unit Kerja', 'unit-kerja.index', 'bi bi-building', 4, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Bidang Ilmu', 'bidang-ilmu.index', 'bi bi-journal-text', 5, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Jabatan Target', 'jabatan-target.index', 'bi bi-target', 6, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Syarat Jabatan', 'syarat-jabatan.index', 'bi bi-card-checklist', 7, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Eselon', 'eselon.index', 'bi bi-bar-chart-steps', 8, $adminRoles, 'master-data-access');
-        $this->createSubMenu($masterData->id, 'Jurusan Pendidikan', 'jurusan-pendidikan.index', 'bi bi-mortarboard', 9, $adminRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Jabatan Pelaksana', 'jabatan-pelaksana.index', 'bi bi-person-workspace', 1, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Jabatan Fungsional', 'jabatan-fungsional.index', 'bi bi-person-gear', 2, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Golongan', 'golongan.index', 'bi bi-chevron-double-up', 3, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Unit Kerja', 'unit-kerja.index', 'bi bi-building', 4, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Bidang Ilmu', 'bidang-ilmu.index', 'bi bi-journal-text', 5, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Jabatan Target', 'jabatan-target.index', 'bi bi-target', 6, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Syarat Jabatan', 'syarat-jabatan.index', 'bi bi-card-checklist', 7, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Eselon', 'eselon.index', 'bi bi-bar-chart-steps', 8, $pimpinanRoles, 'master-data-access');
+        $this->createSubMenu($masterData->id, 'Jurusan Pendidikan', 'jurusan-pendidikan.index', 'bi bi-mortarboard', 9, $pimpinanRoles, 'master-data-access');
 
         // 3. KRITERIA
         $kriteriaParent = Menu::create([
@@ -70,10 +70,10 @@ class MenuSeeder extends Seeder
             'permission_name' => 'kriteria-manage',
             'is_active' => true,
         ]);
-        $kriteriaParent->roles()->sync($adminRoles);
+        $kriteriaParent->roles()->sync($pimpinanRoles); // Changed to include Pimpinan
 
-        $this->createSubMenu($kriteriaParent->id, 'Daftar Kriteria', 'kriteria.index', 'bi bi-list-check', 1, $adminRoles, 'kriteria-manage');
-        $this->createSubMenu($kriteriaParent->id, 'Nilai Kriteria', 'kriteria-nilai.index', 'bi bi-star-half', 2, $adminRoles, 'kriteria-manage');
+        $this->createSubMenu($kriteriaParent->id, 'Daftar Kriteria', 'kriteria.index', 'bi bi-list-check', 1, $pimpinanRoles, 'kriteria-manage');
+        $this->createSubMenu($kriteriaParent->id, 'Nilai Kriteria', 'kriteria-nilai.index', 'bi bi-star-half', 2, $pimpinanRoles, 'kriteria-manage');
 
         // 4. KANDIDAT (Parent menu with submenus)
         $kandidatParent = Menu::create([
@@ -85,9 +85,9 @@ class MenuSeeder extends Seeder
             'permission_name' => 'kandidat-manage',
             'is_active' => true,
         ]);
-        $kandidatParent->roles()->sync([$superAdmin->id, $adminKepegawaian->id]); // Super Admin view-only, Admin Kepegawaian full access
+        $kandidatParent->roles()->sync($pimpinanRoles); // Changed to include Pimpinan
 
-        $this->createSubMenu($kandidatParent->id, 'Daftar Kandidat', 'kandidat.index', 'bi bi-person-lines-fill', 1, [$superAdmin->id, $adminKepegawaian->id], 'kandidat-manage'); // Super Admin view-only
+        $this->createSubMenu($kandidatParent->id, 'Daftar Kandidat', 'kandidat.index', 'bi bi-person-lines-fill', 1, $pimpinanRoles, 'kandidat-manage'); // Super Admin view-only
 
 
         // 5. PENILAIAN

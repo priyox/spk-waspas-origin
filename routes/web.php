@@ -26,6 +26,10 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+
+
+
+
 Route::get('profile', Profile::class)
     ->middleware(['auth'])
     ->name('profile');
@@ -90,10 +94,6 @@ Route::middleware(['auth', 'menu.access'])->group(function () {
 });
 
 // Hasil Akhir page (formerly Laporan)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/hasil-akhir', \App\Http\Livewire\HasilAkhir::class)
-        ->name('hasil-akhir');
-    
     Route::get('/waspas/analisis', \App\Http\Livewire\WaspasAnalisis::class)
         ->name('waspas.analisis');
 
@@ -102,7 +102,11 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/waspas/hasil/pdf', [\App\Http\Controllers\ReportController::class, 'downloadWaspasHasil'])
         ->name('waspas.hasil.pdf');
-});
+
+
+// TEMPORARY PUBLIC
+Route::get('/hasil-akhir', \App\Http\Livewire\HasilAkhir::class)
+    ->name('hasil-akhir');
 
 
 // Logout route

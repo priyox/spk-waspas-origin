@@ -19,9 +19,11 @@
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Kelola Kriteria</h2>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Kriteria penilaian untuk perhitungan WASPAS</p>
                     </div>
+                    @if(!auth()->user()->hasRole('Pimpinan'))
                     <button wire:click="create" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition-colors duration-150 shadow-lg hover:shadow-xl">
                         + Tambah Kriteria
                     </button>
+                    @endif
                 </div>
 
                 <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
@@ -32,7 +34,9 @@
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Nama Kriteria</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Bobot</th>
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Jenis</th>
+                                @if(!auth()->user()->hasRole('Pimpinan'))
                                 <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -54,6 +58,7 @@
                                         {{ $kriteria->jenis ?? 'Benefit' }}
                                     </span>
                                 </td>
+                                @if(!auth()->user()->hasRole('Pimpinan'))
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <div class="flex items-center justify-center gap-2">
                                         <button wire:click="edit({{ $kriteria->id }})" class="inline-flex items-center px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/50 dark:hover:bg-amber-900 dark:text-amber-300 rounded-lg transition-colors">
@@ -70,6 +75,7 @@
                                         </button>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @empty
                             <tr>

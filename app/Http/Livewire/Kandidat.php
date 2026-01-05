@@ -44,14 +44,18 @@ class Kandidat extends Component
         'eselon_id' => 'nullable|exists:eselons,id',
         'jabatan' => 'required|string|max:255',
         'tmt_jabatan' => 'nullable|date',
-        'tingkat_pendidikan_id' => 'nullable|exists:tingkat_pendidikans,id',
-        'jurusan_pendidikan_id' => 'nullable|exists:jurusan_pendidikans,id',
-        'jabatan_fungsional_id' => 'nullable|exists:jabatan_fungsionals,id',
-        'jabatan_pelaksana_id' => 'nullable|exists:jabatan_pelaksanas,id',
-        'jabatan_target_id' => 'nullable|exists:jabatan_targets,id',
-        'bidang_ilmu_id' => 'nullable|exists:bidang_ilmus,id',
-        'unit_kerja_id' => 'nullable|exists:unit_kerjas,id',
+        'tingkat_pendidikan_id' => 'required|exists:tingkat_pendidikans,id',
+        'jurusan_pendidikan_id' => 'required|exists:jurusan_pendidikans,id', // Required as per user request
         'jurusan' => 'nullable|string|max:255',
+        
+        // Dynamic validation will be handled in store() to be cleaner or we can use generic rules here
+        'jabatan_fungsional_id' => 'nullable', 
+        'jabatan_pelaksana_id' => 'nullable',
+        'jabatan_target_id' => 'nullable',
+        
+        'bidang_ilmu_id' => 'nullable|exists:bidang_ilmus,id',
+        'unit_kerja_id' => 'required|exists:unit_kerjas,id',
+
         // Assessment fields
         'kn_id_skp' => 'nullable|exists:kriteria_nilais,id',
         'kn_id_penghargaan' => 'nullable|exists:kriteria_nilais,id',
@@ -60,6 +64,21 @@ class Kandidat extends Component
         'kn_id_potensi' => 'nullable|exists:kriteria_nilais,id',
         'kn_id_kompetensi' => 'nullable|exists:kriteria_nilais,id',
     ];
+
+    protected function getValidationRules()
+    {
+        $rules = $this->rules;
+
+        if ($this->jenis_jabatan_id == 2) {
+             $rules['jabatan_fungsional_id'] = 'required|exists:jabatan_fungsionals,id';
+        } elseif ($this->jenis_jabatan_id == 3) {
+             $rules['jabatan_pelaksana_id'] = 'required|exists:jabatan_pelaksanas,id';
+        } elseif (in_array($this->jenis_jabatan_id, [20, 30, 40])) {
+             $rules['jabatan_target_id'] = 'required|exists:jabatan_targets,id';
+        }
+
+        return $rules;
+    }
 
     public function boot()
     {
@@ -109,7 +128,9 @@ class Kandidat extends Component
             'bidang_ilmus' => \App\Models\BidangIlmu::all(),
             'eselons' => \App\Models\Eselon::all(),
             'unit_kerjas' => \App\Models\UnitKerja::all(),
-            'jurusan_pendidikans' => \App\Models\JurusanPendidikan::all(),
+            'jurusan_pendidikans' => $this->tingkat_pendidikan_id 
+                ? \App\Models\JurusanPendidikan::where('tingkat_pendidikan_id', $this->tingkat_pendidikan_id)->orderBy('nama_jurusan')->get() 
+                : [],
             'jabatan_fungsionals' => \App\Models\JabatanFungsional::all(),
             'jabatan_pelaksanas' => \App\Models\JabatanPelaksana::all(),
             'jabatan_targets' => \App\Models\JabatanTarget::all(),
@@ -119,6 +140,27 @@ class Kandidat extends Component
     public function updatedTingkatPendidikanId()
     {
         $this->jurusan_pendidikan_id = null;
+        $this->bidang_ilmu_id = null;
+    }
+
+    public function updatedJenisJabatanId($value)
+    {
+        $eselonJabatanIds = [20, 30, 40]; // Pimpinan Tinggi, Administrator, Pengawas
+        
+        // If not struktural/eselon, clear eselon_id
+        if (!in_array($value, $eselonJabatanIds)) {
+            $this->eselon_id = null;
+        }
+
+        // If not fungsional (ID 2), clear jabatan_fungsional_id
+        if ($value != 2) {
+            $this->jabatan_fungsional_id = null;
+        }
+
+        // If not pelaksana (ID 3), clear jabatan_pelaksana_id
+        if ($value != 3) {
+            $this->jabatan_pelaksana_id = null;
+        }
     }
 
     public function updatedJurusanPendidikanId($value)
@@ -127,7 +169,14 @@ class Kandidat extends Component
             $jurusan = \App\Models\JurusanPendidikan::find($value);
             if ($jurusan) {
                 $this->bidang_ilmu_id = $jurusan->bidang_ilmu_id;
+                $this->jurusan = $jurusan->nama_jurusan;
+            } else {
+                $this->bidang_ilmu_id = null;
+                $this->jurusan = null;
             }
+        } else {
+            $this->bidang_ilmu_id = null;
+            $this->jurusan = null;
         }
     }
 
@@ -177,7 +226,23 @@ class Kandidat extends Component
             return;
         }
 
-        $this->validate();
+        $this->validate($this->getValidationRules());
+
+        // Logic to cleanup relations based on Jenis Jabatan
+        $eselonJabatanIds = [20, 30, 40]; // Pimpinan Tinggi, Administrator, Pengawas
+        $isFungsional = ($this->jenis_jabatan_id == 2);
+        $isPelaksana = ($this->jenis_jabatan_id == 3);
+        $isStruktural = in_array($this->jenis_jabatan_id, $eselonJabatanIds);
+
+        if (!$isStruktural) {
+            $this->eselon_id = null;
+        }
+        if (!$isFungsional) {
+            $this->jabatan_fungsional_id = null;
+        }
+        if (!$isPelaksana) {
+            $this->jabatan_pelaksana_id = null;
+        }
 
         $data = [
             'nip' => $this->nip,
@@ -236,13 +301,49 @@ class Kandidat extends Component
         $this->tmt_jabatan = $kandidat->tmt_jabatan;
         $this->tingkat_pendidikan_id = $kandidat->tingkat_pendidikan_id;
         $this->jurusan_pendidikan_id = $kandidat->jurusan_pendidikan_id;
-        $this->jabatan_fungsional_id = $kandidat->jabatan_fungsional_id;
-        $this->jabatan_pelaksana_id = $kandidat->jabatan_pelaksana_id;
-        $this->jabatan_target_id = $kandidat->jabatan_target_id;
         $this->bidang_ilmu_id = $kandidat->bidang_ilmu_id;
         $this->unit_kerja_id = $kandidat->unit_kerja_id;
         $this->jurusan = $kandidat->jurusan;
         
+        // Reset specific IDs first
+        $this->jabatan_fungsional_id = null;
+        $this->jabatan_pelaksana_id = null;
+        $this->jabatan_target_id = null;
+
+        // Logic assignment based on structure (relasi)
+        if ($this->jenis_jabatan_id == 2) {
+            $this->jabatan_fungsional_id = $kandidat->jabatan_fungsional_id;
+            // Auto-match fallback
+            if (!$this->jabatan_fungsional_id && $this->jabatan) {
+                // Try exact match first, then loose match
+                $jw = \App\Models\JabatanFungsional::where('nama_jabatan', trim($this->jabatan))->first()
+                    ?? \App\Models\JabatanFungsional::where('nama_jabatan', 'LIKE', '%' . trim($this->jabatan) . '%')->first();
+                
+                if ($jw) $this->jabatan_fungsional_id = $jw->id;
+            }
+        } elseif ($this->jenis_jabatan_id == 3) {
+            $this->jabatan_pelaksana_id = $kandidat->jabatan_pelaksana_id;
+            // Auto-match fallback
+            if (!$this->jabatan_pelaksana_id && $this->jabatan) {
+                $jp = \App\Models\JabatanPelaksana::where('nama_jabatan', trim($this->jabatan))->first()
+                    ?? \App\Models\JabatanPelaksana::where('nama_jabatan', 'LIKE', '%' . trim($this->jabatan) . '%')->first();
+                
+                if ($jp) $this->jabatan_pelaksana_id = $jp->id;
+            }
+        } elseif (in_array($this->jenis_jabatan_id, [20, 30, 40])) {
+            $this->jabatan_target_id = $kandidat->jabatan_target_id;
+            // Auto-match fallback
+            if (!$this->jabatan_target_id && $this->jabatan) {
+                $jt = \App\Models\JabatanTarget::where('nama_jabatan', trim($this->jabatan))->first()
+                    ?? \App\Models\JabatanTarget::where('nama_jabatan', 'LIKE', '%' . trim($this->jabatan) . '%')->first();
+                
+                if ($jt) {
+                    $this->jabatan_target_id = $jt->id;
+                    $this->eselon_id = $jt->id_eselon; 
+                }
+            }
+        }
+
         // Load assessment values
         $this->kn_id_skp = $kandidat->kn_id_skp;
         $this->kn_id_penghargaan = $kandidat->kn_id_penghargaan;
@@ -251,10 +352,9 @@ class Kandidat extends Component
         $this->kn_id_potensi = $kandidat->kn_id_potensi;
         $this->kn_id_kompetensi = $kandidat->kn_id_kompetensi;
         
-        $this->kandidat_id_to_edit = $kandidat->id; // Store ID instead of NIP
+        $this->kandidat_id_to_edit = $kandidat->id;
         $this->isModalOpen = true;
 
-        
         $this->dispatch('open-modal', 'kandidat-modal');
     }
 

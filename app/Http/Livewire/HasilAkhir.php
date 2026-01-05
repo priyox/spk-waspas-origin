@@ -64,7 +64,7 @@ class HasilAkhir extends Component
         $jabatanTarget = JabatanTarget::find($this->selectedJabatanId);
         $syarat = SyaratJabatan::where('eselon_id', $jabatanTarget->id_eselon)->first();
 
-        $this->results = $waspasNilais->map(function ($item) use ($syarat) {
+        $this->results = $waspasNilais->map(function ($item, $index) use ($syarat, $jabatanTarget) {
             $qi = (0.5 * $item->wsm) + (0.5 * $item->wpm);
             $kandidat = $item->kandidat;
 
@@ -72,9 +72,13 @@ class HasilAkhir extends Component
             $status_ms = true;
             $is_masih_ms = false;
             $alasan_tms = [];
+            
+
+
+
 
             if ($syarat) {
-                // 1. Check Golongan
+                // 1. Check Golongan (Base Requirement)
                 $minGol = $syarat->minimal_golongan_id;
                 $syaratGol = $syarat->syarat_golongan_id;
 
@@ -82,37 +86,52 @@ class HasilAkhir extends Component
                     $status_ms = false;
                     $alasan_tms[] = "Golongan ({$kandidat->golongan->golongan}) dibawah batas minimal";
                 } elseif ($kandidat->golongan_id < $syaratGol) {
-                    // Golongan is between minimal and syarat (e.g. 1 level below)
                     $is_masih_ms = true;
                 }
 
-                // 2. Check Pendidikan (Must be equal or higher)
+                // 2. Check Pendidikan (Base Requirement)
                 if ($kandidat->tingkat_pendidikan_id < $syarat->minimal_tingkat_pendidikan_id) {
                     $status_ms = false;
                     $alasan_tms[] = "Pendidikan ({$kandidat->tingkat_pendidikan->tingkat}) dibawah syarat minimum";
                 }
 
-                // 3. Conditional Check: Manajerial vs Fungsional
-                $isFungsional = ($kandidat->jenis_jabatan_id == 2);
-                $isManajerial = in_array($kandidat->jenis_jabatan_id, [20, 30, 40]);
+                // 3. User Specific Logic: Eselon vs Fungsional vs Pelaksana
+                $eselonIds = [20, 30, 40]; // Pimpinan Tinggi, Administrator, Pengawas
+                $isStruktural = in_array($kandidat->jenis_jabatan_id, $eselonIds);
+                $isFungsional = ($kandidat->jenis_jabatan_id == 2); 
+                $isPelaksana = ($kandidat->jenis_jabatan_id == 3);
 
-                if ($isManajerial) {
+                if ($isStruktural) {
+                    // Rule: If minimal_eselon_id is empty => MS. If filled => Check.
                     if ($syarat->minimal_eselon_id) {
+                        // Smaller ID = Higher Rank (e.g. 21 > 41). Candidate ID must be <= Syarat ID.
+                        // If candidate has no eselon_id but is structural, that's a data discrepancy, effectively TMS if requirement exists.
                         if (!$kandidat->eselon_id || $kandidat->eselon_id > $syarat->minimal_eselon_id) {
                             $status_ms = false;
-                            $alasan_tms[] = "Eselon belum memenuhi syarat manajerial";
+                            $alasan_tms[] = "Eselon belum memenuhi syarat";
                         }
                     }
-                } elseif ($isFungsional) {
+                } 
+                elseif ($isFungsional) {
+                    // Rule: Check minimal_jenjang_fungsional_id
                     if ($syarat->minimal_jenjang_fungsional_id) {
-                        $syaratJenjang = \App\Models\JenjangFungsional::find($syarat->minimal_jenjang_fungsional_id);
-                        $kandidatJenjang = $kandidat->jabatan_fungsional?->jenjang;
-                        
-                        if (!$kandidatJenjang || $kandidatJenjang->tingkat < $syaratJenjang->tingkat) {
-                            $status_ms = false;
-                            $alasan_tms[] = "Jenjang Fungsional belum memenuhi syarat minimum";
-                        }
+                         $syaratJenjang = \App\Models\JenjangFungsional::find($syarat->minimal_jenjang_fungsional_id);
+                         $kandidatJenjang = $kandidat->jabatan_fungsional?->jenjang;
+                         
+                         // If candidate has no functional job or no jenjang -> Fail if requirement exists
+                         if (!$kandidatJenjang || $kandidatJenjang->tingkat < $syaratJenjang->tingkat) {
+                             $status_ms = false;
+                             $alasan_tms[] = "Jenjang Fungsional belum memenuhi syarat minimum";
+                         }
                     }
+                } 
+                elseif ($isPelaksana) {
+                     // Rule: Pelaksana only for Pengawas (Eselon IV.A / IV.B -> IDs 41, 42)
+                     // Check target jabatan's eselon
+                     if (!in_array($jabatanTarget->id_eselon, [41, 42])) {
+                          $status_ms = false;
+                          $alasan_tms[] = "Pelaksana hanya bisa menduduki Jabatan Pengawas";
+                     }
                 }
             }
 
@@ -147,6 +166,8 @@ class HasilAkhir extends Component
                     $kekurangan[] = $k->kriteria;
                 }
             }
+
+
 
             return [
                 'id' => $item->id,
